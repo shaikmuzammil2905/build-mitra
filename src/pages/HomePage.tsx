@@ -98,13 +98,13 @@ export const HomePage: React.FC<HomePageProps> = ({
         onOpenEnquiry={onOpenEnquiry} 
       />
 
-      {/* 02. Upgraded Large Prominent Trust Bar (per image copy 5.png) */}
+      {/* 02. Upgraded Large Prominent Trust Bar (per image copy 5.png & image copy 13.png: icon on top, content below in mobile view) */}
       <div className="bg-white border-y border-slate-200/80 py-6 sm:py-8 shadow-sm relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
             
             {/* Card 1: 100% Quality Tested */}
-            <div className="bg-gradient-to-br from-emerald-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-emerald-200/80 shadow-xs hover:shadow-md transition-all flex items-center gap-3.5 group">
+            <div className="bg-gradient-to-br from-emerald-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-emerald-200/80 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-center text-center sm:text-left gap-2.5 sm:gap-3.5 group">
               <div className="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
                 <ShieldCheck className="w-6 h-6" />
               </div>
@@ -119,7 +119,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Card 2: Direct From Primary Mills */}
-            <div className="bg-gradient-to-br from-blue-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-xs hover:shadow-md transition-all flex items-center gap-3.5 group">
+            <div className="bg-gradient-to-br from-blue-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-center text-center sm:text-left gap-2.5 sm:gap-3.5 group">
               <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
                 <Truck className="w-6 h-6" />
               </div>
@@ -134,7 +134,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Card 3: On-Time Site Delivery */}
-            <div className="bg-gradient-to-br from-amber-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-amber-200/80 shadow-xs hover:shadow-md transition-all flex items-center gap-3.5 group">
+            <div className="bg-gradient-to-br from-amber-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-amber-200/80 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-center text-center sm:text-left gap-2.5 sm:gap-3.5 group">
               <div className="w-12 h-12 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
                 <Clock className="w-6 h-6" />
               </div>
@@ -149,7 +149,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Card 4: Milestone Escrow */}
-            <div className="bg-gradient-to-br from-purple-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-purple-200/80 shadow-xs hover:shadow-md transition-all flex items-center gap-3.5 group">
+            <div className="bg-gradient-to-br from-purple-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-purple-200/80 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-center text-center sm:text-left gap-2.5 sm:gap-3.5 group">
               <div className="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
                 <Sparkles className="w-6 h-6" />
               </div>

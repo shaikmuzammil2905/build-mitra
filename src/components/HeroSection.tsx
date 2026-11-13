@@ -40,70 +40,61 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, onOpen
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl sunray-pulse z-10"></div>
       </div>
 
-      {/* MOBILE BACKGROUND IMAGE (image copy 3.png) - Bright look and animated in mobile view only (image copy 7.png) */}
+      {/* MOBILE BACKGROUND IMAGE (image copy 3.png) - Bright look without white patch work (image copy 12.png) */}
       <div className="block md:hidden absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img 
           src="/assets/hero-mobile.png" 
           alt="Modern Architectural Building"
-          className="w-full h-full object-cover object-top filter brightness-110 contrast-105 saturate-110 animate-hero-mobile"
+          className="w-full h-full object-cover object-center filter brightness-105 contrast-105 saturate-110 animate-hero-mobile"
           loading="eager"
         />
-        {/* Mobile translucent gradient: keeps the colorful building bright & visible while making text ultra-crisp */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/65 to-white/95 z-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent z-10 h-40 bottom-0"></div>
+        {/* Clean bottom transition only - Zero white patch over the sunny sky & building */}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white via-white/50 to-transparent z-10"></div>
       </div>
 
       {/* Content Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
-        <div className="max-w-2xl lg:max-w-xl space-y-5">
+        <div className="max-w-2xl lg:max-w-xl space-y-4 sm:space-y-5">
           
           {/* Top Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/90 backdrop-blur-sm border border-blue-200/80 text-blue-700 text-xs sm:text-sm font-semibold shadow-xs animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-white/60 text-blue-900 text-xs sm:text-sm font-bold shadow-xs animate-fade-in">
             <Sparkles className="w-4 h-4 text-amber-500 animate-spin" style={{ animationDuration: '6s' }} />
             <span>Digital Construction & Real Estate Ecosystem</span>
           </div>
 
           {/* Main Headline */}
           <div className="space-y-1 sm:space-y-2">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-bm-navy tracking-tight leading-[1.12]">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.14] drop-shadow-xs">
               Build Smart.<br />
-              <span className="text-bm-red">Build Better.</span>
+              <span className="text-bm-red drop-shadow-xs">Build Better.</span>
             </h1>
-            <p className="text-lg sm:text-xl font-bold text-slate-900 leading-snug pt-1">
+            <p className="text-base sm:text-xl font-extrabold text-slate-900 leading-snug drop-shadow-xs">
               Your Complete Construction & Real Estate Ecosystem – All in One Platform
             </p>
           </div>
 
           {/* Supporting Description */}
-          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium bg-white/40 md:bg-transparent backdrop-blur-xs md:backdrop-blur-none p-2 md:p-0 rounded-xl">
+          <p className="text-xs sm:text-sm text-slate-900 leading-relaxed font-semibold bg-white/65 md:bg-transparent backdrop-blur-md md:backdrop-blur-none p-3 md:p-0 rounded-2xl border border-white/60 md:border-0 shadow-xs md:shadow-none">
             Discover transparent material pricing, reverse auction bidding, verified professionals, smart engineering calculators, property intelligence and complete construction solutions.
           </p>
 
           {/* 4 Green Tick Benefit Points */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-900">
-              <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              </div>
-              <span>Real-Time Material Rates</span>
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none px-2.5 py-1.5 md:p-0 rounded-xl border border-white/50 md:border-0">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="truncate">Material Rates</span>
             </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-900">
-              <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              </div>
-              <span>Trusted Professionals</span>
+            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none px-2.5 py-1.5 md:p-0 rounded-xl border border-white/50 md:border-0">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="truncate">Verified Trades</span>
             </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-900">
-              <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              </div>
-              <span>Smart Tools & Calculators</span>
+            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none px-2.5 py-1.5 md:p-0 rounded-xl border border-white/50 md:border-0">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="truncate">Smart Tools</span>
             </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-900">
-              <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              </div>
-              <span>Transparent & Fair Pricing</span>
+            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none px-2.5 py-1.5 md:p-0 rounded-xl border border-white/50 md:border-0">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="truncate">Milestone Escrow</span>
             </div>
           </div>
 
@@ -112,7 +103,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, onOpen
             onSubmit={handleSearch}
             className="pt-1"
           >
-            <div className="flex items-center bg-white rounded-full p-1.5 shadow-lg border border-slate-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100 transition-all max-w-xl">
+            <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full p-1.5 shadow-lg border border-slate-200/90 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100 transition-all max-w-xl">
               <div className="pl-3 text-slate-400">
                 <Search className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
@@ -132,8 +123,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, onOpen
             </div>
           </form>
 
-          {/* Quick CTA Buttons */}
-          <div className="flex flex-wrap items-center gap-2.5 pt-1">
+          {/* Quick CTA Buttons - REMOVED ON MOBILE PER image copy 12.png */}
+          <div className="hidden sm:flex flex-wrap items-center gap-2.5 pt-1">
             <Link 
               to="/materials" 
               className="inline-flex items-center gap-1.5 bg-bm-navy hover:bg-slate-800 text-white font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all active:scale-95"
