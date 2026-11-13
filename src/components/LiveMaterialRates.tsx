@@ -160,3 +160,4 @@ export const LiveMaterialRates: React.FC<LiveMaterialRatesProps> = ({ onOpenAllR
     </section>
   );
 };
+

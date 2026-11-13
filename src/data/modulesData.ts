@@ -109,3 +109,4 @@ export const CORE_MODULES: PlatformModule[] = [
     features: ['Construction Stage Disbursement', 'Real-Time EMI Optimizer', 'Multi-Bank Comparison', 'Affiliate Partner Dashboard']
   }
 ];
+

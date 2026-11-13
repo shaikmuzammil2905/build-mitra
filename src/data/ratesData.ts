@@ -401,3 +401,4 @@ export const CITIES_DATA: Record<string, CityRates> = {
     ]
   }
 };
+

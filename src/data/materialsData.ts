@@ -169,3 +169,4 @@ export const MATERIALS_CATALOG: MaterialProduct[] = [
     supplierCity: 'Bengaluru'
   }
 ];
+

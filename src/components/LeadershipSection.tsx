@@ -152,3 +152,4 @@ export const LeadershipSection: React.FC = () => {
     </section>
   );
 };
+

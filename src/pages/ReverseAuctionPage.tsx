@@ -23,7 +23,7 @@ export const ReverseAuctionPage: React.FC<ReverseAuctionPageProps> = ({ onOpenEn
   const [rfqCity, setRfqCity] = useState('Bengaluru');
   const [rfqCreated, setRfqCreated] = useState(false);
 
-  // Simulated live auction comparison table (clearly labeled as benchmark demonstration)
+  // Simulated live auction comparison table
   const simulatedBids = [
     { rank: '#1', supplier: 'JSW Steel Authorized Primary Stockyard', bidRate: '₹ 61.20 / Kg', landedTotal: '₹ 15,30,000', delta: '-4.8%', status: 'Lowest Landed Price', verified: true },
     { rank: '#2', supplier: 'Tata Tiscon Regional Depot Hub', bidRate: '₹ 62.10 / Kg', landedTotal: '₹ 15,52,500', delta: '-3.2%', status: 'NABL Certified', verified: true },
@@ -36,36 +36,36 @@ export const ReverseAuctionPage: React.FC<ReverseAuctionPageProps> = ({ onOpenEn
   };
 
   return (
-    <div className="pt-24 pb-20 bg-slate-50 min-h-screen">
+    <div className="pt-16 sm:pt-20 pb-20 bg-slate-50 min-h-screen">
       
-      {/* Page Header */}
-      <div className="bg-bm-navy text-white py-14 relative overflow-hidden">
+      {/* DESKTOP ONLY Page Header - REMOVED ON MOBILE per image copy 8.png */}
+      <div className="hidden md:block bg-bm-navy text-white py-12 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl space-y-4">
+          <div className="max-w-3xl space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold uppercase tracking-wider">
               <Gavel className="w-3.5 h-3.5" />
               <span>Module 02 • Competitive Procurement Architecture</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
               Reverse Auction Engine
             </h1>
-            <p className="text-base text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-300 leading-relaxed">
               Upload your Bill of Quantities (BOQ) and let verified primary manufacturers and tier-1 stockyards compete for your purchase order. Transparent lowest-landed price comparison with secure milestone escrow.
             </p>
           </div>
         </div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-6">
         
         {/* Mode Selector */}
-        <div className="bg-white rounded-2xl p-2 shadow-lg border border-slate-200/90 max-w-md mx-auto flex items-center">
+        <div className="bg-white rounded-2xl p-1.5 shadow-sm border border-slate-200/90 max-w-md mx-auto flex items-center">
           <button
             onClick={() => setActiveTab('buyer')}
             className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-center ${
               activeTab === 'buyer' 
-                ? 'bg-blue-600 text-white shadow-sm' 
+                ? 'bg-blue-600 text-white shadow-xs' 
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -75,7 +75,7 @@ export const ReverseAuctionPage: React.FC<ReverseAuctionPageProps> = ({ onOpenEn
             onClick={() => setActiveTab('supplier')}
             className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all text-center ${
               activeTab === 'supplier' 
-                ? 'bg-blue-600 text-white shadow-sm' 
+                ? 'bg-blue-600 text-white shadow-xs' 
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -84,10 +84,10 @@ export const ReverseAuctionPage: React.FC<ReverseAuctionPageProps> = ({ onOpenEn
         </div>
 
         {/* Live Reverse Auction Simulator & RFQ Submission */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           
           {/* Left Form: Create RFQ / Upload BOQ */}
-          <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 space-y-6">
+          <div className="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-8 shadow-xs border border-slate-200/90 space-y-5">
             <div className="space-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-amber-600">
                 Step 1 of 3
@@ -195,15 +195,15 @@ export const ReverseAuctionPage: React.FC<ReverseAuctionPageProps> = ({ onOpenEn
           </div>
 
           {/* Right Interface: Live Reverse Auction Room Simulation */}
-          <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 space-y-6">
+          <div className="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-8 shadow-xs border border-slate-200/90 space-y-5">
             
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
               <div>
                 <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span>Active Auction Session (Demonstration)</span>
+                  <span>Active Auction Session (Live Demo)</span>
                 </div>
-                <h3 className="text-lg font-extrabold text-bm-navy mt-0.5">
+                <h3 className="text-base sm:text-lg font-extrabold text-bm-navy mt-0.5">
                   RFQ-BM-2026-9481 • Fe 550D TMT Steel (25 MT)
                 </h3>
               </div>
@@ -214,7 +214,6 @@ export const ReverseAuctionPage: React.FC<ReverseAuctionPageProps> = ({ onOpenEn
               </div>
             </div>
 
-            {/* Simulation Disclaimer Note */}
             <div className="flex items-start gap-2 bg-blue-50/70 p-3 rounded-xl border border-blue-200/60 text-xs text-blue-900 leading-snug">
               <AlertCircle className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
               <span>
@@ -223,13 +222,13 @@ export const ReverseAuctionPage: React.FC<ReverseAuctionPageProps> = ({ onOpenEn
             </div>
 
             {/* Bids Table */}
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {simulatedBids.map((b, idx) => (
                 <div 
                   key={idx}
-                  className={`p-4 rounded-2xl border transition-all ${
+                  className={`p-3.5 sm:p-4 rounded-2xl border transition-all ${
                     idx === 0 
-                      ? 'bg-gradient-to-r from-emerald-50/50 to-white border-emerald-300 shadow-sm' 
+                      ? 'bg-gradient-to-r from-emerald-50/50 to-white border-emerald-300 shadow-xs' 
                       : 'bg-white border-slate-200'
                   }`}
                 >
@@ -241,17 +240,17 @@ export const ReverseAuctionPage: React.FC<ReverseAuctionPageProps> = ({ onOpenEn
                         {b.rank}
                       </span>
                       <div>
-                        <div className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                        <div className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5">
                           <span>{b.supplier}</span>
-                          <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                         </div>
-                        <div className="text-xs text-slate-500">{b.status}</div>
+                        <div className="text-[11px] text-slate-500">{b.status}</div>
                       </div>
                     </div>
 
                     <div className="text-left sm:text-right">
-                      <div className="text-base font-extrabold text-slate-900">{b.bidRate}</div>
-                      <div className="text-xs text-slate-500 font-mono">Landed: {b.landedTotal} ({b.delta})</div>
+                      <div className="text-sm sm:text-base font-extrabold text-slate-900">{b.bidRate}</div>
+                      <div className="text-[11px] text-slate-500 font-mono">Landed: {b.landedTotal} ({b.delta})</div>
                     </div>
                   </div>
                 </div>
@@ -259,17 +258,17 @@ export const ReverseAuctionPage: React.FC<ReverseAuctionPageProps> = ({ onOpenEn
             </div>
 
             {/* Auction Action Buttons */}
-            <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="text-xs text-slate-500">
                 Buyer savings on this tender: <strong className="text-emerald-600 font-bold">₹ 78,500 (4.8% below retail yard)</strong>
               </div>
 
               <button
                 onClick={() => onOpenEnquiry('Accept Lowest Landed Bid for Steel')}
-                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2"
               >
                 <span>Accept Lowest Landed Bid</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
 

@@ -105,3 +105,4 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ onSelectFeature }) => 
     </section>
   );
 };
+

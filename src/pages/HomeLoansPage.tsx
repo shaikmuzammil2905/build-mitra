@@ -46,7 +46,7 @@ export const HomeLoansPage: React.FC<HomeLoansPageProps> = ({ onOpenEnquiry }) =
     <div className="pt-24 pb-20 bg-slate-50 min-h-screen">
       
       {/* Page Header */}
-      <div className="bg-bm-navy text-white py-14 relative overflow-hidden">
+      <div className="hidden md:block bg-bm-navy text-white py-14 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold uppercase tracking-wider">
@@ -64,7 +64,7 @@ export const HomeLoansPage: React.FC<HomeLoansPageProps> = ({ onOpenEnquiry }) =
         <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2 md:-mt-6 relative z-20 space-y-8">
         
         {/* Interactive Construction Loan EMI Calculator */}
         <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200/90 space-y-8">
@@ -264,3 +264,4 @@ export const HomeLoansPage: React.FC<HomeLoansPageProps> = ({ onOpenEnquiry }) =
     </div>
   );
 };
+

@@ -156,3 +156,4 @@ export const HOME_SERVICES_CATALOG: HomeService[] = [
     popularProjects: ['Acrylic Modular Kitchen', 'Floor-to-Ceiling Sliding Wardrobes', 'Solid Teak Pooja Mandir & Main Door', 'Acoustic TV Media Wall Paneling']
   }
 ];
+

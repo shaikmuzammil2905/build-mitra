@@ -8,9 +8,10 @@ import {
   Clock, 
   MapPin, 
   ArrowRight,
-  Sparkles,
   Search,
-  Filter
+  ChevronDown,
+  ChevronRight,
+  Sparkles
 } from 'lucide-react';
 
 interface ServicesPageProps {
@@ -20,6 +21,16 @@ interface ServicesPageProps {
 export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Visual Category Tiles per image copy 9.png
+  const visualCategories = [
+    { id: 'Waterproofing', name: 'Waterproofing', image: '/assets/services.jpg', subtitle: 'Terrace & Sump' },
+    { id: 'Painting', name: 'Painting', image: '/assets/services.jpg', subtitle: 'Interior & Exterior' },
+    { id: 'Electrical', name: 'Electrical', image: '/assets/cat_electrical.jpg', subtitle: 'Wiring & Panels' },
+    { id: 'Plumbing', name: 'Plumbing', image: '/assets/cat_plumbing.jpg', subtitle: 'Piping & Pumps' },
+    { id: 'Civil Works', name: 'Civil Works', image: '/assets/engineering.jpg', subtitle: 'Turnkey & Remodel' },
+    { id: 'Carpentry', name: 'Carpentry', image: '/assets/floor-plans.jpg', subtitle: 'Modular & Doors' },
+  ];
 
   const categories = ['All', 'Waterproofing', 'Painting', 'Electrical', 'Plumbing', 'Civil Works', 'Carpentry'];
 
@@ -33,139 +44,200 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking }) => 
   });
 
   return (
-    <div className="pt-24 pb-20 bg-slate-50 min-h-screen">
+    <div className="pt-16 sm:pt-20 pb-20 bg-slate-50 min-h-screen">
       
-      {/* Page Header */}
-      <div className="bg-bm-navy text-white py-14 relative overflow-hidden">
+      {/* DESKTOP ONLY Page Header - REMOVED ON MOBILE per image copy 8.png */}
+      <div className="hidden md:block bg-bm-navy text-white py-12 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl space-y-4">
+          <div className="max-w-3xl space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider">
               <Hammer className="w-3.5 h-3.5" />
               <span>Module 03 • GPS-Verified On-Demand Trades</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
               On-Demand Home & Civil Services
             </h1>
-            <p className="text-base text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-300 leading-relaxed">
               Book certified civil contractors, waterproofing specialists, master plumbers, electricians, and turnkey painters. 100% background-checked with upfront transparent rate matrices and warranty guarantees.
             </p>
           </div>
         </div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-6">
         
-        {/* Filter & Search Bar */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-lg border border-slate-200/90 flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* TOP SEARCH & DROPDOWN BAR (per image copy 9.png) */}
+        <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/90 space-y-4">
           
-          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
-            {categories.map((cat) => (
+          <div className="flex flex-col sm:flex-row items-stretch gap-3">
+            {/* Search Input Box with Search Button */}
+            <div className="relative flex-1 flex items-center bg-slate-50 rounded-2xl border border-slate-200 p-1.5 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+              <Search className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 ml-2.5 shrink-0" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search electrician, plumber, painting, waterproofing..."
+                className="w-full px-3 py-1.5 bg-transparent text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
+              />
               <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                  selectedCategory === cat
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
+                onClick={() => {}}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-xs transition-all shrink-0 active:scale-95"
               >
-                {cat}
+                Search
               </button>
-            ))}
+            </div>
+
+            {/* Category Dropdown */}
+            <div className="relative w-full sm:w-56 shrink-0">
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full h-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-500 cursor-pointer appearance-none transition-colors"
+              >
+                {categories.map((c) => (
+                  <option key={c} value={c}>
+                    {c === 'All' ? '🛠️ All Services' : `🔧 ${c}`}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="w-4 h-4 text-slate-500 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
           </div>
 
-          <div className="relative w-full md:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search electrician, waterproofing..."
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium focus:outline-none focus:border-blue-500"
-            />
+          {/* VISUAL SERVICE TILES (per image copy 9.png) */}
+          <div className="space-y-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-between">
+              <div className="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+                <span className="w-1.5 h-3.5 bg-emerald-500 rounded-full"></span>
+                <span>Service Categories</span>
+              </div>
+              <button 
+                onClick={() => setSelectedCategory('All')}
+                className="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-0.5"
+              >
+                View All <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Category Photos Grid */}
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5 sm:gap-4 overflow-x-auto pb-1 scrollbar-none">
+              {visualCategories.map((cat) => {
+                const isSelected = selectedCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`group rounded-2xl p-2 sm:p-2.5 transition-all text-center flex flex-col items-center justify-between border ${
+                      isSelected
+                        ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-200 shadow-sm'
+                        : 'bg-white border-slate-200/90 hover:border-slate-300 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-slate-100 mb-1.5 shadow-2xs group-hover:scale-105 transition-transform">
+                      <img 
+                        src={cat.image} 
+                        alt={cat.name} 
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="font-extrabold text-[11px] sm:text-xs text-slate-900 leading-tight">
+                      {cat.name}
+                    </div>
+                    <div className="text-[10px] text-slate-400 mt-0.5 hidden sm:block">
+                      {cat.subtitle}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
         </div>
 
-        {/* Services List Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredServices.map((service) => (
-            <div
-              key={service.id}
-              className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
-            >
-              <div className="p-6 space-y-4">
-                
-                {/* Header Tag & Rating */}
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">
-                    {service.category}
-                  </span>
-                  <div className="flex items-center gap-1 bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-full text-xs">
-                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    <span>{service.rating} ({service.reviewsCount})</span>
-                  </div>
-                </div>
-
-                {/* Service Title */}
-                <div>
-                  <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
-                    {service.name}
-                  </h3>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1 font-medium">
-                    <Clock className="w-3.5 h-3.5 text-blue-600" />
-                    <span>{service.eta}</span>
-                  </div>
-                </div>
-
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {service.shortDesc}
-                </p>
-
-                {/* Pricing & Insurance Card */}
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
-                  <div>
-                    <span className="text-[11px] text-slate-400 uppercase font-semibold">Standard Pricing</span>
-                    <div className="text-xl font-extrabold text-slate-900">{service.startingPrice}</div>
-                    <div className="text-[11px] text-slate-500">{service.priceUnit}</div>
-                  </div>
-
-                  <div className="text-right text-xs">
-                    <span className="text-[11px] text-slate-400 uppercase font-semibold">Coverage</span>
-                    <div className="font-bold text-emerald-600">{service.insuranceCover}</div>
-                    <div className="text-[11px] text-slate-500">Verified Pros</div>
-                  </div>
-                </div>
-
-                {/* Scope of Work */}
-                <div className="space-y-1.5 pt-1">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                    Standard Scope of Work:
-                  </span>
-                  {service.deliverables.slice(0, 3).map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-xs text-slate-600">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-
-              </div>
-
-              {/* Action Button */}
-              <div className="p-6 pt-0">
-                <button
-                  onClick={() => onOpenBooking(`Book ${service.name}`)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center gap-2"
-                >
-                  <span>Book Verified Service</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
+        {/* FEATURED SERVICES LIST */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-1.5">
+              <span className="w-1.5 h-4 bg-emerald-600 rounded-full"></span>
+              <span>Verified Home & Civil Services ({filteredServices.length})</span>
             </div>
-          ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredServices.map((service) => (
+              <div
+                key={service.id}
+                className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
+              >
+                {/* Visual Header Image */}
+                <div className="relative h-44 bg-slate-100 overflow-hidden">
+                  <img
+                    src={
+                      service.category === 'Electrical' ? '/assets/cat_electrical.jpg' :
+                      service.category === 'Plumbing' ? '/assets/cat_plumbing.jpg' :
+                      service.category === 'Civil Works' ? '/assets/engineering.jpg' :
+                      service.category === 'Carpentry' ? '/assets/floor-plans.jpg' :
+                      '/assets/services.jpg'
+                    }
+                    alt={service.name}
+                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-3 left-3 bg-emerald-600 text-white font-mono text-[11px] font-bold px-2.5 py-0.5 rounded-md shadow-xs">
+                    {service.category}
+                  </div>
+                  <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-amber-700 text-[11px] font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1">
+                    <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {service.rating}
+                  </div>
+                </div>
+
+                <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
+                      {service.name}
+                    </h3>
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1 font-medium">
+                      <Clock className="w-3.5 h-3.5 text-blue-600" />
+                      <span>{service.eta}</span>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-2 line-clamp-2 leading-relaxed">
+                      {service.shortDesc}
+                    </p>
+                  </div>
+
+                  {/* Pricing and Insurance Card */}
+                  <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-bold">Standard Rate</span>
+                      <div className="text-lg font-black text-slate-900">{service.startingPrice}</div>
+                      <div className="text-[10px] text-slate-500">{service.priceUnit}</div>
+                    </div>
+                    <div className="text-right text-xs">
+                      <span className="text-[10px] text-slate-400 uppercase font-bold">Warranty</span>
+                      <div className="font-bold text-emerald-600 text-xs">{service.insuranceCover}</div>
+                      <div className="text-[10px] text-slate-500">100% Insured</div>
+                    </div>
+                  </div>
+
+                  {/* Action CTA */}
+                  <div className="pt-2 border-t border-slate-100">
+                    <button
+                      onClick={() => onOpenBooking(`Book ${service.name}`)}
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-xs transition-all active:scale-95 flex items-center justify-center gap-1.5"
+                    >
+                      <span>Book Verified Professional</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                </div>
+
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>

@@ -130,3 +130,4 @@ export const CoreModules: React.FC<CoreModulesProps> = ({ onQuickView }) => {
     </section>
   );
 };
+

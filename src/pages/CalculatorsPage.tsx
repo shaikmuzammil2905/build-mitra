@@ -71,7 +71,7 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
     <div className="pt-24 pb-20 bg-slate-50 min-h-screen">
       
       {/* Page Header */}
-      <div className="bg-bm-navy text-white py-14 relative overflow-hidden">
+      <div className="hidden md:block bg-bm-navy text-white py-14 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider">
@@ -89,7 +89,7 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2 md:-mt-6 relative z-20 space-y-8">
         
         {/* Dynamic BOQ Alert Banner */}
         <div className="bg-gradient-to-r from-bm-navy via-slate-900 to-blue-950 text-white rounded-3xl p-6 sm:p-7 shadow-xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -222,3 +222,4 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
     </div>
   );
 };
+

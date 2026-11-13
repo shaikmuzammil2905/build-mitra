@@ -240,3 +240,4 @@ export const CalculatorModal: React.FC<CalculatorModalProps> = ({ calculator, on
     </div>
   );
 };
+

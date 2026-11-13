@@ -9,7 +9,9 @@ import {
   Ruler, 
   Eye, 
   Sparkles,
-  Download
+  Download,
+  Box,
+  FileSpreadsheet
 } from 'lucide-react';
 
 interface FloorPlansPageProps {
@@ -18,42 +20,41 @@ interface FloorPlansPageProps {
 
 export const FloorPlansPage: React.FC<FloorPlansPageProps> = ({ onOpenEnquiry }) => {
   const [selectedPlan, setSelectedPlan] = useState<FloorPlan>(FLOOR_PLANS_CATALOG[0]);
-  const [viewMode, setViewMode] = useState<'3d' | '2d'>('3d');
 
   return (
-    <div className="pt-24 pb-20 bg-slate-50 min-h-screen">
+    <div className="pt-16 sm:pt-20 pb-20 bg-slate-50 min-h-screen">
       
-      {/* Page Header */}
-      <div className="bg-bm-navy text-white py-14 relative overflow-hidden">
+      {/* DESKTOP ONLY Page Header - REMOVED ON MOBILE per image copy 8.png */}
+      <div className="hidden md:block bg-bm-navy text-white py-12 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl space-y-4">
+          <div className="max-w-3xl space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-300 text-xs font-bold uppercase tracking-wider">
               <Building2 className="w-3.5 h-3.5" />
               <span>Module 06 • Architectural Studio & CAD Plans</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
               2D/3D Drawing Studio & Floor Plans
             </h1>
-            <p className="text-base text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-300 leading-relaxed">
               Explore 100% Vastu-compliant architectural floor plans with CAD dimensions, photorealistic 3D cutaways, structural column schedules, and accurate turnkey construction budgets.
             </p>
           </div>
         </div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-80 h-80 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-8">
         
         {/* Main Floor Plan Showcase Card */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200/90 space-y-6">
+        <div className="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200/90 space-y-6">
           
           {/* Top Bar with Plan Selector Tabs */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-red-600">
-                Featured Architectural Design
+                Architectural Plan Showcase
               </span>
-              <h2 className="text-2xl font-extrabold text-bm-navy mt-0.5">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-bm-navy mt-0.5">
                 {selectedPlan.title}
               </h2>
             </div>
@@ -80,8 +81,8 @@ export const FloorPlansPage: React.FC<FloorPlansPageProps> = ({ onOpenEnquiry })
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Visual Box */}
-            <div className="lg:col-span-7 space-y-3">
-              <div className="relative h-80 sm:h-96 rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 group shadow-md">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="relative h-72 sm:h-96 rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 group shadow-md">
                 <img 
                   src="/assets/floor-plans.jpg" 
                   alt={selectedPlan.title} 
@@ -114,10 +115,37 @@ export const FloorPlansPage: React.FC<FloorPlansPageProps> = ({ onOpenEnquiry })
                   <div className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">₹ {selectedPlan.estCostPerSqft}</div>
                 </div>
                 <div>
-                  <div className="text-[11px] text-emerald-600 uppercase font-bold">Turnkey Cost</div>
+                  <div className="text-[11px] text-emerald-600 uppercase font-bold">Turnkey Budget</div>
                   <div className="text-sm sm:text-base font-extrabold text-emerald-700 mt-0.5">{selectedPlan.estCostTurnkey}</div>
                 </div>
               </div>
+
+              {/* Material Quantity Estimation Schedule */}
+              <div className="bg-gradient-to-br from-slate-50 to-blue-50/40 p-4 rounded-2xl border border-blue-100/80 space-y-2">
+                <div className="text-xs font-extrabold text-slate-900 flex items-center gap-1.5">
+                  <FileSpreadsheet className="w-4 h-4 text-blue-600" />
+                  <span>Estimated Structural Materials for this Design</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                  <div className="bg-white p-2.5 rounded-xl border border-slate-200">
+                    <div className="text-[10px] text-slate-400 uppercase font-bold">Cement</div>
+                    <div className="font-mono font-black text-slate-900 text-sm mt-0.5">{selectedPlan.materialEstimates.cementBags} Bags</div>
+                  </div>
+                  <div className="bg-white p-2.5 rounded-xl border border-slate-200">
+                    <div className="text-[10px] text-slate-400 uppercase font-bold">Steel Rebars</div>
+                    <div className="font-mono font-black text-slate-900 text-sm mt-0.5">{selectedPlan.materialEstimates.steelTons} MT</div>
+                  </div>
+                  <div className="bg-white p-2.5 rounded-xl border border-slate-200">
+                    <div className="text-[10px] text-slate-400 uppercase font-bold">M-Sand</div>
+                    <div className="font-mono font-black text-slate-900 text-sm mt-0.5">{selectedPlan.materialEstimates.sandTons} Tons</div>
+                  </div>
+                  <div className="bg-white p-2.5 rounded-xl border border-slate-200">
+                    <div className="text-[10px] text-slate-400 uppercase font-bold">Bricks/Blocks</div>
+                    <div className="font-mono font-black text-slate-900 text-sm mt-0.5">{selectedPlan.materialEstimates.bricksCount} Pcs</div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             {/* Room Dimensions & Vastu Schedule */}
@@ -127,7 +155,7 @@ export const FloorPlansPage: React.FC<FloorPlansPageProps> = ({ onOpenEnquiry })
                 <span>Room Dimensions & Vastu Alignment</span>
               </h3>
 
-              <div className="divide-y divide-slate-100 rounded-2xl border border-slate-200 overflow-hidden bg-slate-50">
+              <div className="divide-y divide-slate-100 rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 max-h-72 overflow-y-auto">
                 {selectedPlan.rooms.map((rm, idx) => (
                   <div key={idx} className="p-3 flex items-center justify-between text-xs hover:bg-white transition-colors">
                     <div>

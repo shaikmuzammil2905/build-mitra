@@ -120,3 +120,4 @@ export const LABOUR_WORKFORCE: LabourProfile[] = [
     badge: 'Certified Welder'
   }
 ];
+
