@@ -17,10 +17,15 @@ import {
   Home, 
   Shield, 
   Compass, 
-  Search,
-  FileSpreadsheet,
-  ArrowRight,
-  Sparkles
+  Search, 
+  FileSpreadsheet, 
+  ArrowRight, 
+  Sparkles,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+  BookOpen,
+  Scale
 } from 'lucide-react';
 
 interface CalculatorsPageProps {
@@ -31,6 +36,7 @@ interface CalculatorsPageProps {
 export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculator, onOpenBOQ }) => {
   const [selectedCat, setSelectedCat] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const categories = ['All', 'Structural', 'Finishes', 'MEP', 'Site & Civils', 'Specialized'];
 
@@ -67,10 +73,46 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
     }
   };
 
+  const thumbRules = [
+    { component: 'Residential RCC Slab Steel', rule: '3.5 to 4.5 kg / Sq.Ft of slab area', formula: 'Total Built-up × 4.0 kg' },
+    { component: 'Commercial Structural Steel', rule: '5.0 to 6.5 kg / Sq.Ft of built-up area', formula: 'Higher column/shear wall ratio' },
+    { component: 'M20 Concrete Mix (1:1.5:3)', rule: '8.0 bags of cement per 1 m³ finished concrete', formula: 'Dry volume factor = 1.54' },
+    { component: 'M25 Concrete Mix (1:1:2)', rule: '10.5 bags of cement per 1 m³ finished concrete', formula: 'Designed for RCC structural columns' },
+    { component: '6" Concrete Solid Block Masonry', rule: '10.5 blocks per 1 m² wall elevation', formula: 'Deduct 10% for door & window openings' },
+    { component: '12mm Internal Plastering (1:4)', rule: '1.25 bags cement per 100 Sq.Ft wall area', formula: 'Add 15% wastage for joint filling' }
+  ];
+
+  const bisStandards = [
+    { code: 'IS 456 : 2000', title: 'Code of Practice for Plain and Reinforced Concrete', scope: 'Governs concrete mix designs, cover thickness, deflection limits, and shear reinforcement.' },
+    { code: 'IS 1786 : 2008', title: 'High Strength Deformed Steel Bars and Wires', scope: 'Standard for Fe 500D and Fe 550D thermo-mechanically treated (TMT) rebars with high ductility.' },
+    { code: 'IS 1200 : Parts 1–28', title: 'Method of Measurement of Building Works', scope: 'Standard rules for measurement of earthwork, concrete, brickwork, joinery, and finishes.' },
+    { code: 'IS 383 : 2016', title: 'Coarse and Fine Aggregates for Concrete', scope: 'Grading zone curves for river sand and manufactured sand (M-Sand) with silt volume thresholds.' },
+    { code: 'IS 732 : 2019', title: 'Code of Practice for Electrical Wiring Installations', scope: 'Guidelines for conduit sizing, earthing loop resistance, and miniature circuit breaker (MCB) ratings.' }
+  ];
+
+  const faqs = [
+    {
+      q: 'Are the material estimates in these calculators certified for structural approvals?',
+      a: 'The calculators employ exact Bureau of Indian Standards (IS Code) formulas and standard dry-volume density coefficients. They serve as reliable pre-construction BOQ estimates. For municipal sanction, structural drawings must be endorsed by a registered chartered structural engineer.'
+    },
+    {
+      q: 'How does the "Add to BOQ" feature aggregate project costs?',
+      a: 'Each calculator outputs the required raw material quantities (bags of cement, metric tonnes of steel, brass of sand). When you click "Add to BOQ", these items accumulate into a centralized project bill with live Bengaluru yard unit rates.'
+    },
+    {
+      q: 'What dry volume factor is used for concrete calculations?',
+      a: 'In accordance with IS 456, we use a standard dry volume factor of 1.54 to 1.57 (accounting for void compression during water mixing) and include 5% on-site handling wastage.'
+    },
+    {
+      q: 'Can I export the completed Bill of Quantities to Microsoft Excel or PDF?',
+      a: 'Yes. The Consolidated Dynamic BOQ Engine allows 1-click export to formatted Excel (.csv/.xlsx) and printable PDF with itemized unit rates and stage-wise totals.'
+    }
+  ];
+
   return (
     <div className="pt-24 pb-20 bg-slate-50 min-h-screen">
       
-      {/* Page Header */}
+      {/* DESKTOP ONLY Page Header */}
       <div className="hidden md:block bg-bm-navy text-white py-14 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
@@ -89,9 +131,9 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2 md:-mt-6 relative z-20 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2 md:-mt-6 relative z-20 space-y-12">
         
-        {/* Dynamic BOQ Alert Banner */}
+        {/* SECTION 1: DYNAMIC BOQ ALERT BANNER */}
         <div className="bg-gradient-to-r from-bm-navy via-slate-900 to-blue-950 text-white rounded-3xl p-6 sm:p-7 shadow-xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-md">
@@ -119,7 +161,7 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
           </button>
         </div>
 
-        {/* Filter and Search Bar */}
+        {/* SECTION 2: FILTER AND SEARCH BAR */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-lg border border-slate-200/90 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
             {categories.map((cat) => (
@@ -149,7 +191,7 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
           </div>
         </div>
 
-        {/* 19 Calculators Grid */}
+        {/* SECTION 3: 19 CALCULATORS GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((calc) => (
             <div
@@ -157,8 +199,6 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
               className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div className="space-y-4">
-                
-                {/* Header */}
                 <div className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2">
                     <div className="w-9 h-9 rounded-xl bg-slate-50 group-hover:bg-blue-50 flex items-center justify-center transition-colors">
@@ -174,7 +214,6 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
                   </span>
                 </div>
 
-                {/* Title & Standard */}
                 <div>
                   <h3 className="text-lg font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
                     {calc.title}
@@ -188,7 +227,6 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
                   {calc.description}
                 </p>
 
-                {/* Input Fields Sample */}
                 <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-[11px] text-slate-500 space-y-1">
                   <div className="font-bold text-slate-700">Configured Parameters:</div>
                   <div className="flex flex-wrap gap-1">
@@ -199,10 +237,8 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
                     ))}
                   </div>
                 </div>
-
               </div>
 
-              {/* Action Button */}
               <div className="pt-6">
                 <button
                   onClick={() => onOpenCalculator(calc)}
@@ -218,8 +254,104 @@ export const CalculatorsPage: React.FC<CalculatorsPageProps> = ({ onOpenCalculat
           ))}
         </div>
 
+        {/* SECTION 4: CIVIL ENGINEERING STANDARD THUMB RULES TABLE */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 space-y-6">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2">
+              <Scale className="w-3.5 h-3.5" />
+              <span>Standard Civil Engineering Thumb Rules</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+              Quick Reference Rule-of-Thumb Estimation Index
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Field-tested civil estimation metrics applied across residential and commercial construction sites in India.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm border-collapse">
+              <thead>
+                <tr className="bg-slate-100 text-slate-800 font-extrabold border-b border-slate-200">
+                  <th className="p-3.5 rounded-l-xl">Structural Component</th>
+                  <th className="p-3.5">Standard Consumption Rule</th>
+                  <th className="p-3.5 rounded-r-xl">Engineering Derivation</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-medium">
+                {thumbRules.map((row, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                    <td className="p-3.5 font-bold text-slate-900">{row.component}</td>
+                    <td className="p-3.5 font-mono text-blue-700 font-bold">{row.rule}</td>
+                    <td className="p-3.5 text-slate-600">{row.formula}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* SECTION 5: BUREAU OF INDIAN STANDARDS (BIS) COMPENDIUM */}
+        <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 space-y-6">
+          <div className="max-w-2xl space-y-2">
+            <div className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+              Codal Compliance
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-white">
+              Bureau of Indian Standards (BIS) IS Code Compendium
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300">
+              All 19 calculators execute algorithmically verified equations adhering to statutory Indian standards.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {bisStandards.map((item, idx) => (
+              <div key={idx} className="bg-white/5 p-5 rounded-2xl border border-white/10 space-y-2">
+                <div className="text-xs font-mono font-bold text-amber-400">{item.code}</div>
+                <div className="text-sm font-extrabold text-white">{item.title}</div>
+                <p className="text-xs text-slate-300 leading-relaxed">{item.scope}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* SECTION 6: CALCULATORS FAQ ACCORDION */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">
+              <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
+              <span>Civil Intelligence</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+              Engineering Tools & BOQ FAQs
+            </h3>
+          </div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div key={index} className="rounded-2xl border border-slate-200 overflow-hidden">
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-extrabold text-xs sm:text-sm text-slate-900 hover:text-blue-600 transition-colors"
+                  >
+                    <span>{faq.q}</span>
+                    {isOpen ? <ChevronUp className="w-4 h-4 text-blue-600 shrink-0" /> : <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />}
+                  </button>
+                  {isOpen && (
+                    <div className="px-4 sm:px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/50">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
     </div>
   );
 };
-

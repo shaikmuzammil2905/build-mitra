@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
-import { REAL_ESTATE_INSIGHTS, MICRO_MARKET_BENCHMARKS, PropertyInsight } from '../data/propertiesData';
+import { REAL_ESTATE_INSIGHTS, MICRO_MARKET_BENCHMARKS } from '../data/propertiesData';
 import { 
   Building2, 
   MapPin, 
   TrendingUp, 
   ShieldCheck, 
   Compass, 
-  Layers, 
   CheckCircle2, 
   ArrowRight, 
   Sparkles, 
   Calculator,
   Search,
-  FileCheck
+  FileCheck,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+  Award,
+  Clock,
+  Landmark
 } from 'lucide-react';
 
 interface RealEstatePageProps {
@@ -20,15 +25,55 @@ interface RealEstatePageProps {
 }
 
 export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry }) => {
-  const [selectedProperty, setSelectedProperty] = useState<PropertyInsight>(REAL_ESTATE_INSIGHTS[0]);
   const [simulatedPoints, setSimulatedPoints] = useState<number>(4);
-  const [propertyValueInput, setPropertyValueInput] = useState<number>(5000000); // 50 Lakhs
+  const [propertyValueInput, setPropertyValueInput] = useState<number>(6500000); // 65 Lakhs
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [filterType, setFilterType] = useState<string>('All');
 
-  // Stamp duty calculation (Karnataka standard: 5% Stamp Duty + 2% Surcharge/Cess + 1% Registration = ~5.6% - 6.6%)
+  // Stamp duty calculation (Karnataka standard: 5% Stamp Duty + 10% Surcharge/Cess + 1% Registration)
   const stampDuty = Math.round(propertyValueInput * 0.05);
-  const cessSurcharge = Math.round(stampDuty * 0.10); // 10% of stamp duty
+  const cessSurcharge = Math.round(stampDuty * 0.10);
   const regFee = Math.round(propertyValueInput * 0.01);
   const totalGovtCharges = stampDuty + cessSurcharge + regFee;
+
+  const filteredProperties = REAL_ESTATE_INSIGHTS.filter(p => {
+    if (filterType === 'All') return true;
+    return p.type.toLowerCase().includes(filterType.toLowerCase());
+  });
+
+  const legalChecklist = [
+    { title: '30-Year Mother Deed Link Verification', desc: 'Continuous chronological ownership chain establishing clear, undisputed title flow from the original land grant.' },
+    { title: 'Form 15 Encumbrance Certificate (EC)', desc: 'Official Sub-Registrar record reflecting zero registered mortgages, bank hypothecations, or court attachments.' },
+    { title: 'RTC / Pahani & Mutation Register Extracts', desc: 'Revenue record verification ensuring land is not categorized as Government gomal, lake buffer, or PTCL land.' },
+    { title: 'DC Conversion & BDA / BMRDA Sanction', desc: 'Valid Deputy Commissioner agricultural to non-agricultural conversion order and competent layout plan sanction.' },
+    { title: 'BBMP / BDA Khata Certificate & E-Khata', desc: 'Genuine ‘A’ Khata endorsement ensuring tax property identification number (PID) without unregularized penalties.' }
+  ];
+
+  const infrastructureCorridors = [
+    { name: 'STRR (Satellite Town Ring Road - NH 948A)', status: 'Operational & Expanding', impact: '+22% 3-Year Appreciation', locations: 'Doddaballapur • Hoskote • Kanakapura' },
+    { name: 'Namma Metro Yellow & Pink Lines', status: 'Commissioning 2024–2025', impact: '+18% Rental Yield Surge', locations: 'Electronic City • Silk Board • Bannerghatta' },
+    { name: 'Devanahalli Aerotropolis & ITIR SEZ', status: 'Active Development', impact: '+25% Commercial Land Growth', locations: 'North Bengaluru • Airport Corridor' },
+    { name: 'Peripheral Ring Road (PRR) Corridor', status: 'Land Acquisition Phase', impact: '+30% Long-term Capital Growth', locations: 'Tumkur Road to Hosur Road Arc' }
+  ];
+
+  const faqs = [
+    {
+      q: 'How does BuildMitra benchmark Guidance Value against Fair Market Value?',
+      a: 'We aggregate official Department of Stamps & Registration (Kaveri 2.0) circle rates and cross-verify them against verified registered sales deeds in the corresponding sub-registrar jurisdiction to calculate the true market premium.'
+    },
+    {
+      q: 'How accurate is the Satellite DIY Land Boundary Demarcation tool?',
+      a: 'Our online studio utilizes high-resolution satellite imagery mapped to the WGS84 Geodetic Datum with sub-meter spatial resolution. For legal boundary fencing and registration, our team conducts physical Total Station / DGPS surveys.'
+    },
+    {
+      q: 'What is the difference between BDA ‘A’ Khata and B-Khata or Gram Panchayat e-Khata?',
+      a: 'An ‘A’ Khata is an authentic legal property register document for properties with sanctioned layout approvals and DC conversion. B-Khata is a temporary property tax assessment register without building sanction privileges.'
+    },
+    {
+      q: 'Do you assist with Kaveri 2.0 digital registration and slot booking?',
+      a: 'Yes. Our legal executive desk prepares the draft sale deed, calculates exact e-stamp duty, books the biometric registration appointment at the Sub-Registrar Office, and assists with post-registration e-Khata transfer.'
+    }
+  ];
 
   return (
     <div className="pt-16 sm:pt-20 pb-20 bg-slate-50 min-h-screen">
@@ -52,9 +97,9 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
         <div className="absolute top-0 right-0 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-12">
         
-        {/* Interactive Satellite DIY Demarcation Simulation Box */}
+        {/* SECTION 1: INTERACTIVE SATELLITE DIY DEMARCATION SIMULATION */}
         <div className="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200/90 space-y-5">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-slate-200">
             <div>
@@ -75,7 +120,6 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
             </div>
           </div>
 
-          {/* Interactive Visual Map Preview */}
           <div className="relative h-72 sm:h-96 rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-inner group">
             <img 
               src="/assets/real-estate.jpg" 
@@ -83,9 +127,8 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
               className="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
             />
             
-            {/* Digital Grid & Boundary Overlay */}
             <div className="absolute inset-0 bg-blue-950/30 flex items-center justify-center pointer-events-none p-4">
-              <div className="border-2 border-emerald-400 bg-emerald-500/20 w-64 h-44 rounded-lg relative shadow-lg flex items-center justify-center animate-pulse-subtle">
+              <div className="border-2 border-emerald-400 bg-emerald-500/20 w-64 h-44 rounded-lg relative shadow-lg flex items-center justify-center">
                 <div className="absolute -top-2 -left-2 w-4 h-4 rounded-full bg-emerald-400 border-2 border-white shadow"></div>
                 <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-emerald-400 border-2 border-white shadow"></div>
                 <div className="absolute -bottom-2 -left-2 w-4 h-4 rounded-full bg-emerald-400 border-2 border-white shadow"></div>
@@ -98,7 +141,6 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
               </div>
             </div>
 
-            {/* Bottom floating HUD controls */}
             <div className="absolute bottom-3 left-3 right-3 bg-slate-950/80 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 text-white flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -114,7 +156,7 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
           </div>
         </div>
 
-        {/* BENGALURU MICRO-MARKET VALUATION BENCHMARKS TABLE */}
+        {/* SECTION 2: BENGALURU MICRO-MARKET VALUATION BENCHMARKS TABLE */}
         <div className="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200/90 space-y-4">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
@@ -154,7 +196,7 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
           </div>
         </div>
 
-        {/* STAMP DUTY & REGISTRATION ESTIMATOR */}
+        {/* SECTION 3: STAMP DUTY & REGISTRATION ESTIMATOR */}
         <div className="bg-gradient-to-br from-slate-900 via-bm-navy to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
             <div>
@@ -163,11 +205,11 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
                 <span>Statutory Fee Estimator</span>
               </div>
               <h3 className="text-xl font-extrabold text-white mt-1">
-                Karnataka Stamp Duty & Registration Calculator
+                Karnataka Stamp Duty & Registration Calculator (Kaveri 2.0)
               </h3>
             </div>
             <span className="text-xs text-slate-400">
-              Department of Stamps & Registration (Kaveri 2.0)
+              Department of Stamps & Registration Karnataka
             </span>
           </div>
 
@@ -191,7 +233,7 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Computes 5% basic stamp duty + 10% cess/surcharge on duty + 1% registration charges.
+                Computes 5% basic stamp duty + 10% cess/surcharge on duty + 1% registration fee.
               </p>
             </div>
 
@@ -216,16 +258,58 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
           </div>
         </div>
 
-        {/* EXPANDED VERIFIED PROPERTY LISTINGS */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-extrabold text-bm-navy">
-              Verified Properties & Land Parcels ({REAL_ESTATE_INSIGHTS.length})
+        {/* SECTION 4: 30-YEAR LEGAL TITLE DUE DILIGENCE CHECKLIST */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 space-y-6">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-2">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Legal Due Diligence Protocol</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+              5-Pillar Property Title Verification Checklist
             </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Ensure your plot or residential property is 100% free of encumbrance, litigation, or unapproved layouts.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {legalChecklist.map((item, idx) => (
+              <div key={idx} className="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 space-y-2">
+                <div className="text-xs font-bold text-blue-600 uppercase">Check 0{idx+1}</div>
+                <h4 className="text-sm font-extrabold text-slate-900">{item.title}</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* SECTION 5: EXPANDED VERIFIED PROPERTY LISTINGS */}
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <h3 className="text-xl font-extrabold text-bm-navy">
+              Verified Properties & Land Parcels ({filteredProperties.length})
+            </h3>
+            
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+              {['All', 'Plot', 'Villa', 'Commercial'].map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setFilterType(type)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    filterType === type
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {REAL_ESTATE_INSIGHTS.map((prop) => (
+            {filteredProperties.map((prop) => (
               <div
                 key={prop.id}
                 className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xs hover:shadow-xl transition-all space-y-4 flex flex-col justify-between"
@@ -272,7 +356,6 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
                     </div>
                   </div>
 
-                  {/* Features */}
                   <div className="space-y-1 pt-1">
                     {prop.features.slice(0, 2).map((feat, idx) => (
                       <div key={idx} className="flex items-start gap-1.5 text-xs text-slate-600">
@@ -295,6 +378,66 @@ export const RealEstatePage: React.FC<RealEstatePageProps> = ({ onOpenEnquiry })
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* SECTION 6: INFRASTRUCTURE GROWTH CORRIDORS */}
+        <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 space-y-6">
+          <div className="max-w-2xl space-y-2">
+            <div className="text-xs font-bold text-sky-400 uppercase tracking-wider">
+              Capital Growth Forecast
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-white">
+              Bengaluru Infrastructure Corridors & Value Drivers
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300">
+              Strategic transport corridors driving capital appreciation across residential and commercial micro-markets.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {infrastructureCorridors.map((c, idx) => (
+              <div key={idx} className="bg-white/5 p-5 rounded-2xl border border-white/10 space-y-2">
+                <div className="text-sm font-extrabold text-white">{c.name}</div>
+                <div className="text-xs font-bold text-emerald-400">{c.impact}</div>
+                <div className="text-[11px] text-slate-400">{c.locations}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* SECTION 7: REAL ESTATE FAQ ACCORDION */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/90 space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">
+              <HelpCircle className="w-3.5 h-3.5 text-sky-600" />
+              <span>Real Estate Insights</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+              Property & Land Survey FAQs
+            </h3>
+          </div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div key={index} className="rounded-2xl border border-slate-200 overflow-hidden">
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-extrabold text-xs sm:text-sm text-slate-900 hover:text-sky-600 transition-colors"
+                  >
+                    <span>{faq.q}</span>
+                    {isOpen ? <ChevronUp className="w-4 h-4 text-sky-600 shrink-0" /> : <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />}
+                  </button>
+                  {isOpen && (
+                    <div className="px-4 sm:px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/50">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
