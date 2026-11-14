@@ -79,12 +79,12 @@ export const CustomerHeader: React.FC = () => {
           <div className="flex items-center justify-between h-14 sm:h-16 gap-1.5 sm:gap-3">
             
             {/* Left: Brand Logo + Location Selector */}
-            <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-              <Link to="/" className="flex items-center gap-1.5 group shrink-0" title="BuildMitra Home">
+            <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
+              <Link to="/" className="flex items-center gap-1 group shrink-0" title="BuildMitra Home">
                 <img 
                   src="/assets/logo.png" 
                   alt="BuildMitra Logo" 
-                  className="h-8 sm:h-9 w-auto object-contain transition-transform group-hover:scale-105" 
+                  className="h-7 sm:h-9 w-auto object-contain transition-transform group-hover:scale-105" 
                 />
               </Link>
 
@@ -94,12 +94,12 @@ export const CustomerHeader: React.FC = () => {
                     setCityDropdownOpen(!cityDropdownOpen);
                     setNotifDropdownOpen(false);
                   }}
-                  className="flex items-center gap-1 text-[11px] sm:text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-full border border-slate-200 transition-colors"
+                  className="flex items-center gap-1 text-[11px] sm:text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-full border border-slate-200 transition-colors"
                   title="Change Location"
                 >
                   <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
-                  <span className="max-w-[65px] sm:max-w-none truncate">{selectedCity}</span>
-                  <ChevronDown className="w-3 h-3 text-slate-400" />
+                  <span className="max-w-[55px] xs:max-w-[70px] sm:max-w-none truncate">{selectedCity}</span>
+                  <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
                 </button>
 
                 {cityDropdownOpen && (
@@ -209,10 +209,10 @@ export const CustomerHeader: React.FC = () => {
                   const inputEl = document.querySelector('input[type="text"]') as HTMLInputElement;
                   if (inputEl) inputEl.focus();
                 }}
-                className="p-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-full transition-colors"
+                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors"
                 title="Search Services"
               >
-                <Search className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
 
               {/* Notifications Bell */}
@@ -222,10 +222,10 @@ export const CustomerHeader: React.FC = () => {
                     setNotifDropdownOpen(!notifDropdownOpen);
                     setCityDropdownOpen(false);
                   }}
-                  className="relative p-1.5 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors"
+                  className="relative w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors"
                   title="Notifications"
                 >
-                  <Bell className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                  <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   {unreadCount > 0 && (
                     <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white animate-pulse"></span>
                   )}
@@ -262,11 +262,11 @@ export const CustomerHeader: React.FC = () => {
                 <div className="flex items-center gap-1 sm:gap-1.5">
                   <Link
                     to="/profile"
-                    className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 p-1 sm:px-2.5 sm:py-1 rounded-full border border-slate-200 transition-colors"
+                    className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 p-0.5 sm:px-2.5 sm:py-1 rounded-full border border-slate-200 transition-colors"
                     title="View Profile"
                   >
                     <img src={currentUser.avatar} alt={currentUser.name} className="w-6 h-6 rounded-full object-cover border border-blue-500" />
-                    <span className="text-xs font-bold text-slate-800 max-w-[65px] sm:max-w-[80px] truncate">{currentUser.name}</span>
+                    <span className="hidden sm:inline text-xs font-bold text-slate-800 max-w-[70px] truncate">{currentUser.name}</span>
                   </Link>
 
                   <button
@@ -284,10 +284,10 @@ export const CustomerHeader: React.FC = () => {
                     setAuthStep('login');
                     setAuthModalOpen(true);
                   }}
-                  className="inline-flex items-center gap-1 px-2.5 sm:px-3.5 py-1.5 rounded-full text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all active:scale-95 whitespace-nowrap"
+                  className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all active:scale-95 whitespace-nowrap"
                   title="Sign In / Register"
                 >
-                  <User className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                  <User className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
                   <span className="sm:hidden">Sign In</span>
                   <span className="hidden sm:inline">Sign In / Register</span>
                 </button>
@@ -313,14 +313,14 @@ export const CustomerHeader: React.FC = () => {
                   setCityDropdownOpen(false);
                   setNotifDropdownOpen(false);
                 }}
-                className="lg:hidden p-1.5 text-slate-700 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition-colors ml-0.5"
+                className="lg:hidden flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-colors shrink-0"
                 title={mobileMenuOpen ? 'Close Menu' : 'Open Menu Bar'}
                 aria-label="Navigation Menu"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-5 h-5 text-slate-900" />
+                  <X className="w-4 h-4 text-slate-900" />
                 ) : (
-                  <Menu className="w-5 h-5 text-slate-900" />
+                  <Menu className="w-4 h-4 text-slate-900" />
                 )}
               </button>
 

@@ -53,9 +53,9 @@ export const CustomerProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24 max-w-md mx-auto pt-16">
+    <div className="min-h-screen bg-slate-50 pb-24 max-w-md mx-auto pt-0">
       {/* Top Header */}
-      <div className="bg-white border-b border-slate-100 px-4 py-3 sticky top-12 z-20 flex items-center justify-between">
+      <div className="bg-white border-b border-slate-100 px-4 py-3 sticky top-14 sm:top-16 z-20 flex items-center justify-between shadow-2xs">
         <div className="flex items-center gap-3">
           <button 
             onClick={() => navigate(-1)} 
