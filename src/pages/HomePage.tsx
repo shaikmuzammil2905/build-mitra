@@ -20,13 +20,15 @@ import {
   Droplets, 
   Zap, 
   Hammer, 
-  MoreHorizontal, 
+  Grid,
   Clock, 
   Star, 
   Building, 
   Calculator, 
   ChevronRight, 
-  Layers
+  Layers,
+  Check,
+  CheckCircle2
 } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -34,60 +36,331 @@ export const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  // Modals state for interactive sections
+  // Modals state for interactive features
   const [activeCalculator, setActiveCalculator] = useState<EngineeringCalculator | null>(null);
   const [quickViewModule, setQuickViewModule] = useState<PlatformModule | null>(null);
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
   const [enquiryTopic, setEnquiryTopic] = useState('General Consultation');
 
-  const getCategoryIcon = (id: string) => {
-    switch (id) {
-      case 'painting': return <Paintbrush className="w-6 h-6 text-blue-600" />;
-      case 'construction': return <Building2 className="w-6 h-6 text-amber-600" />;
-      case 'repairs': return <Wrench className="w-6 h-6 text-emerald-600" />;
-      case 'cleaning': return <Sparkles className="w-6 h-6 text-purple-600" />;
-      case 'plumbing': return <Droplets className="w-6 h-6 text-cyan-600" />;
-      case 'electrical': return <Zap className="w-6 h-6 text-yellow-500" />;
-      case 'carpentry': return <Hammer className="w-6 h-6 text-rose-600" />;
-      default: return <MoreHorizontal className="w-6 h-6 text-slate-600" />;
-    }
-  };
+  // 8 Services matching Screen 5 & image copy 20.png
+  const mainServices = [
+    { id: 'painting', name: 'Painting', icon: Paintbrush, path: '/services/painting' },
+    { id: 'construction', name: 'Construction', icon: Building2, path: '/services/construction' },
+    { id: 'repairs', name: 'Repairs', icon: Wrench, path: '/services/repairs' },
+    { id: 'cleaning', name: 'Cleaning', icon: Sparkles, path: '/services/cleaning' },
+    { id: 'plumbing', name: 'Plumbing', icon: Droplets, path: '/services/plumbing' },
+    { id: 'electrical', name: 'Electrical', icon: Zap, path: '/services/electrical' },
+    { id: 'carpentry', name: 'Carpentry', icon: Hammer, path: '/services/carpentry' },
+    { id: 'others', name: 'Others', icon: Grid, path: '/services' },
+  ];
 
-  const getCategoryColor = (id: string) => {
-    switch (id) {
-      case 'painting': return 'bg-blue-50 border-blue-200/80 group-hover:bg-blue-100/80';
-      case 'construction': return 'bg-amber-50 border-amber-200/80 group-hover:bg-amber-100/80';
-      case 'repairs': return 'bg-emerald-50 border-emerald-200/80 group-hover:bg-emerald-100/80';
-      case 'cleaning': return 'bg-purple-50 border-purple-200/80 group-hover:bg-purple-100/80';
-      case 'plumbing': return 'bg-cyan-50 border-cyan-200/80 group-hover:bg-cyan-100/80';
-      case 'electrical': return 'bg-yellow-50 border-yellow-200/80 group-hover:bg-yellow-100/80';
-      case 'carpentry': return 'bg-rose-50 border-rose-200/80 group-hover:bg-rose-100/80';
-      default: return 'bg-slate-50 border-slate-200 group-hover:bg-slate-100';
+  // Product categories matching image copy 21.png
+  const productSections = [
+    {
+      categoryId: 'cleaning',
+      title: 'Housekeeping & Cleaning',
+      serviceCount: '3 services',
+      icon: Sparkles,
+      iconBg: 'bg-emerald-100 text-emerald-700',
+      items: [
+        {
+          id: 'cleaning-staff',
+          name: 'Cleaning Staff',
+          image: '/assets/cleaning_staff.jpg',
+          available: true,
+          desc: 'Deep house cleaning, washroom stain removal & surface sanitization',
+          price: '₹1,000',
+          unit: '/visit',
+          serviceId: 'post-construction-cleaning'
+        },
+        {
+          id: 'housekeeping-staff',
+          name: 'Housekeeping Staff',
+          image: '/assets/housekeeping_gloves.jpg',
+          available: true,
+          desc: 'Daily cleaning, dusting, dusting waste disposal & kitchen cleaning',
+          price: '₹450',
+          unit: '/day',
+          serviceId: 'post-construction-cleaning'
+        },
+        {
+          id: 'deep-scrubbing',
+          name: 'Post-Construction Scrubbing',
+          image: '/assets/services.jpg',
+          available: true,
+          desc: 'Industrial mechanized single-disc scrubbing for newly built homes',
+          price: '₹3,500',
+          unit: '/visit',
+          serviceId: 'post-construction-cleaning'
+        }
+      ]
+    },
+    {
+      categoryId: 'carpentry',
+      title: 'Interior & Carpentry',
+      serviceCount: '3 services',
+      icon: Hammer,
+      iconBg: 'bg-purple-100 text-purple-700',
+      items: [
+        {
+          id: 'custom-carpentry',
+          name: 'Custom Furniture & Wardrobes',
+          image: '/assets/labour.jpg',
+          available: true,
+          desc: 'Plywood cutting, edge banding, modular kitchen cabinets crafting',
+          price: '₹1,200',
+          unit: '/day',
+          serviceId: 'custom-furniture'
+        },
+        {
+          id: 'door-lock-fitting',
+          name: 'Door & Smart Lock Setup',
+          image: '/assets/services.jpg',
+          available: true,
+          desc: 'Precision hinge alignment, biometric smart locks & master latch fitting',
+          price: '₹499',
+          unit: '/visit',
+          serviceId: 'custom-furniture'
+        },
+        {
+          id: 'wood-polishing',
+          name: 'Wood Polish & PU Finish',
+          image: '/assets/engineering.jpg',
+          available: true,
+          desc: 'Italian spray polish, teak restoration & melamine finish for furniture',
+          price: '₹800',
+          unit: '/visit',
+          serviceId: 'custom-furniture'
+        }
+      ]
+    },
+    {
+      categoryId: 'painting',
+      title: 'Painting & Wall Care',
+      serviceCount: '3 services',
+      icon: Paintbrush,
+      iconBg: 'bg-blue-100 text-blue-700',
+      items: [
+        {
+          id: 'interior-painting',
+          name: 'Turnkey Interior Painting',
+          image: '/assets/services.jpg',
+          available: true,
+          desc: 'Asian Paints Royale, dust-free sanding & full furniture masking',
+          price: '₹14',
+          unit: '/sq.ft',
+          serviceId: 'interior-painting'
+        },
+        {
+          id: 'waterproofing-dampproof',
+          name: 'Waterproof Dampproof Coating',
+          image: '/assets/engineering.jpg',
+          available: true,
+          desc: 'Crystalline negative damp proofing, infrared scan, 10-year warranty',
+          price: '₹38',
+          unit: '/sq.ft',
+          serviceId: 'waterproofing-paint'
+        },
+        {
+          id: 'designer-textures',
+          name: 'Designer Italian Wall Textures',
+          image: '/assets/hero-desktop.png',
+          available: true,
+          desc: 'Artistic Italian stucco, metallic glaze & accent wall stencils',
+          price: '₹2,500',
+          unit: '/wall',
+          serviceId: 'premium-finish'
+        }
+      ]
+    },
+    {
+      categoryId: 'repairs',
+      title: 'Electrical & Plumbing Repairs',
+      serviceCount: '3 services',
+      icon: Wrench,
+      iconBg: 'bg-amber-100 text-amber-700',
+      items: [
+        {
+          id: 'cpvc-piping',
+          name: 'Concealed CPVC Pipe Setup',
+          image: '/assets/cat_plumbing.jpg',
+          available: true,
+          desc: 'Astral CPVC, 10 kg/cm² pressure tested, leakproof solvent weld',
+          price: '₹1,100',
+          unit: '/point',
+          serviceId: 'concealed-plumbing'
+        },
+        {
+          id: 'db-dressing',
+          name: 'Short-Circuit & DB Dressing',
+          image: '/assets/cat_electrical.jpg',
+          available: true,
+          desc: 'MCB trip repair, load balancing, FRLS fire-retardant wiring',
+          price: '₹399',
+          unit: '/visit',
+          serviceId: 'home-rewiring'
+        },
+        {
+          id: 'booster-pump',
+          name: 'Automatic Booster Pump Setup',
+          image: '/assets/cat_plumbing.jpg',
+          available: true,
+          desc: 'Pressure switch, dry run protection, overhead tank bypass piping',
+          price: '₹2,500',
+          unit: '/job',
+          serviceId: 'pump-installation'
+        }
+      ]
     }
-  };
+  ];
 
   const activeJob = bookings.find(b => b.status === 'In Progress' || b.status === 'On the Way' || b.status === 'Request Placed' || b.status === 'Provider Accepted');
 
-  const filteredCategories = categories.filter(c => {
-    if (searchQuery.trim() === '') return true;
-    const q = searchQuery.toLowerCase();
-    return c.name.toLowerCase().includes(q) || c.subServices.some(s => s.name.toLowerCase().includes(q));
-  });
-
   return (
     <div className="pb-28">
-      {/* SECTION 1: ARCHITECTURAL HERO SECTION */}
+      
+      {/* 1. APP HERO SECTION (Clean Search Bar + Grand Blue Hero Banner with Painter as in image copy 20.png) */}
       <HeroSection 
-        onSearchSubmit={(q) => setSearchQuery(q)}
+        onSearchSubmit={(q) => {
+          setSearchQuery(q);
+          navigate(`/services?q=${encodeURIComponent(q)}`);
+        }}
         onOpenEnquiry={(topic) => {
           setEnquiryTopic(topic || 'General Consultation');
           setEnquiryModalOpen(true);
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-12 mt-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-10 mt-6">
 
-        {/* SECTION 2: ACTIVE BOOKING STATUS STRIP (if user has active request) */}
+        {/* 2. "OUR SERVICES" - 8 Clean App Cards (Exact Match to image copy 20.png) */}
+        <div>
+          <div className="flex items-center justify-between mb-3 px-1">
+            <h2 className="text-base sm:text-xl font-black text-slate-900 tracking-tight">
+              Our Services
+            </h2>
+            <Link
+              to="/services"
+              className="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-0.5"
+            >
+              <span>See all</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 sm:gap-4">
+            {mainServices.map((svc) => {
+              const Icon = svc.icon;
+              return (
+                <Link
+                  key={svc.id}
+                  to={svc.path}
+                  className="group flex flex-col items-center text-center p-3 sm:p-4 rounded-2xl bg-white border border-slate-100 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all"
+                >
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-50/80 border border-blue-100 flex items-center justify-center mb-2 transition-transform duration-300 group-hover:scale-110">
+                    <Icon className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                    {svc.name}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 3. PRODUCT & SERVICE SHOWCASES (Exact Match to image copy 21.png) */}
+        <div className="space-y-8">
+          {productSections.map((section) => {
+            const SectionIcon = section.icon;
+            return (
+              <div key={section.title} className="space-y-3">
+                
+                {/* Category Header with Pill Icon + Count + See all */}
+                <div className="flex items-center justify-between px-1">
+                  <div className="flex items-center gap-2.5">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${section.iconBg}`}>
+                      <SectionIcon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-base sm:text-lg font-black text-slate-900 leading-tight">
+                        {section.title}
+                      </h3>
+                      <span className="text-[11px] font-semibold text-slate-400">
+                        {section.serviceCount}
+                      </span>
+                    </div>
+                  </div>
+
+                  <Link
+                    to={`/services/${section.categoryId}`}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors"
+                  >
+                    <span>See all</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+
+                {/* Horizontal Scrolling Product Cards (per image copy 21.png) */}
+                <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-2 pt-1 no-scrollbar sm:grid sm:grid-cols-3 sm:overflow-visible">
+                  {section.items.map((prod) => (
+                    <div 
+                      key={prod.id}
+                      className="w-[230px] sm:w-auto shrink-0 bg-white rounded-2xl border border-slate-100 shadow-2xs hover:shadow-md hover:border-slate-200 transition-all flex flex-col justify-between overflow-hidden group"
+                    >
+                      {/* Product Thumbnail with Available Badge */}
+                      <div className="relative h-32 sm:h-36 w-full overflow-hidden bg-slate-100">
+                        <img 
+                          src={prod.image} 
+                          alt={prod.name}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                        {prod.available && (
+                          <div className="absolute bottom-2.5 left-2.5 bg-emerald-600/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 backdrop-blur-xs shadow-xs">
+                            <Check className="w-3 h-3 stroke-[3]" />
+                            <span>Available</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Product Details */}
+                      <div className="p-3.5 flex flex-col flex-1 justify-between gap-3">
+                        <div>
+                          <h4 className="text-xs sm:text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                            {prod.name}
+                          </h4>
+                          <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">
+                            {prod.desc}
+                          </p>
+                        </div>
+
+                        {/* Price & Book Button (per image copy 21.png) */}
+                        <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                          <div>
+                            <span className="text-xs sm:text-sm font-black text-slate-900">{prod.price}</span>
+                            <span className="text-[10px] text-slate-400 font-medium ml-0.5">{prod.unit}</span>
+                          </div>
+
+                          <Link
+                            to={`/service/${prod.serviceId}`}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow-xs transition-colors active:scale-95"
+                          >
+                            Book
+                          </Link>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
+
+        {/* 4. ACTIVE BOOKING STATUS STRIP (if user has active request) */}
         {activeJob && (
           <div 
             onClick={() => navigate(`/booking/${activeJob.id}`)}
@@ -120,44 +393,7 @@ export const HomePage: React.FC = () => {
           </div>
         )}
 
-        {/* SECTION 3: EXPLORE 8 VERIFIED SERVICES */}
-        <div>
-          <div className="flex items-center justify-between mb-4 px-1">
-            <div>
-              <h2 className="text-lg sm:text-2xl font-black text-slate-900">Explore Services</h2>
-              <p className="text-xs sm:text-sm text-slate-500">Select a category to view verified services and upfront pricing</p>
-            </div>
-            <Link
-              to="/services"
-              className="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-0.5"
-            >
-              <span>View All</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4">
-            {filteredCategories.map((cat) => (
-              <Link
-                key={cat.id}
-                to={`/services/${cat.id}`}
-                className="group flex flex-col items-center text-center p-3 sm:p-4 rounded-2xl bg-white border border-slate-100 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all"
-              >
-                <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center border mb-2 transition-transform duration-300 group-hover:scale-110 ${getCategoryColor(cat.id)}`}>
-                  {getCategoryIcon(cat.id)}
-                </div>
-                <span className="text-[11px] sm:text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-1">
-                  {cat.name}
-                </span>
-                <span className="text-[9px] text-slate-400 mt-0.5 hidden sm:block">
-                  {cat.subServices.length} options
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* SECTION 4: DIGITAL ECOSYSTEM MODULE CARDS */}
+        {/* 5. DIGITAL ECOSYSTEM MODULE CARDS (Real Estate, 3D House Designs, Cost Calculator) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           
           {/* Real Estate Module Card */}
@@ -224,7 +460,7 @@ export const HomePage: React.FC = () => {
 
       </div>
 
-      {/* SECTION 5: LIVE MATERIAL RATES & MARKET PRICING */}
+      {/* 6. LIVE MATERIAL RATES & MARKET PRICING */}
       <div className="mt-12">
         <LiveMaterialRates 
           onOpenAllRates={(city) => {
@@ -239,7 +475,7 @@ export const HomePage: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-12 mt-12">
 
-        {/* SECTION 6: NEARBY VERIFIED SERVICE PROVIDERS */}
+        {/* 7. NEARBY TOP-RATED SERVICE PROVIDERS */}
         <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-100 shadow-2xs">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -300,14 +536,14 @@ export const HomePage: React.FC = () => {
 
       </div>
 
-      {/* SECTION 7: CORE PLATFORM MODULES (8 Core Solutions) */}
+      {/* 8. CORE INFRASTRUCTURE MODULES */}
       <div className="mt-12">
         <CoreModules 
           onQuickView={(mod) => setQuickViewModule(mod)}
         />
       </div>
 
-      {/* SECTION 8: SMART ENGINEERING CALCULATORS */}
+      {/* 9. SMART ENGINEERING CALCULATORS */}
       <div className="mt-8">
         <EngineeringToolsGrid 
           onOpenCalculator={(calc) => setActiveCalculator(calc)}
@@ -315,7 +551,7 @@ export const HomePage: React.FC = () => {
         />
       </div>
 
-      {/* SECTION 9: WHY CHOOSE BUILDMITRA / TRUST & SECURITY */}
+      {/* 10. WHY CHOOSE BUILDMITRA */}
       <div className="mt-8">
         <WhyChooseUs 
           onSelectFeature={(title, desc) => {
@@ -325,13 +561,13 @@ export const HomePage: React.FC = () => {
         />
       </div>
 
-      {/* SECTION 10: LEADERSHIP HERITAGE & CIVIL ENGINEERING PEDIGREE */}
+      {/* 11. LEADERSHIP & CIVIL ENGINEERING PEDIGREE */}
       <div className="mt-8">
         <LeadershipSection />
       </div>
 
+      {/* 12. PARTNER ONBOARDING BANNER */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-12">
-        {/* SECTION 11: PARTNER ONBOARDING & ENROLLMENT DRIVE */}
         <div className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-slate-950 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <span className="text-[10px] font-extrabold uppercase tracking-wider bg-black/10 px-2.5 py-0.5 rounded-full inline-block mb-1.5">

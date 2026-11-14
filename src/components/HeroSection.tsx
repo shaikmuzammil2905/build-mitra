@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Search, 
-  CheckCircle2, 
-  ArrowRight, 
-  Sparkles
-} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Search, ArrowRight } from 'lucide-react';
 
 interface HeroSectionProps {
   onSearchSubmit: (query: string) => void;
-  onOpenEnquiry: (topic?: string) => void;
+  onOpenEnquiry?: (topic?: string) => void;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, onOpenEnquiry }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,134 +19,59 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, onOpen
   };
 
   return (
-    <section className="relative min-h-0 sm:min-h-[85vh] lg:min-h-[82vh] flex items-start sm:items-center pt-3 sm:pt-20 pb-6 sm:pb-12 overflow-hidden">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-6 space-y-4 sm:space-y-6">
       
-      {/* DESKTOP BACKGROUND IMAGE (image copy 2.png) - Animated in desktop view only */}
-      <div className="hidden md:block absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <img 
-          src="/assets/hero-desktop.png" 
-          alt="Modern Architectural Development with Construction Crane"
-          className="w-full h-full object-cover object-center lg:object-right-bottom animate-hero-desktop"
-          loading="eager"
+      {/* 1. App-Style Search Bar (Exact Match to image copy 20.png) */}
+      <form onSubmit={handleSearch} className="relative w-full max-w-3xl mx-auto">
+        <input 
+          type="text" 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search for services..."
+          className="w-full bg-white text-slate-800 placeholder-slate-400 pl-11 pr-24 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-medium border border-slate-200/90 shadow-2xs hover:border-blue-400 focus:border-blue-600 focus:outline-none transition-all"
         />
-        {/* Elegant light overlay ensuring 100% text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-transparent md:w-[68%] lg:w-[58%] z-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-transparent to-transparent z-10 h-32 bottom-0"></div>
-        {/* Sunray shimmer effect */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl sunray-pulse z-10"></div>
-      </div>
+        <Search className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <button
+          type="submit"
+          className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3.5 py-1.5 sm:py-2 rounded-full transition-colors active:scale-95"
+        >
+          Search
+        </button>
+      </form>
 
-      {/* MOBILE BACKGROUND IMAGE (image copy 3.png) - Bright look without white patch work & zero empty gap */}
-      <div className="block md:hidden absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <img 
-          src="/assets/hero-mobile.png" 
-          alt="Modern Architectural Building"
-          className="w-full h-full object-cover object-top filter brightness-105 contrast-105 saturate-110 animate-hero-mobile"
-          loading="eager"
-        />
-        {/* Clean bottom transition to content without blocking the sky */}
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-50 via-slate-50/60 to-transparent z-10"></div>
-      </div>
-
-      {/* Content Container - Compact and impressive on mobile */}
-      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 relative z-20 w-full pt-1 sm:pt-0">
-        <div className="max-w-2xl lg:max-w-xl space-y-3 sm:space-y-5">
+      {/* 2. Grand Hero Banner with Painter (Exact Match to image copy 20.png) */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-700 via-blue-600 to-sky-500 text-white shadow-md border border-blue-600/30 p-5 sm:p-8 lg:p-10 flex items-center justify-between min-h-[170px] sm:min-h-[210px] lg:min-h-[240px]">
+        
+        {/* Left: Headline & CTA Button */}
+        <div className="relative z-10 max-w-[62%] sm:max-w-md lg:max-w-lg space-y-3 sm:space-y-4">
+          <h1 className="text-lg sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-xs">
+            Professional Home Services <br />at Your Fingertips
+          </h1>
           
-          {/* Top Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-white/60 text-blue-900 text-xs sm:text-sm font-bold shadow-xs animate-fade-in">
-            <Sparkles className="w-4 h-4 text-amber-500 animate-spin" style={{ animationDuration: '6s' }} />
-            <span>Digital Construction & Real Estate Ecosystem</span>
-          </div>
-
-          {/* Main Headline */}
-          <div className="space-y-1 sm:space-y-2">
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.14] drop-shadow-xs">
-              Build Smart.<br />
-              <span className="text-bm-red drop-shadow-xs">Build Better.</span>
-            </h1>
-            <p className="text-base sm:text-xl font-extrabold text-slate-900 leading-snug drop-shadow-xs">
-              Your Complete Construction & Real Estate Ecosystem – All in One Platform
-            </p>
-          </div>
-
-          {/* Supporting Description */}
-          <p className="text-xs sm:text-sm text-slate-900 leading-relaxed font-semibold bg-white/65 md:bg-transparent backdrop-blur-md md:backdrop-blur-none p-3 md:p-0 rounded-2xl border border-white/60 md:border-0 shadow-xs md:shadow-none">
-            Discover transparent material pricing, reverse auction bidding, verified professionals, smart engineering calculators, property intelligence and complete construction solutions.
-          </p>
-
-          {/* 4 Green Tick Benefit Points */}
-          <div className="grid grid-cols-2 gap-2 pt-1">
-            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none px-2.5 py-1.5 md:p-0 rounded-xl border border-white/50 md:border-0">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span className="truncate">Material Rates</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none px-2.5 py-1.5 md:p-0 rounded-xl border border-white/50 md:border-0">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span className="truncate">Verified Trades</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none px-2.5 py-1.5 md:p-0 rounded-xl border border-white/50 md:border-0">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span className="truncate">Smart Tools</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none px-2.5 py-1.5 md:p-0 rounded-xl border border-white/50 md:border-0">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span className="truncate">Milestone Escrow</span>
-            </div>
-          </div>
-
-          {/* Functional Search Bar */}
-          <form 
-            onSubmit={handleSearch}
-            className="pt-1"
+          <button
+            onClick={() => navigate('/services')}
+            className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 rounded-full shadow-md active:scale-95 transition-all"
           >
-            <div className="flex items-center bg-white/95 backdrop-blur-md rounded-full p-1.5 shadow-lg border border-slate-200/90 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100 transition-all max-w-xl">
-              <div className="pl-3 text-slate-400">
-                <Search className="w-4 h-4 sm:w-5 sm:h-5" />
-              </div>
-              <input 
-                type="text" 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search materials, services, labour..." 
-                className="w-full px-2 sm:px-3 py-2 text-xs sm:text-sm text-slate-900 placeholder-slate-400 bg-transparent focus:outline-none"
-              />
-              <button 
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-5 sm:px-6 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all shrink-0 active:scale-95"
-              >
-                Search
-              </button>
-            </div>
-          </form>
-
-          {/* Quick CTA Buttons - REMOVED ON MOBILE PER image copy 12.png */}
-          <div className="hidden sm:flex flex-wrap items-center gap-2.5 pt-1">
-            <Link 
-              to="/materials" 
-              className="inline-flex items-center gap-1.5 bg-bm-navy hover:bg-slate-800 text-white font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all active:scale-95"
-            >
-              <span>Explore Solutions</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </Link>
-
-            <button 
-              onClick={() => onOpenEnquiry('Hero Get Started')}
-              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all active:scale-95"
-            >
-              <span>Get Started</span>
-            </button>
-
-            <Link 
-              to="/contact" 
-              className="inline-flex items-center gap-1.5 bg-white/90 hover:bg-white text-slate-700 font-bold text-xs sm:text-sm px-3.5 sm:px-4 py-2.5 rounded-full border border-slate-200 shadow-xs hover:shadow transition-all"
-            >
-              <span>Contact Us</span>
-            </Link>
-          </div>
-
+            <span>Book Now</span>
+            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </button>
         </div>
+
+        {/* Right: Verified Professional Painter Image with Hardhat (image copy 20.png) */}
+        <div className="absolute right-0 top-0 bottom-0 w-[45%] sm:w-[42%] lg:w-[38%] flex items-center justify-end pointer-events-none">
+          <img 
+            src="/assets/banner_painter.jpg" 
+            alt="Professional Technician with Yellow Hardhat" 
+            className="h-full w-full object-cover object-left-top mix-blend-normal opacity-98 contrast-105"
+          />
+          {/* Subtle gradient blend on left edge */}
+          <div className="absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-blue-600 to-transparent"></div>
+        </div>
+
       </div>
 
-    </section>
+    </div>
   );
 };
+
+export default HeroSection;
