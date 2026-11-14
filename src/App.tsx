@@ -1,26 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
-import { Header } from './components/Header';
+import { CustomerHeader } from './components/CustomerHeader';
 import { Footer } from './components/Footer';
 import { BottomNav } from './components/BottomNav';
 import { AuthModal } from './components/AuthModal';
 
-// Corporate & Ecosystem Pages
+// All 17 Mobile App Screens & Portals from image copy 14.png
 import { HomePage } from './pages/HomePage';
-import { MaterialsPage } from './pages/MaterialsPage';
-import { ReverseAuctionPage } from './pages/ReverseAuctionPage';
-import { ServicesPage } from './pages/ServicesPage';
-import { LabourNetPage } from './pages/LabourNetPage';
-import { RealEstatePage } from './pages/RealEstatePage';
-import { FloorPlansPage } from './pages/FloorPlansPage';
-import { CalculatorsPage } from './pages/CalculatorsPage';
-import { HomeLoansPage } from './pages/HomeLoansPage';
-import { AboutPage } from './pages/AboutPage';
-import { ContactPage } from './pages/ContactPage';
-
-// Home Services Marketplace & Mobile App Pages (image copy 14.png)
-import { CustomerHomePage } from './pages/CustomerHomePage';
 import { CategoryServicesPage } from './pages/CategoryServicesPage';
 import { ServiceDetailPage } from './pages/ServiceDetailPage';
 import { NearbyProvidersPage } from './pages/NearbyProvidersPage';
@@ -34,15 +21,7 @@ import { ConstructionCalculatorAppPage } from './pages/ConstructionCalculatorApp
 import { PartnerRegistrationPage } from './pages/PartnerRegistrationPage';
 import { PartnerDashboardPage } from './pages/PartnerDashboardPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
-
-// Modals
-import { QuickViewModal } from './components/QuickViewModal';
-import { EnquiryModal } from './components/EnquiryModal';
-import { CalculatorModal } from './components/CalculatorModal';
-import { SearchModal } from './components/SearchModal';
-import { BOQModal, BOQItem } from './components/BOQModal';
-import { PlatformModule } from './data/modulesData';
-import { EngineeringCalculator } from './data/calculatorsData';
+import { ContactPage } from './pages/ContactPage';
 
 // Helper to scroll to top on route navigation
 const ScrollToTop = () => {
@@ -56,200 +35,84 @@ const ScrollToTop = () => {
 export const AppContent: React.FC = () => {
   const location = useLocation();
 
-  // Global Modals State
-  const [quickViewModule, setQuickViewModule] = useState<PlatformModule | null>(null);
-  const [enquiryOpen, setEnquiryOpen] = useState(false);
-  const [enquiryTopic, setEnquiryTopic] = useState('General Consultation');
-  const [activeCalculator, setActiveCalculator] = useState<EngineeringCalculator | null>(null);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchInitialQuery, setSearchInitialQuery] = useState('');
-  const [boqOpen, setBOQOpen] = useState(false);
-
-  // Dynamic BOQ Line Items State
-  const [boqItems, setBOQItems] = useState<BOQItem[]>([
-    { id: '1', item: 'UltraTech Cement 50kg Bags (M20 Grade)', quantity: 80, unit: 'Bags', rate: 380, total: 30400 },
-    { id: '2', item: 'Tata Tiscon Fe 550D 12mm Rebars', quantity: 600, unit: 'Kg', rate: 62, total: 37200 },
-    { id: '3', item: 'VSI Washed M-Sand for Masonry', quantity: 12, unit: 'Tons', rate: 1800, total: 21600 }
-  ]);
-
-  const handleOpenEnquiry = (topic = 'General Consultation') => {
-    setEnquiryTopic(topic);
-    setEnquiryOpen(true);
-  };
-
-  const handleSearchTrigger = (query: string) => {
-    setSearchInitialQuery(query);
-    setSearchOpen(true);
-  };
-
-  const handleAddToBOQ = (newItems: any[]) => {
-    const formatted: BOQItem[] = newItems.map((it, idx) => ({
-      id: `${Date.now()}-${idx}`,
-      item: it.item,
-      quantity: it.quantity,
-      unit: it.unit,
-      rate: it.rate,
-      total: it.total
-    }));
-    setBOQItems((prev) => [...prev, ...formatted]);
-  };
-
-  const handleRemoveBOQItem = (id: string) => {
-    setBOQItems((prev) => prev.filter(it => it.id !== id));
-  };
-
-  const handleClearBOQ = () => {
-    setBOQItems([]);
-  };
-
-  // Determine if on mobile app screen or admin
-  const isAppView = [
-    '/app',
-    '/nearby-providers',
+  // Hide large footer on pure app screens to preserve app experience
+  const isAppOnlyView = [
     '/booking',
-    '/booking-success',
-    '/my-bookings',
+    '/nearby-providers',
     '/profile',
-    '/3d-designs',
-    '/calculator-app',
-    '/partner',
-    '/admin'
-  ].some(prefix => location.pathname.startsWith(prefix));
+    '/partner/dashboard'
+  ].some(p => location.pathname.startsWith(p));
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans antialiased selection:bg-blue-500 selection:text-white">
       
-      {/* Sticky Corporate Header */}
-      <Header 
-        onOpenSearch={() => setSearchOpen(true)}
-        onOpenEnquiry={handleOpenEnquiry}
-      />
+      {/* Universal Top Customer App Header */}
+      <CustomerHeader />
 
-      {/* Main Routed Content */}
+      {/* Main Routed Content - Directly Maps to image copy 14.png */}
       <main className="flex-1">
         <Routes>
-          {/* Corporate / Ecosystem Pages */}
-          <Route 
-            path="/" 
-            element={
-              <HomePage
-                onSearchSubmit={handleSearchTrigger}
-                onOpenEnquiry={handleOpenEnquiry}
-                onQuickView={(mod) => setQuickViewModule(mod)}
-                onOpenCalculator={(calc) => setActiveCalculator(calc)}
-                onOpenBOQ={() => setBOQOpen(true)}
-              />
-            } 
-          />
-          <Route 
-            path="/materials" 
-            element={<MaterialsPage onOpenEnquiry={handleOpenEnquiry} />} 
-          />
-          <Route 
-            path="/reverse-auction" 
-            element={<ReverseAuctionPage onOpenEnquiry={handleOpenEnquiry} />} 
-          />
-          <Route 
-            path="/services" 
-            element={<ServicesPage onOpenBooking={handleOpenEnquiry} />} 
-          />
-          <Route 
-            path="/labour" 
-            element={<LabourNetPage onHireWorker={(worker, trade) => handleOpenEnquiry(`Hire ${worker} (${trade})`)} />} 
-          />
-          <Route 
-            path="/real-estate" 
-            element={<RealEstatePage onOpenEnquiry={handleOpenEnquiry} />} 
-          />
-          <Route 
-            path="/floor-plans" 
-            element={<FloorPlansPage onOpenEnquiry={handleOpenEnquiry} />} 
-          />
-          <Route 
-            path="/calculators" 
-            element={
-              <CalculatorsPage 
-                onOpenCalculator={(calc) => setActiveCalculator(calc)} 
-                onOpenBOQ={() => setBOQOpen(true)} 
-              />
-            } 
-          />
-          <Route 
-            path="/loans" 
-            element={<HomeLoansPage onOpenEnquiry={handleOpenEnquiry} />} 
-          />
-          <Route 
-            path="/about" 
-            element={<AboutPage onOpenEnquiry={handleOpenEnquiry} />} 
-          />
-          <Route 
-            path="/contact" 
-            element={<ContactPage />} 
-          />
-
-          {/* Home Services Marketplace & Mobile App Routes (image copy 14.png) */}
-          <Route path="/app" element={<CustomerHomePage />} />
+          {/* Screen 5: Customer Home Screen */}
+          <Route path="/" element={<HomePage />} />
+          
+          {/* Screen 6: Category Services Listing */}
+          <Route path="/services" element={<CategoryServicesPage />} />
           <Route path="/services/:categoryId" element={<CategoryServicesPage />} />
           <Route path="/category/:categoryId" element={<CategoryServicesPage />} />
+
+          {/* Screen 7: Service Detail Page */}
           <Route path="/service/:serviceId" element={<ServiceDetailPage />} />
+
+          {/* Screen 8: GPS Nearby Providers */}
           <Route path="/nearby-providers" element={<NearbyProvidersPage />} />
           <Route path="/nearby-providers/:serviceId" element={<NearbyProvidersPage />} />
+
+          {/* Screen 9: Live Booking Tracking */}
           <Route path="/booking/:bookingId" element={<BookingTrackingPage />} />
+
+          {/* Screen 13: Payment & Booking Completed */}
           <Route path="/booking-success/:bookingId" element={<BookingCompletedPage />} />
-          <Route path="/my-bookings" element={<MyBookingsPage />} />
-          <Route path="/profile" element={<CustomerProfilePage />} />
+
+          {/* Screen 10: Real Estate Module (Buy/Rent/Sell) */}
+          <Route path="/real-estate" element={<RealEstateAppPage />} />
           <Route path="/real-estate-app" element={<RealEstateAppPage />} />
+
+          {/* Screen 11: 3D House & Villa Designs */}
           <Route path="/3d-designs" element={<HouseDesigns3DPage />} />
+
+          {/* Screen 12: Construction Cost Calculator */}
+          <Route path="/calculator" element={<ConstructionCalculatorAppPage />} />
           <Route path="/calculator-app" element={<ConstructionCalculatorAppPage />} />
 
-          {/* Partner & Admin Portals */}
+          {/* Screen 4: Customer Profile */}
+          <Route path="/profile" element={<CustomerProfilePage />} />
+          <Route path="/my-bookings" element={<MyBookingsPage />} />
+
+          {/* Screens 14, 15, 17: Partner Onboarding & KYC Upload */}
           <Route path="/partner/register" element={<PartnerRegistrationPage />} />
+
+          {/* Screen 16: Partner Dashboard */}
           <Route path="/partner/dashboard" element={<PartnerDashboardPage />} />
+
+          {/* Admin Panel (Phase 14 & Phase 4: KYC Approvals, Bookings Override, SMTP Gateway) */}
           <Route path="/admin" element={<AdminDashboardPage />} />
+
+          {/* Support / Contact */}
+          <Route path="/contact" element={<ContactPage />} />
+
+          {/* Catch-all fallback to Home */}
+          <Route path="*" element={<HomePage />} />
         </Routes>
       </main>
 
-      {/* Footer (hidden on pure app views) */}
-      {!isAppView && <Footer />}
+      {/* Footer on desktop & informative views */}
+      {!isAppOnlyView && <Footer />}
 
-      {/* Mobile Bottom Navigation Bar (Screen 5 & App screens) */}
+      {/* Mobile App Bottom Navigation Bar (Screens 4, 5, 10) */}
       <BottomNav />
 
-      {/* Global Auth Modal (Screens 1, 2, 3) */}
+      {/* Global Customer Auth Modal (Screens 1, 2, 3: Welcome, Mobile/Email Login, 6-digit OTP) */}
       <AuthModal />
-
-      {/* Global Modals */}
-      <QuickViewModal
-        module={quickViewModule}
-        onClose={() => setQuickViewModule(null)}
-        onEnquire={(title) => handleOpenEnquiry(title)}
-      />
-
-      <EnquiryModal
-        isOpen={enquiryOpen}
-        onClose={() => setEnquiryOpen(false)}
-        defaultTopic={enquiryTopic}
-      />
-
-      <CalculatorModal
-        calculator={activeCalculator}
-        onClose={() => setActiveCalculator(null)}
-        onAddToBOQ={handleAddToBOQ}
-      />
-
-      <SearchModal
-        isOpen={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        initialQuery={searchInitialQuery}
-      />
-
-      <BOQModal
-        isOpen={boqOpen}
-        onClose={() => setBOQOpen(false)}
-        items={boqItems}
-        onRemoveItem={handleRemoveBOQItem}
-        onClearAll={handleClearBOQ}
-      />
 
     </div>
   );

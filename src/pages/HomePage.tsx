@@ -1,603 +1,371 @@
 import React, { useState } from 'react';
-import { HeroSection } from '../components/HeroSection';
-import { CoreModules } from '../components/CoreModules';
-import { LiveMaterialRates } from '../components/LiveMaterialRates';
-import { LeadershipSection } from '../components/LeadershipSection';
-import { EngineeringToolsGrid } from '../components/EngineeringToolsGrid';
-import { WhyChooseUs } from '../components/WhyChooseUs';
-import { PlatformModule } from '../data/modulesData';
-import { EngineeringCalculator } from '../data/calculatorsData';
+import { Link, useNavigate } from 'react-router-dom';
+import { useApp } from '../context/AppContext';
 import { 
-  ShieldCheck, 
-  Truck, 
-  Clock, 
-  Sparkles, 
-  CheckCircle2, 
+  Search, 
   ArrowRight, 
-  Calculator, 
-  TrendingDown, 
+  Paintbrush, 
+  Building2, 
+  Wrench, 
+  Sparkles, 
+  Droplets, 
+  Zap, 
+  Hammer, 
+  MoreHorizontal, 
+  Clock, 
+  ShieldCheck, 
   Star, 
-  HelpCircle, 
-  ChevronDown, 
-  ChevronUp,
-  Layers,
-  Users,
+  MapPin, 
+  Calendar,
   Building,
-  FileCheck2,
-  Award
+  Calculator,
+  ChevronRight,
+  Briefcase,
+  Phone,
+  CheckCircle2,
+  Award,
+  Layers,
+  Sliders,
+  DollarSign
 } from 'lucide-react';
 
-interface HomePageProps {
-  onSearchSubmit: (q: string) => void;
-  onOpenEnquiry: (topic?: string) => void;
-  onQuickView: (module: PlatformModule) => void;
-  onOpenCalculator: (calc: EngineeringCalculator) => void;
-  onOpenBOQ: () => void;
-}
+export const HomePage: React.FC = () => {
+  const { categories, bookings, providers, selectedCity } = useApp();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilterCategory, setSelectedFilterCategory] = useState<string>('all');
+  const navigate = useNavigate();
 
-export const HomePage: React.FC<HomePageProps> = ({
-  onSearchSubmit,
-  onOpenEnquiry,
-  onQuickView,
-  onOpenCalculator,
-  onOpenBOQ
-}) => {
-  // Interactive Cost Estimator State
-  const [builtUpArea, setBuiltUpArea] = useState<number>(2000);
-  const [packageType, setPackageType] = useState<'Standard' | 'Premium' | 'Luxury'>('Premium');
-  
-  // FAQ Accordion State
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
-
-  const ratesPerSqft = {
-    Standard: 1650,
-    Premium: 1980,
-    Luxury: 2550
+  const getCategoryIcon = (id: string) => {
+    switch (id) {
+      case 'painting': return <Paintbrush className="w-6 h-6 text-blue-600" />;
+      case 'construction': return <Building2 className="w-6 h-6 text-amber-600" />;
+      case 'repairs': return <Wrench className="w-6 h-6 text-emerald-600" />;
+      case 'cleaning': return <Sparkles className="w-6 h-6 text-purple-600" />;
+      case 'plumbing': return <Droplets className="w-6 h-6 text-cyan-600" />;
+      case 'electrical': return <Zap className="w-6 h-6 text-yellow-500" />;
+      case 'carpentry': return <Hammer className="w-6 h-6 text-rose-600" />;
+      default: return <MoreHorizontal className="w-6 h-6 text-slate-600" />;
+    }
   };
 
-  const totalEstimate = builtUpArea * ratesPerSqft[packageType];
-  const foundationCost = Math.round(totalEstimate * 0.15);
-  const structureCost = Math.round(totalEstimate * 0.30);
-  const masonryCost = Math.round(totalEstimate * 0.18);
-  const finishesCost = Math.round(totalEstimate * 0.17);
-  const mepCost = Math.round(totalEstimate * 0.20);
-
-  const faqs = [
-    {
-      q: 'How does BuildMitra ensure the authenticity of cement and TMT steel?',
-      a: 'All materials listed on BuildMitra are dispatched directly from primary manufacturer depots or authorized tier-1 stockists. Every shipment comes accompanied by a manufacturer test certificate (MTC) and passes random NABL-accredited third-party cube and tensile testing.'
-    },
-    {
-      q: 'What is the BuildMitra Reverse Auction Engine and how does it save costs?',
-      a: 'Instead of accepting fixed retail quotes, builders upload their Bill of Quantities (BOQ). Verified regional distributors and mill representatives place competing bids in real-time, driving landed prices down by an average of 12% to 18%.'
-    },
-    {
-      q: 'Are workers and civil contractors on Labour Net verified?',
-      a: 'Yes. Every tradesperson and contractor team undergoes physical Aadhaar KYC verification, skill assessment, past project reference checks, and police verification. Daily wages are benchmarked according to official Karnataka minimum wage standards.'
-    },
-    {
-      q: 'How does the Milestone Escrow payment model protect homeowners?',
-      a: 'Funds deposited by the client are held safely in a regulated escrow account. Disbursements to civil contractors or material suppliers are released only after our structural engineer conducts an on-site quality inspection and signs off on the completed stage.'
-    },
-    {
-      q: 'Can I export a dynamic Bill of Quantities (BOQ) with live market rates?',
-      a: 'Yes! Our Engineering Calculators allow you to input your building dimensions, automatically calculate materials compliant with IS 456, and generate an itemized, downloadable Excel or PDF BOQ with real-time Bengaluru yard prices.'
-    },
-    {
-      q: 'What real estate services are offered under the Property Hub?',
-      a: 'We provide satellite-based DIY land boundary measurement, BDA/BMRDA title due diligence checklists, and real-time guidance value vs. market value comparisons backed by Karnataka Kaveri 2.0 registered transaction benchmarks.'
+  const getCategoryColor = (id: string) => {
+    switch (id) {
+      case 'painting': return 'bg-blue-50 border-blue-200/80 group-hover:bg-blue-100/80';
+      case 'construction': return 'bg-amber-50 border-amber-200/80 group-hover:bg-amber-100/80';
+      case 'repairs': return 'bg-emerald-50 border-emerald-200/80 group-hover:bg-emerald-100/80';
+      case 'cleaning': return 'bg-purple-50 border-purple-200/80 group-hover:bg-purple-100/80';
+      case 'plumbing': return 'bg-cyan-50 border-cyan-200/80 group-hover:bg-cyan-100/80';
+      case 'electrical': return 'bg-yellow-50 border-yellow-200/80 group-hover:bg-yellow-100/80';
+      case 'carpentry': return 'bg-rose-50 border-rose-200/80 group-hover:bg-rose-100/80';
+      default: return 'bg-slate-50 border-slate-200 group-hover:bg-slate-100';
     }
-  ];
+  };
+
+  const activeJob = bookings.find(b => b.status === 'In Progress' || b.status === 'On the Way' || b.status === 'Request Placed' || b.status === 'Provider Accepted');
+
+  const filteredCategories = categories.filter(c => {
+    if (searchQuery.trim() === '') return true;
+    const q = searchQuery.toLowerCase();
+    return c.name.toLowerCase().includes(q) || c.subServices.some(s => s.name.toLowerCase().includes(q));
+  });
 
   return (
-    <div className="space-y-0">
+    <div className="pb-28 pt-2 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-6">
       
-      {/* 01. Hero Section */}
-      <HeroSection 
-        onSearchSubmit={onSearchSubmit} 
-        onOpenEnquiry={onOpenEnquiry} 
-      />
-
-      {/* 02. Upgraded Large Prominent Trust Bar (per image copy 5.png & image copy 13.png: icon on top, content below in mobile view) */}
-      <div className="bg-white border-y border-slate-200/80 py-6 sm:py-8 shadow-sm relative z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
-            
-            {/* Card 1: 100% Quality Tested */}
-            <div className="bg-gradient-to-br from-emerald-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-emerald-200/80 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-center text-center sm:text-left gap-2.5 sm:gap-3.5 group">
-              <div className="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="text-sm sm:text-base font-extrabold text-slate-900 leading-snug">
-                  100% Quality Tested
-                </div>
-                <div className="text-xs text-emerald-700 font-semibold mt-0.5">
-                  NABL Lab Certified Stocks
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2: Direct From Primary Mills */}
-            <div className="bg-gradient-to-br from-blue-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-blue-200/80 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-center text-center sm:text-left gap-2.5 sm:gap-3.5 group">
-              <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
-                <Truck className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="text-sm sm:text-base font-extrabold text-slate-900 leading-snug">
-                  Direct From Primary Mills
-                </div>
-                <div className="text-xs text-blue-700 font-semibold mt-0.5">
-                  No Multi-Tier Wholesalers
-                </div>
-              </div>
-            </div>
-
-            {/* Card 3: On-Time Site Delivery */}
-            <div className="bg-gradient-to-br from-amber-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-amber-200/80 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-center text-center sm:text-left gap-2.5 sm:gap-3.5 group">
-              <div className="w-12 h-12 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
-                <Clock className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="text-sm sm:text-base font-extrabold text-slate-900 leading-snug">
-                  On-Time Site Delivery
-                </div>
-                <div className="text-xs text-amber-800 font-semibold mt-0.5">
-                  Fleet GPS Real-Time Tracked
-                </div>
-              </div>
-            </div>
-
-            {/* Card 4: Milestone Escrow */}
-            <div className="bg-gradient-to-br from-purple-50 via-white to-white p-4 sm:p-5 rounded-2xl border border-purple-200/80 shadow-xs hover:shadow-md transition-all flex flex-col sm:flex-row items-center text-center sm:text-left gap-2.5 sm:gap-3.5 group">
-              <div className="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
-                <Sparkles className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="text-sm sm:text-base font-extrabold text-slate-900 leading-snug">
-                  Milestone Escrow
-                </div>
-                <div className="text-xs text-purple-700 font-semibold mt-0.5">
-                  100% Secure Fund Release
-                </div>
-              </div>
-            </div>
-
-          </div>
+      {/* 1. APP SEARCH BAR (Exact to Screen 5 of image copy 14.png) */}
+      <div className="relative">
+        <div className="flex items-center bg-white rounded-2xl p-2 shadow-xs border border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+          <Search className="w-5 h-5 text-slate-400 ml-2.5 shrink-0" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={`Search painting, electrical, plumbing in ${selectedCity}...`}
+            className="w-full px-3 py-1.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 bg-transparent focus:outline-none"
+          />
+          {searchQuery && (
+            <button 
+              onClick={() => setSearchQuery('')}
+              className="text-xs font-bold text-slate-400 hover:text-slate-600 mr-2"
+            >
+              Clear
+            </button>
+          )}
+          <Link
+            to="/nearby-providers"
+            className="hidden sm:flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shrink-0"
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            <span>Find Nearby</span>
+          </Link>
         </div>
       </div>
 
-      {/* 03. 8 Core Solutions Grid */}
-      <CoreModules onQuickView={onQuickView} />
-
-      {/* 04. How BuildMitra Works (4-Step End-to-End Lifecycle) */}
-      <section className="py-16 sm:py-20 bg-slate-100 border-y border-slate-200/80 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
-          
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-              <span>Streamlined Digital Execution</span>
+      {/* 2. ACTIVE BOOKING STATUS STRIP (When user has an active booking) */}
+      {activeJob && (
+        <div 
+          onClick={() => navigate(`/booking/${activeJob.id}`)}
+          className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white p-4 rounded-3xl shadow-md border border-blue-800 flex items-center justify-between gap-3 cursor-pointer hover:shadow-lg transition-all group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
+              <Clock className="w-5 h-5 text-amber-400 animate-spin" style={{ animationDuration: '8s' }} />
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              How BuildMitra Powers Your Construction
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              From the initial architectural floor plan to final site handover, experience a transparent, zero-conflict digital construction workflow.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-            
-            {/* Step 1 */}
-            <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-lg font-black shadow-md">
-                  01
-                </div>
-                <h3 className="text-lg font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
-                  Plan & BOQ Estimate
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Input your plot dimensions into our 19 IS Code engineering calculators or choose a Vastu-compliant 2D/3D floor plan to generate an instant, itemized Bill of Quantities.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 mt-6 flex items-center gap-1.5 text-xs font-bold text-blue-600">
-                <CheckCircle2 className="w-4 h-4" /> Accurate IS 456 Standards
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-lg font-black shadow-md">
-                  02
-                </div>
-                <h3 className="text-lg font-extrabold text-slate-900 group-hover:text-emerald-600 transition-colors">
-                  Reverse Auction Sourcing
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Submit your BOQ to verified primary manufacturers and tier-1 stockists. Watch live competing bids drive your cement, steel, and sand costs down by 12% to 18%.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 mt-6 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
-                <CheckCircle2 className="w-4 h-4" /> Direct Mill Factory Invoicing
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center text-lg font-black shadow-md">
-                  03
-                </div>
-                <h3 className="text-lg font-extrabold text-slate-900 group-hover:text-amber-600 transition-colors">
-                  Verified Labour & Civil Team
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Deploy KYC-verified master masons, bar benders, shuttering teams, and turnkey civil contractors with transparent daily wages benchmarked against Karnataka state norms.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 mt-6 flex items-center gap-1.5 text-xs font-bold text-amber-700">
-                <CheckCircle2 className="w-4 h-4" /> 100% Aadhaar KYC & Safety
-              </div>
-            </div>
-
-            {/* Step 4 */}
-            <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 relative group flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center text-lg font-black shadow-md">
-                  04
-                </div>
-                <h3 className="text-lg font-extrabold text-slate-900 group-hover:text-purple-600 transition-colors">
-                  Milestone Escrow Handover
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Your payments remain securely held in escrow. Payouts are released incrementally only after our civil engineers conduct site quality audits and certify milestone completion.
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 mt-6 flex items-center gap-1.5 text-xs font-bold text-purple-600">
-                <CheckCircle2 className="w-4 h-4" /> Zero Financial Risk
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* 05. Live Material Rates Section */}
-      <LiveMaterialRates 
-        onOpenAllRates={(city) => onOpenEnquiry(`View All Rates for ${city}`)}
-        onRequestQuote={(material, city) => onOpenEnquiry(`Quotation for ${material} in ${city}`)}
-      />
-
-      {/* 06. Interactive Construction Cost Estimator */}
-      <section className="py-16 sm:py-20 bg-white border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-200">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2">
-                <Calculator className="w-3.5 h-3.5" />
-                <span>Real-Time Estimation Tool</span>
+              <div className="flex items-center gap-2">
+                <span className="font-mono font-bold text-xs text-amber-400">#{activeJob.id}</span>
+                <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-emerald-400/30">
+                  {activeJob.status}
+                </span>
               </div>
-              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Quick Construction Cost Estimator
-              </h2>
-              <p className="text-sm text-slate-600 mt-1 max-w-2xl">
-                Estimate the complete turnkey building cost for your residential or commercial project in Bengaluru based on updated 2024–2026 material and labor index.
-              </p>
+              <div className="font-extrabold text-sm text-white mt-0.5">
+                {activeJob.serviceName}
+              </div>
+              <div className="text-[11px] text-slate-300">
+                Assigned: {activeJob.provider?.name || 'Verified Specialist'} • Tap to track live
+              </div>
             </div>
+          </div>
 
-            <button
-              onClick={onOpenBOQ}
-              className="bg-bm-navy hover:bg-slate-800 text-white font-bold text-xs sm:text-sm py-3 px-6 rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-2 shrink-0 self-start md:self-auto"
+          <div className="flex items-center gap-1 text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform shrink-0">
+            <span>Track</span>
+            <ChevronRight className="w-4 h-4" />
+          </div>
+        </div>
+      )}
+
+      {/* 3. HERO PROMO BANNER (Screen 5 Reference: Professional Home Services at Your Fingertips) */}
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white p-6 sm:p-8 shadow-lg">
+        <div className="relative z-10 max-w-xl">
+          <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full border border-white/30 mb-3">
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-300" />
+            <span>100% Verified Partners • Zero Commission MVP</span>
+          </div>
+
+          <h1 className="text-2xl sm:text-4xl font-black text-white leading-tight">
+            Professional Home Services at Your Fingertips
+          </h1>
+
+          <p className="text-xs sm:text-sm text-blue-100 mt-2 leading-relaxed">
+            Connect with top-rated painters, plumbers, electricians and construction contractors near you with GPS instant matching and transparent rates.
+          </p>
+
+          <div className="flex flex-wrap gap-2.5 mt-5">
+            <Link
+              to="/services/painting"
+              className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm px-5 py-2.5 rounded-2xl shadow-md transition-all active:scale-95 flex items-center gap-2"
             >
-              <span>Explore Dynamic BOQ</span>
+              <span>Explore Services</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+            </Link>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* Input Controls */}
-            <div className="lg:col-span-6 bg-slate-50 p-6 sm:p-8 rounded-3xl border border-slate-200/90 space-y-6">
-              
-              {/* Built-Up Area Slider */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-extrabold text-slate-900">
-                    Total Built-Up Area (Sq.Ft)
-                  </label>
-                  <span className="text-lg font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-xl border border-blue-200">
-                    {builtUpArea.toLocaleString()} Sq.Ft
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="600"
-                  max="10000"
-                  step="100"
-                  value={builtUpArea}
-                  onChange={(e) => setBuiltUpArea(Number(e.target.value))}
-                  className="w-full accent-blue-600 cursor-pointer h-2 bg-slate-200 rounded-lg"
+            <Link
+              to="/nearby-providers"
+              className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-2xl border border-white/30 transition-all flex items-center gap-1.5"
+            >
+              <MapPin className="w-4 h-4 text-amber-300" />
+              <span>GPS Nearby</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Decorative background glow */}
+        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-radial from-blue-400/30 to-transparent blur-2xl pointer-events-none"></div>
+      </div>
+
+      {/* 4. THE 8 SERVICE CATEGORIES (Exact match to Screen 5 of image copy 14.png) */}
+      <div>
+        <div className="flex items-center justify-between mb-3 px-1">
+          <div>
+            <h2 className="text-base sm:text-lg font-black text-slate-900">Explore Services</h2>
+            <p className="text-xs text-slate-500">Select a category to view verified services and pricing</p>
+          </div>
+          <Link
+            to="/nearby-providers"
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-0.5"
+          >
+            <span>View All</span>
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* Categories Grid - 8 Categories */}
+        <div className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4">
+          {filteredCategories.map((cat) => (
+            <Link
+              key={cat.id}
+              to={`/services/${cat.id}`}
+              className="group flex flex-col items-center text-center p-3 sm:p-4 rounded-2xl bg-white border border-slate-100 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all"
+            >
+              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center border mb-2 transition-transform duration-300 group-hover:scale-110 ${getCategoryColor(cat.id)}`}>
+                {getCategoryIcon(cat.id)}
+              </div>
+              <span className="text-[11px] sm:text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-1">
+                {cat.name}
+              </span>
+              <span className="text-[9px] text-slate-400 mt-0.5 hidden sm:block">
+                {cat.subServices.length} options
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* 5. QUICK ACCESS ECOSYSTEM CARDS (Real Estate, 3D House Designs, Cost Calculator) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        {/* Real Estate Module Card (Screen 10) */}
+        <Link 
+          to="/real-estate"
+          className="group bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white rounded-3xl p-5 shadow-sm hover:shadow-md border border-indigo-800 transition-all flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-amber-300 mb-3 border border-white/20 group-hover:scale-110 transition-transform">
+              <Building className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-white">Real Estate Marketplace</h3>
+            <p className="text-xs text-blue-200 mt-1 leading-relaxed">
+              Buy, rent, and sell verified apartments, luxury villas, and commercial plots with zero brokerage.
+            </p>
+          </div>
+          <div className="flex items-center gap-1 text-xs font-bold text-amber-300 mt-4 group-hover:translate-x-1 transition-transform">
+            <span>Browse Listings</span>
+            <ChevronRight className="w-4 h-4" />
+          </div>
+        </Link>
+
+        {/* 3D House Designs Card (Screen 11) */}
+        <Link 
+          to="/3d-designs"
+          className="group bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 text-white rounded-3xl p-5 shadow-sm hover:shadow-md border border-slate-800 transition-all flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-emerald-400 mb-3 border border-white/20 group-hover:scale-110 transition-transform">
+              <Layers className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-white">3D House & Villa Designs</h3>
+            <p className="text-xs text-blue-200 mt-1 leading-relaxed">
+              Interactive 3D exterior and interior house designs, Vastu-compliant blueprints, and instant turnkey quotes.
+            </p>
+          </div>
+          <div className="flex items-center gap-1 text-xs font-bold text-emerald-400 mt-4 group-hover:translate-x-1 transition-transform">
+            <span>Inspect 3D Models</span>
+            <ChevronRight className="w-4 h-4" />
+          </div>
+        </Link>
+
+        {/* Construction Cost Calculator Card (Screen 12) */}
+        <Link 
+          to="/calculator"
+          className="group bg-gradient-to-br from-blue-950 via-slate-900 to-blue-900 text-white rounded-3xl p-5 shadow-sm hover:shadow-md border border-blue-900 transition-all flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-yellow-400 mb-3 border border-white/20 group-hover:scale-110 transition-transform">
+              <Calculator className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-white">Construction Cost Calculator</h3>
+            <p className="text-xs text-blue-200 mt-1 leading-relaxed">
+              Input area in sq.ft and material grades to calculate exact cement, steel, sand, and labour cost estimates.
+            </p>
+          </div>
+          <div className="flex items-center gap-1 text-xs font-bold text-yellow-400 mt-4 group-hover:translate-x-1 transition-transform">
+            <span>Calculate Cost</span>
+            <ChevronRight className="w-4 h-4" />
+          </div>
+        </Link>
+
+      </div>
+
+      {/* 6. NEARBY VERIFIED SERVICE PROVIDERS (Screen 8 GPS match preview) */}
+      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-100 shadow-2xs">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-base sm:text-lg font-black text-slate-900">Top-Rated Nearby Providers</h2>
+              <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                GPS Live
+              </span>
+            </div>
+            <p className="text-xs text-slate-500">Instant matching based on location in {selectedCity}</p>
+          </div>
+          <Link
+            to="/nearby-providers"
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-0.5"
+          >
+            <span>Open Map</span>
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {providers.slice(0, 4).map((p) => (
+            <div 
+              key={p.id}
+              className="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-100 hover:border-blue-200 transition-all flex flex-col justify-between"
+            >
+              <div className="flex items-center gap-3 mb-2.5">
+                <img 
+                  src={p.avatar} 
+                  alt={p.name} 
+                  className="w-11 h-11 rounded-full object-cover border-2 border-blue-500 shrink-0" 
                 />
-                <div className="flex justify-between text-[11px] text-slate-400 font-mono">
-                  <span>600 Sq.Ft (Compact)</span>
-                  <span>4,000 Sq.Ft (Duplex Villa)</span>
-                  <span>10,000 Sq.Ft (Apartment)</span>
-                </div>
-              </div>
-
-              {/* Package Type Selection */}
-              <div className="space-y-3">
-                <label className="text-sm font-extrabold text-slate-900">
-                  Specification & Quality Package
-                </label>
-                <div className="grid grid-cols-3 gap-3">
-                  {(['Standard', 'Premium', 'Luxury'] as const).map((pkg) => (
-                    <button
-                      key={pkg}
-                      onClick={() => setPackageType(pkg)}
-                      className={`p-3.5 rounded-2xl border text-center transition-all ${
-                        packageType === pkg
-                          ? 'bg-blue-600 text-white border-blue-600 shadow-md ring-2 ring-blue-200'
-                          : 'bg-white text-slate-800 border-slate-200 hover:border-slate-300'
-                      }`}
-                    >
-                      <div className="text-xs font-black uppercase tracking-wider">{pkg}</div>
-                      <div className="text-[11px] mt-1 opacity-90">₹{ratesPerSqft[pkg]}/sq.ft</div>
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-slate-500 leading-relaxed pt-1">
-                  {packageType === 'Standard' && '• Standard: OPC 43/53 cement, Fe 500D steel, 6" concrete solid blocks, vitrified tiles, Anchor electricals.'}
-                  {packageType === 'Premium' && '• Premium: UltraTech/ACC cement, Fe 550D Tata/JSW steel, Red wire-cut bricks, teak wood joinery, Jaguar plumbing.'}
-                  {packageType === 'Luxury' && '• Luxury: Italian marble/granite flooring, automated lighting, double-glazed UPVC, Kohler sanitary, complete interior package.'}
-                </p>
-              </div>
-
-            </div>
-
-            {/* Output Summary Card */}
-            <div className="lg:col-span-6 bg-gradient-to-br from-bm-navy via-slate-900 to-blue-950 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800 space-y-6">
-              
-              <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                  Turnkey Construction Budget
-                </div>
-                <div className="text-3xl sm:text-5xl font-black text-white mt-1">
-                  ₹ {(totalEstimate / 100000).toFixed(2)} <span className="text-xl sm:text-2xl font-bold text-slate-300">Lakhs</span>
-                </div>
-                <div className="text-xs text-slate-400 mt-1">
-                  Estimated at ₹{ratesPerSqft[packageType]} per Sq.Ft for {builtUpArea.toLocaleString()} Sq.Ft built-up structure.
-                </div>
-              </div>
-
-              {/* Stage-wise Breakdown */}
-              <div className="space-y-3 pt-4 border-t border-white/10">
-                <div className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  Stage-Wise Disbursement Allocation
-                </div>
-                
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between items-center bg-white/5 p-2 rounded-xl">
-                    <span className="text-slate-300">Foundation & Substructure (15%)</span>
-                    <span className="font-mono font-bold text-white">₹ {(foundationCost / 100000).toFixed(2)} Lakhs</span>
-                  </div>
-                  <div className="flex justify-between items-center bg-white/5 p-2 rounded-xl">
-                    <span className="text-slate-300">RCC Superstructure & Slab (30%)</span>
-                    <span className="font-mono font-bold text-white">₹ {(structureCost / 100000).toFixed(2)} Lakhs</span>
-                  </div>
-                  <div className="flex justify-between items-center bg-white/5 p-2 rounded-xl">
-                    <span className="text-slate-300">Brick Masonry & Plastering (18%)</span>
-                    <span className="font-mono font-bold text-white">₹ {(masonryCost / 100000).toFixed(2)} Lakhs</span>
-                  </div>
-                  <div className="flex justify-between items-center bg-white/5 p-2 rounded-xl">
-                    <span className="text-slate-300">Flooring, Doors & Windows (17%)</span>
-                    <span className="font-mono font-bold text-white">₹ {(finishesCost / 100000).toFixed(2)} Lakhs</span>
-                  </div>
-                  <div className="flex justify-between items-center bg-white/5 p-2 rounded-xl">
-                    <span className="text-slate-300">Plumbing, Electrical & Painting (20%)</span>
-                    <span className="font-mono font-bold text-white">₹ {(mepCost / 100000).toFixed(2)} Lakhs</span>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={() => onOpenEnquiry(`Construction estimate inquiry for ${builtUpArea} sqft ${packageType} package (₹${(totalEstimate/100000).toFixed(2)} Lakhs)`)}
-                className="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm py-3.5 px-6 rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center gap-2"
-              >
-                <span>Request Detailed Engineering BOQ</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* 07. 31+ Years Leadership Heritage */}
-      <LeadershipSection />
-
-      {/* 08. Powerful Engineering Tools & Calculators Grid */}
-      <EngineeringToolsGrid 
-        onOpenCalculator={onOpenCalculator}
-        onOpenBOQ={onOpenBOQ}
-      />
-
-      {/* 09. Why Choose BuildMitra */}
-      <WhyChooseUs 
-        onSelectFeature={(title) => onOpenEnquiry(`Inquiry about ${title}`)}
-      />
-
-      {/* 10. Verified Client Case Studies & Projects */}
-      <section className="py-16 sm:py-20 bg-slate-50 border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold uppercase tracking-wider">
-              <Award className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Proven Bengaluru Track Record</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Featured Client Projects & Case Studies
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600">
-              Real projects delivered across Bengaluru with verified procurement savings and on-time structural handovers.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            {/* Case 1 */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all space-y-4 flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
-                    Whitefield, Bengaluru
-                  </span>
-                  <div className="flex text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                    ))}
-                  </div>
-                </div>
-                <h3 className="text-base font-extrabold text-slate-900">
-                  4BHK Contemporary Villa (3,600 Sq.Ft)
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  "Saved ₹4.8 Lakhs on primary TMT steel and UltraTech cement through BuildMitra's Reverse Auction engine. The milestone escrow gave us complete peace of mind throughout foundation and slab casting."
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
                 <div>
-                  <div className="font-extrabold text-slate-900">Rajesh & Priya Nair</div>
-                  <div className="text-[11px] text-slate-400">Homeowners • Turnkey Delivery</div>
-                </div>
-                <div className="text-right font-mono font-bold text-emerald-600">
-                  ₹ 4.8L Saved
-                </div>
-              </div>
-            </div>
-
-            {/* Case 2 */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all space-y-4 flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">
-                    Kanakapura Road
-                  </span>
-                  <div className="flex text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                    ))}
+                  <h4 className="text-xs font-bold text-slate-900">{p.name}</h4>
+                  <div className="text-[11px] text-slate-500">{p.specialization}</div>
+                  <div className="flex items-center gap-1 text-[11px] font-bold text-amber-600 mt-0.5">
+                    <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
+                    <span>{p.rating} ({p.reviewsCount} reviews)</span>
                   </div>
                 </div>
-                <h3 className="text-base font-extrabold text-slate-900">
-                  Commercial G+3 Complex (8,400 Sq.Ft)
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  "Hired our entire 14-member bar bending and RCC slab casting gang via Labour Net. Zero absenteeism, strict safety gear compliance, and completed the structural frame 40 days ahead of schedule."
-                </p>
               </div>
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-                <div>
-                  <div className="font-extrabold text-slate-900">K. V. Subrahmanyam</div>
-                  <div className="text-[11px] text-slate-400">Managing Director • Apex Builders</div>
-                </div>
-                <div className="text-right font-mono font-bold text-blue-600">
-                  40 Days Saved
-                </div>
-              </div>
-            </div>
 
-            {/* Case 3 */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all space-y-4 flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full">
-                    Anjanapura BDA Layout
-                  </span>
-                  <div className="flex text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                    ))}
-                  </div>
-                </div>
-                <h3 className="text-base font-extrabold text-slate-900">
-                  3BHK Duplex Residence (2,400 Sq.Ft)
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  "Used the 30x40 Pragathi floor plan from the 2D/3D studio. The material quantity schedules matched within 3% of our actual site consumption. No material wastage or surprise billing."
-                </p>
-              </div>
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-                <div>
-                  <div className="font-extrabold text-slate-900">Dr. Anand Murthy</div>
-                  <div className="text-[11px] text-slate-400">Independent Home Builder</div>
-                </div>
-                <div className="text-right font-mono font-bold text-purple-600">
-                  97% Accuracy
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* 11. Frequently Asked Questions (FAQ Accordion) */}
-      <section className="py-16 sm:py-20 bg-white border-t border-slate-200/80">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          
-          <div className="text-center space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">
-              <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
-              <span>Clear Answers</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-sm text-slate-600">
-              Everything you need to know about material procurement, engineering calculations, and escrow guarantees.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            {faqs.map((faq, index) => {
-              const isOpen = openFaq === index;
-              return (
-                <div 
-                  key={index}
-                  className="rounded-2xl border border-slate-200 bg-slate-50/60 overflow-hidden transition-all"
+              <div className="flex items-center justify-between pt-2 border-t border-slate-200/60 text-xs">
+                <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                  {p.distanceKm} km away • {p.etaMinutes} mins
+                </span>
+                <Link
+                  to={`/services/${p.serviceCategory}`}
+                  className="text-xs font-bold text-blue-600 hover:text-blue-700"
                 >
-                  <button
-                    onClick={() => setOpenFaq(isOpen ? null : index)}
-                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-extrabold text-sm sm:text-base text-slate-900 hover:text-blue-600 transition-colors"
-                  >
-                    <span>{faq.q}</span>
-                    <div className="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center shrink-0">
-                      {isOpen ? <ChevronUp className="w-4 h-4 text-blue-600" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                    </div>
-                  </button>
-                  {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/60 bg-white">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
+                  Book Now
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
-      </section>
+      </div>
+
+      {/* 7. PARTNER ONBOARDING BANNER (Screens 14, 15, 16) */}
+      <div className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-slate-950 rounded-3xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span className="text-[10px] font-extrabold uppercase tracking-wider bg-black/10 px-2.5 py-0.5 rounded-full inline-block mb-1.5">
+            Partner Recruitment Drive
+          </span>
+          <h3 className="text-lg sm:text-xl font-black">
+            Are You a Skilled Professional or Contractor?
+          </h3>
+          <p className="text-xs text-slate-900 mt-1 max-w-xl">
+            Join 5,000+ verified service partners. Get daily customer bookings in your locality with zero onboarding commission.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <Link
+            to="/partner/register"
+            className="bg-slate-950 hover:bg-slate-900 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition-all active:scale-95"
+          >
+            Register as Partner
+          </Link>
+          <Link
+            to="/partner/dashboard"
+            className="bg-white/80 hover:bg-white text-slate-900 font-bold text-xs px-4 py-2.5 rounded-xl border border-slate-300 transition-all"
+          >
+            Partner Login
+          </Link>
+        </div>
+      </div>
 
     </div>
   );
 };
+export default HomePage;
