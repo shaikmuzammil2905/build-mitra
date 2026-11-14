@@ -23,7 +23,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, onOpen
   };
 
   return (
-    <section className="relative min-h-[90vh] sm:min-h-[85vh] lg:min-h-[82vh] flex items-center pt-20 pb-12 overflow-hidden">
+    <section className="relative min-h-0 sm:min-h-[85vh] lg:min-h-[82vh] flex items-start sm:items-center pt-3 sm:pt-20 pb-6 sm:pb-12 overflow-hidden">
       
       {/* DESKTOP BACKGROUND IMAGE (image copy 2.png) - Animated in desktop view only */}
       <div className="hidden md:block absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -40,21 +40,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit, onOpen
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl sunray-pulse z-10"></div>
       </div>
 
-      {/* MOBILE BACKGROUND IMAGE (image copy 3.png) - Bright look without white patch work (image copy 12.png) */}
+      {/* MOBILE BACKGROUND IMAGE (image copy 3.png) - Bright look without white patch work & zero empty gap */}
       <div className="block md:hidden absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img 
           src="/assets/hero-mobile.png" 
           alt="Modern Architectural Building"
-          className="w-full h-full object-cover object-center filter brightness-105 contrast-105 saturate-110 animate-hero-mobile"
+          className="w-full h-full object-cover object-top filter brightness-105 contrast-105 saturate-110 animate-hero-mobile"
           loading="eager"
         />
-        {/* Clean bottom transition only - Zero white patch over the sunny sky & building */}
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white via-white/50 to-transparent z-10"></div>
+        {/* Clean bottom transition to content without blocking the sky */}
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-50 via-slate-50/60 to-transparent z-10"></div>
       </div>
 
-      {/* Content Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
-        <div className="max-w-2xl lg:max-w-xl space-y-4 sm:space-y-5">
+      {/* Content Container - Compact and impressive on mobile */}
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 relative z-20 w-full pt-1 sm:pt-0">
+        <div className="max-w-2xl lg:max-w-xl space-y-3 sm:space-y-5">
           
           {/* Top Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-white/60 text-blue-900 text-xs sm:text-sm font-bold shadow-xs animate-fade-in">
