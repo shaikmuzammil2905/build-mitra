@@ -7,7 +7,6 @@ import { CoreModules } from '../components/CoreModules';
 import { EngineeringToolsGrid } from '../components/EngineeringToolsGrid';
 import { WhyChooseUs } from '../components/WhyChooseUs';
 import { LeadershipSection } from '../components/LeadershipSection';
-import { HomeLoanCalculatorCard } from '../components/HomeLoanCalculatorCard';
 import { CalculatorModal } from '../components/CalculatorModal';
 import { QuickViewModal } from '../components/QuickViewModal';
 import { EnquiryModal } from '../components/EnquiryModal';
@@ -29,7 +28,10 @@ import {
   ChevronRight, 
   Layers,
   Check,
-  CheckCircle2
+  CheckCircle2,
+  Gavel,
+  Landmark,
+  ArrowRight
 } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -270,14 +272,34 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
 
-        {/* 3. HOME LOAN EMI CALCULATOR (Exact Match to image copy 26.png) */}
-        <div>
-          <HomeLoanCalculatorCard 
-            onApplyLoan={(loanDetails) => {
-              setEnquiryTopic(`Home Loan Application: ₹${(loanDetails.amount / 100000).toFixed(1)} Lakhs for ${loanDetails.tenure} Years (EMI: ₹${loanDetails.emi.toLocaleString('en-IN')})`);
-              setEnquiryModalOpen(true);
-            }}
-          />
+        {/* 3. HOME LOAN QUICK ACCESS (Redirects to Separate /home-loans page per image copy 30.png) */}
+        <div className="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-4 sm:p-6 shadow-md border border-blue-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+              <Landmark className="w-6 h-6 text-amber-400" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-black text-white">
+                  Home Loan & Construction Finance
+                </h3>
+                <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full">
+                  8.40% p.a.
+                </span>
+              </div>
+              <p className="text-xs text-blue-200 mt-0.5">
+                Calculate monthly instalments, compare bank interest rates & check eligibility instantly
+              </p>
+            </div>
+          </div>
+
+          <Link
+            to="/home-loans"
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-xs sm:text-sm px-5 py-2.5 rounded-full shadow-md active:scale-95 transition-all shrink-0"
+          >
+            <span>Open Loan EMI Calculator</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
         {/* 4. PRODUCT & SERVICE SHOWCASES (Exact Match to image copy 21.png) */}
@@ -404,25 +426,25 @@ export const HomePage: React.FC = () => {
           </div>
         )}
 
-        {/* 5. DIGITAL ECOSYSTEM MODULE CARDS (Real Estate, 3D House Designs, Cost Calculator) */}
+        {/* 5. DIGITAL ECOSYSTEM MODULE CARDS (Reverse Auction, 3D House Designs, Cost Calculator) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           
-          {/* Real Estate Module Card */}
+          {/* Reverse Auction Engine Card (Replaces Real Estate per user request) */}
           <Link 
-            to="/real-estate"
-            className="group bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white rounded-3xl p-5 shadow-sm hover:shadow-md border border-indigo-800 transition-all flex flex-col justify-between"
+            to="/reverse-auction"
+            className="group bg-gradient-to-br from-indigo-950 via-blue-950 to-slate-900 text-white rounded-3xl p-5 shadow-sm hover:shadow-md border border-indigo-800 transition-all flex flex-col justify-between"
           >
             <div>
               <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-amber-300 mb-3 border border-white/20 group-hover:scale-110 transition-transform">
-                <Building className="w-5 h-5" />
+                <Gavel className="w-5 h-5" />
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-white">Real Estate Marketplace</h3>
+              <h3 className="text-base sm:text-lg font-bold text-white">Reverse Auction Engine</h3>
               <p className="text-xs sm:text-sm text-blue-200 mt-1 leading-relaxed">
-                Buy, rent, and sell verified apartments, luxury villas, and commercial plots with zero brokerage.
+                Live competitive bidding platform where buyers upload their BOQ/material requirements and verified suppliers bid downward in real time to offer the lowest landed price.
               </p>
             </div>
             <div className="flex items-center gap-1 text-xs sm:text-sm font-bold text-amber-300 mt-4 group-hover:translate-x-1 transition-transform">
-              <span>Browse Listings</span>
+              <span>Start Competitive Bidding</span>
               <ChevronRight className="w-4 h-4" />
             </div>
           </Link>

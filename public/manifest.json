@@ -18,11 +18,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    },
-    {
-      "src": "/assets/logo.png",
-      "sizes": "453x137",
-      "type": "image/png"
     }
   ]
 }

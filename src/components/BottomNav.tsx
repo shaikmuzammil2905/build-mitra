@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Calculator, Building, Calendar } from 'lucide-react';
+import { Home, Calculator, Gavel, Calendar } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export const BottomNav: React.FC = () => {
@@ -38,17 +38,17 @@ export const BottomNav: React.FC = () => {
           <span className="text-[10px] tracking-tight font-bold">Calculator</span>
         </NavLink>
 
-        {/* 3. Real Estate */}
+        {/* 3. Reverse Auction Engine (In place of Real Estate per user request) */}
         <NavLink 
-          to="/real-estate" 
+          to="/reverse-auction" 
           className={({ isActive }) => `flex flex-col items-center justify-center gap-1 transition-all ${
             isActive ? 'text-blue-600 font-extrabold scale-105' : 'text-slate-500 hover:text-slate-900 font-medium'
           }`}
         >
           <div className="relative">
-            <Building className="w-5 h-5" />
+            <Gavel className="w-5 h-5" />
           </div>
-          <span className="text-[10px] tracking-tight font-bold">Real Estate</span>
+          <span className="text-[10px] tracking-tight font-bold">Auction</span>
         </NavLink>
 
         {/* 4. Bookings (at the place of More per image copy 24.png) */}
@@ -73,3 +73,5 @@ export const BottomNav: React.FC = () => {
     </div>
   );
 };
+
+export default BottomNav;

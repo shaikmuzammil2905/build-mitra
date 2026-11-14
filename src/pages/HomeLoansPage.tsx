@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Building, 
   Percent, 
   Calendar, 
   ArrowRight, 
+  ArrowLeft,
   ShieldCheck, 
   CheckCircle2, 
   UserPlus, 
@@ -23,6 +25,7 @@ interface HomeLoansPageProps {
 }
 
 export const HomeLoansPage: React.FC<HomeLoansPageProps> = ({ onOpenEnquiry }) => {
+  const navigate = useNavigate();
   const [loanAmount, setLoanAmount] = useState<number>(5000000); // 50 Lakhs
   const [interestRate, setInterestRate] = useState<number>(8.5); // 8.5%
   const [tenureYears, setTenureYears] = useState<number>(20); // 20 years
@@ -85,8 +88,24 @@ export const HomeLoansPage: React.FC<HomeLoansPageProps> = ({ onOpenEnquiry }) =
   ];
 
   return (
-    <div className="pt-24 pb-20 bg-slate-50 min-h-screen">
+    <div className="pt-0 md:pt-0 pb-20 bg-slate-50 min-h-screen">
       
+      {/* Mobile Top Header */}
+      <div className="md:hidden bg-white border-b border-slate-100 px-4 py-3 sticky top-14 sm:top-16 z-20 flex items-center justify-between shadow-2xs">
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => navigate(-1)} 
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-blue-700 text-xs font-bold transition-colors shadow-2xs active:scale-95"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back</span>
+          </button>
+          <h1 className="text-base font-black text-slate-900 tracking-tight">
+            Home Loan Calculator
+          </h1>
+        </div>
+      </div>
+
       {/* DESKTOP ONLY Page Header */}
       <div className="hidden md:block bg-bm-navy text-white py-14 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

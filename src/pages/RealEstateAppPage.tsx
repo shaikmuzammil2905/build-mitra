@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  Search, 
-  Filter, 
-  MapPin, 
-  Building, 
-  Bed, 
-  Bath, 
-  Maximize2, 
-  Phone, 
-  Share2, 
+import {
+  ArrowLeft,
+  Search,
+  Filter,
+  MapPin,
+  Building,
+  Bed,
+  Bath,
+  Maximize2,
+  Phone,
+  Share2,
   Heart,
   ShieldCheck,
   Check
@@ -105,8 +105,8 @@ export const RealEstateAppPage: React.FC = () => {
       {/* Top App Header */}
       <div className="bg-white border-b border-slate-100 px-4 py-3 sticky top-14 sm:top-16 z-20 flex items-center justify-between shadow-2xs">
         <div className="flex items-center gap-3">
-          <button 
-            onClick={() => navigate(-1)} 
+          <button
+            onClick={() => navigate(-1)}
             className="p-1.5 rounded-full hover:bg-slate-100 text-slate-700 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -122,11 +122,10 @@ export const RealEstateAppPage: React.FC = () => {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                tab === t 
-                  ? 'bg-blue-600 text-white shadow-xs' 
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${tab === t
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+                }`}
             >
               {t}
             </button>
@@ -144,10 +143,10 @@ export const RealEstateAppPage: React.FC = () => {
             <form onSubmit={(e) => { e.preventDefault(); setContactSuccess(true); }} className="space-y-3">
               <div>
                 <label className="text-xs font-semibold text-slate-700 block mb-1">Property Title</label>
-                <input 
-                  type="text" 
-                  required 
-                  placeholder="e.g. 3 BHK Luxury Flat in Banjara Hills" 
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. 3 BHK Luxury Flat in Banjara Hills"
                   className="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
@@ -155,19 +154,19 @@ export const RealEstateAppPage: React.FC = () => {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="text-xs font-semibold text-slate-700 block mb-1">Expected Price (₹)</label>
-                  <input 
-                    type="number" 
-                    required 
-                    placeholder="7500000" 
+                  <input
+                    type="number"
+                    required
+                    placeholder="7500000"
                     className="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-slate-700 block mb-1">Area (sq.ft)</label>
-                  <input 
-                    type="number" 
-                    required 
-                    placeholder="1850" 
+                  <input
+                    type="number"
+                    required
+                    placeholder="1850"
                     className="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -175,10 +174,10 @@ export const RealEstateAppPage: React.FC = () => {
 
               <div>
                 <label className="text-xs font-semibold text-slate-700 block mb-1">Your Mobile Number</label>
-                <input 
-                  type="tel" 
-                  required 
-                  defaultValue="+91 98765 43210" 
+                <input
+                  type="tel"
+                  required
+                  defaultValue="+91 98765 43210"
                   className="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
@@ -189,8 +188,8 @@ export const RealEstateAppPage: React.FC = () => {
                   <span>Property listing submitted! Our manager will review and publish within 2 hours.</span>
                 </div>
               ) : (
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-xs"
                 >
                   Submit Listing
@@ -203,14 +202,14 @@ export const RealEstateAppPage: React.FC = () => {
         /* Listings */
         <div className="p-4 space-y-4">
           {filteredProperties.map((prop) => (
-            <div 
-              key={prop.id} 
+            <div
+              key={prop.id}
               className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-xs hover:border-blue-200 transition-all"
             >
               <div className="relative h-44 w-full">
-                <img 
-                  src={prop.image} 
-                  alt={prop.title} 
+                <img
+                  src={prop.image}
+                  alt={prop.title}
                   className="w-full h-full object-cover"
                 />
                 <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-slate-900 font-bold text-xs px-2.5 py-1 rounded-full shadow-xs flex items-center gap-1">
@@ -250,7 +249,7 @@ export const RealEstateAppPage: React.FC = () => {
                   <div className="text-[11px] text-slate-500">
                     Owner: <span className="font-semibold text-slate-700">{prop.owner}</span>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setSelectedProperty(prop)}
                     className="text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl shadow-xs flex items-center gap-1.5"
                   >
@@ -270,7 +269,7 @@ export const RealEstateAppPage: React.FC = () => {
           <div className="bg-white rounded-t-3xl sm:rounded-2xl max-w-sm w-full p-5 space-y-4">
             <h3 className="font-bold text-base text-slate-900">Contact Property Owner</h3>
             <p className="text-xs text-slate-600">{selectedProperty.title} ({selectedProperty.price})</p>
-            
+
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2">
               <div className="text-xs font-semibold text-slate-700">Owner: {selectedProperty.owner}</div>
               <div className="text-xs font-bold text-blue-600 flex items-center gap-2">
@@ -280,13 +279,13 @@ export const RealEstateAppPage: React.FC = () => {
             </div>
 
             <div className="flex gap-2">
-              <button 
+              <button
                 onClick={() => setSelectedProperty(null)}
                 className="flex-1 py-2 text-xs font-bold rounded-xl border border-slate-200 text-slate-600"
               >
                 Close
               </button>
-              <a 
+              <a
                 href={`tel:${selectedProperty.ownerPhone}`}
                 className="flex-1 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white text-center flex items-center justify-center gap-1 shadow-xs"
               >

@@ -3,10 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { 
   MapPin, 
-  Bell, 
   ChevronDown, 
   User, 
-  Search, 
   Check, 
   ArrowRight,
   LogOut,
@@ -20,7 +18,10 @@ import {
   Calendar,
   Briefcase,
   PhoneCall,
-  ShieldCheck
+  ShieldCheck,
+  ShoppingCart,
+  Gavel,
+  Landmark
 } from 'lucide-react';
 
 export const CustomerHeader: React.FC = () => {
@@ -30,25 +31,21 @@ export const CustomerHeader: React.FC = () => {
     setAuthStep, 
     selectedCity, 
     setSelectedCity,
-    notifications,
-    markNotificationRead,
+    bookings,
     logoutUser 
   } = useApp();
 
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
-  const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const cities = ['Hyderabad', 'Bengaluru', 'Chennai', 'Mumbai'];
-  const unreadCount = notifications.filter(n => !n.read).length;
 
   // Auto-close dropdowns and mobile drawer on page navigation
   useEffect(() => {
     setMobileMenuOpen(false);
     setCityDropdownOpen(false);
-    setNotifDropdownOpen(false);
   }, [location.pathname]);
 
   const isActive = (path: string) => {
@@ -60,8 +57,9 @@ export const CustomerHeader: React.FC = () => {
   const navMenuItems = [
     { name: 'Home', path: '/', icon: Home, color: 'text-blue-600 bg-blue-50' },
     { name: 'Explore Services', path: '/services', icon: Wrench, color: 'text-emerald-600 bg-emerald-50' },
+    { name: 'Reverse Auction Engine', path: '/reverse-auction', icon: Gavel, color: 'text-amber-600 bg-amber-50' },
+    { name: 'Home Loan EMI Calculator', path: '/home-loans', icon: Landmark, color: 'text-indigo-600 bg-indigo-50' },
     { name: 'GPS Nearby Providers', path: '/nearby-providers', icon: MapPin, color: 'text-red-600 bg-red-50' },
-    { name: 'Real Estate Marketplace', path: '/real-estate', icon: Building2, color: 'text-indigo-600 bg-indigo-50' },
     { name: '3D House Designs', path: '/3d-designs', icon: Sparkles, color: 'text-purple-600 bg-purple-50' },
     { name: 'Cost Estimator Calculator', path: '/calculator', icon: Calculator, color: 'text-amber-600 bg-amber-50' },
     { name: 'My Bookings', path: '/my-bookings', icon: Calendar, color: 'text-cyan-600 bg-cyan-50' },
@@ -92,7 +90,6 @@ export const CustomerHeader: React.FC = () => {
                 <button
                   onClick={() => {
                     setCityDropdownOpen(!cityDropdownOpen);
-                    setNotifDropdownOpen(false);
                   }}
                   className="flex items-center gap-1.5 text-xs sm:text-sm font-black text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1 sm:py-1.5 rounded-full border border-slate-200 shadow-2xs transition-all active:scale-95"
                   title="Change Location"
@@ -148,6 +145,26 @@ export const CustomerHeader: React.FC = () => {
                 Services
               </Link>
               <Link 
+                to="/reverse-auction" 
+                className={`px-3 py-1.5 rounded-full transition-all ${
+                  isActive('/reverse-auction') 
+                    ? 'text-blue-600 font-bold bg-blue-50 border border-blue-200' 
+                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50'
+                }`}
+              >
+                Reverse Auction
+              </Link>
+              <Link 
+                to="/home-loans" 
+                className={`px-3 py-1.5 rounded-full transition-all ${
+                  isActive('/home-loans') 
+                    ? 'text-blue-600 font-bold bg-blue-50 border border-blue-200' 
+                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50'
+                }`}
+              >
+                Home Loans
+              </Link>
+              <Link 
                 to="/nearby-providers" 
                 className={`px-3 py-1.5 rounded-full transition-all ${
                   isActive('/nearby-providers') 
@@ -156,16 +173,6 @@ export const CustomerHeader: React.FC = () => {
                 }`}
               >
                 GPS Nearby
-              </Link>
-              <Link 
-                to="/real-estate" 
-                className={`px-3 py-1.5 rounded-full transition-all ${
-                  isActive('/real-estate') 
-                    ? 'text-blue-600 font-bold bg-blue-50 border border-blue-200' 
-                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50'
-                }`}
-              >
-                Real Estate
               </Link>
               <Link 
                 to="/3d-designs" 
@@ -199,63 +206,22 @@ export const CustomerHeader: React.FC = () => {
               </Link>
             </nav>
 
-            {/* Right: Search + Notifications + Sign In / Register + Menu Bar */}
-            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            {/* Right: Cart Button + Sign In / Register + Menu Bar (Exact Match to image copy 29.png) */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               
-              {/* Search Trigger */}
-              <button
-                onClick={() => {
-                  navigate('/');
-                  const inputEl = document.querySelector('input[type="text"]') as HTMLInputElement;
-                  if (inputEl) inputEl.focus();
-                }}
-                className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors"
-                title="Search Services"
+              {/* Cart Button with Count Badge (Replaces Search & Bell per image copy 29.png) */}
+              <Link
+                to="/my-bookings"
+                className="relative flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors shadow-2xs"
+                title="View Bookings & Cart"
               >
-                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              </button>
-
-              {/* Notifications Bell */}
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    setNotifDropdownOpen(!notifDropdownOpen);
-                    setCityDropdownOpen(false);
-                  }}
-                  className="relative w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors"
-                  title="Notifications"
-                >
-                  <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  {unreadCount > 0 && (
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white animate-pulse"></span>
-                  )}
-                </button>
-
-                {notifDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-3xl shadow-2xl border border-slate-200 p-4 z-50 animate-fade-in">
-                    <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                      <div className="font-extrabold text-sm text-slate-900">Notifications</div>
-                      <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
-                        {unreadCount} new
-                      </span>
-                    </div>
-
-                    <div className="divide-y divide-slate-100 max-h-72 overflow-y-auto">
-                      {notifications.map((n) => (
-                        <div 
-                          key={n.id} 
-                          onClick={() => markNotificationRead(n.id)}
-                          className={`py-3 px-1 cursor-pointer transition-colors ${n.read ? 'opacity-70' : 'bg-blue-50/40 rounded-xl'}`}
-                        >
-                          <div className="text-xs font-extrabold text-slate-900">{n.title}</div>
-                          <div className="text-xs text-slate-600 mt-0.5 leading-relaxed">{n.message}</div>
-                          <div className="text-[10px] text-slate-400 mt-1">{n.timestamp}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                <ShoppingCart className="w-4 h-4 text-slate-800" />
+                {bookings.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse shadow-xs">
+                    {bookings.length}
+                  </span>
                 )}
-              </div>
+              </Link>
 
               {/* User Authentication: Sign In / Register Option in both Mobile & Desktop */}
               {currentUser.isLoggedIn ? (
@@ -293,25 +259,24 @@ export const CustomerHeader: React.FC = () => {
                 </button>
               )}
 
-              {/* Desktop Only: Amber "Get Started" CTA (Removed on Mobile per user request) */}
-              <button
-                onClick={() => {
-                  setAuthStep('welcome');
-                  setAuthModalOpen(true);
-                }}
-                className="hidden md:inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-xs px-3.5 py-1.5 rounded-full shadow-xs active:scale-95 whitespace-nowrap transition-all"
-                title="Get Started with BuildMitra"
+              {/* Partner Portal Pill Button (Matching Image 3) */}
+              <Link
+                to="/partner/dashboard"
+                className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-[#FFFDF5] hover:bg-[#FEFCE8] border border-[#FDE047] hover:border-amber-400 text-[#78350F] shadow-2xs transition-all active:scale-95 group shrink-0"
+                title="BuildMitra Partner Portal"
               >
-                <span>Get Started</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+                <Briefcase className="w-3.5 h-3.5 text-[#B45309] shrink-0 transition-transform group-hover:scale-110" />
+                <div className="flex flex-col text-left leading-[1.05]">
+                  <span className="text-[10px] sm:text-[11px] font-black text-[#78350F] tracking-tight">Partner</span>
+                  <span className="text-[9px] sm:text-[10px] font-bold text-[#92400E] tracking-tight">Portal</span>
+                </div>
+              </Link>
 
               {/* Mobile View: Menu Bar Hamburger Toggle (Visible on mobile & tablets) */}
               <button
                 onClick={() => {
                   setMobileMenuOpen(!mobileMenuOpen);
                   setCityDropdownOpen(false);
-                  setNotifDropdownOpen(false);
                 }}
                 className="lg:hidden flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 transition-colors shrink-0"
                 title={mobileMenuOpen ? 'Close Menu' : 'Open Menu Bar'}

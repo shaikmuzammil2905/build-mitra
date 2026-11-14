@@ -22,6 +22,8 @@ import { PartnerRegistrationPage } from './pages/PartnerRegistrationPage';
 import { PartnerDashboardPage } from './pages/PartnerDashboardPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { ContactPage } from './pages/ContactPage';
+import { ReverseAuctionPage } from './pages/ReverseAuctionPage';
+import { HomeLoansPage } from './pages/HomeLoansPage';
 
 // Helper to scroll to top on route navigation
 const ScrollToTop = () => {
@@ -73,9 +75,14 @@ export const AppContent: React.FC = () => {
           {/* Screen 13: Payment & Booking Completed */}
           <Route path="/booking-success/:bookingId" element={<BookingCompletedPage />} />
 
-          {/* Screen 10: Real Estate Module (Buy/Rent/Sell) */}
-          <Route path="/real-estate" element={<RealEstateAppPage />} />
-          <Route path="/real-estate-app" element={<RealEstateAppPage />} />
+          {/* Reverse Auction Engine (Replaces Real Estate per user request) */}
+          <Route path="/reverse-auction" element={<ReverseAuctionPage onOpenEnquiry={() => {}} />} />
+          <Route path="/real-estate" element={<ReverseAuctionPage onOpenEnquiry={() => {}} />} />
+          <Route path="/real-estate-app" element={<ReverseAuctionPage onOpenEnquiry={() => {}} />} />
+
+          {/* Home Loan EMI Calculator & Financial Portal (per image copy 30.png) */}
+          <Route path="/home-loans" element={<HomeLoansPage onOpenEnquiry={() => {}} />} />
+          <Route path="/loan-calculator" element={<HomeLoansPage onOpenEnquiry={() => {}} />} />
 
           {/* Screen 11: 3D House & Villa Designs */}
           <Route path="/3d-designs" element={<HouseDesigns3DPage />} />
