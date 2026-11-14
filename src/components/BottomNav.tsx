@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Calendar, Building, User, Menu } from 'lucide-react';
+import { Home, Calculator, Building, Calendar } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export const BottomNav: React.FC = () => {
@@ -11,7 +11,7 @@ export const BottomNav: React.FC = () => {
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-slate-200/90 shadow-2xl safe-area-bottom">
       <div className="grid grid-cols-4 max-w-md mx-auto py-2">
         
-        {/* Home */}
+        {/* 1. Home */}
         <NavLink 
           to="/" 
           end
@@ -22,10 +22,36 @@ export const BottomNav: React.FC = () => {
           <div className="relative">
             <Home className="w-5 h-5" />
           </div>
-          <span className="text-[10px] tracking-tight">Home</span>
+          <span className="text-[10px] tracking-tight font-bold">Home</span>
         </NavLink>
 
-        {/* Bookings */}
+        {/* 2. Calculator (at the place of Bookings per image copy 23.png) */}
+        <NavLink 
+          to="/calculator" 
+          className={({ isActive }) => `flex flex-col items-center justify-center gap-1 transition-all ${
+            isActive ? 'text-blue-600 font-extrabold scale-105' : 'text-slate-500 hover:text-slate-900 font-medium'
+          }`}
+        >
+          <div className="relative">
+            <Calculator className="w-5 h-5" />
+          </div>
+          <span className="text-[10px] tracking-tight font-bold">Calculator</span>
+        </NavLink>
+
+        {/* 3. Real Estate */}
+        <NavLink 
+          to="/real-estate" 
+          className={({ isActive }) => `flex flex-col items-center justify-center gap-1 transition-all ${
+            isActive ? 'text-blue-600 font-extrabold scale-105' : 'text-slate-500 hover:text-slate-900 font-medium'
+          }`}
+        >
+          <div className="relative">
+            <Building className="w-5 h-5" />
+          </div>
+          <span className="text-[10px] tracking-tight font-bold">Real Estate</span>
+        </NavLink>
+
+        {/* 4. Bookings (at the place of More per image copy 24.png) */}
         <NavLink 
           to="/my-bookings" 
           className={({ isActive }) => `flex flex-col items-center justify-center gap-1 transition-all ${
@@ -40,33 +66,7 @@ export const BottomNav: React.FC = () => {
               </span>
             )}
           </div>
-          <span className="text-[10px] tracking-tight">Bookings</span>
-        </NavLink>
-
-        {/* Real Estate */}
-        <NavLink 
-          to="/real-estate" 
-          className={({ isActive }) => `flex flex-col items-center justify-center gap-1 transition-all ${
-            isActive ? 'text-blue-600 font-extrabold scale-105' : 'text-slate-500 hover:text-slate-900 font-medium'
-          }`}
-        >
-          <div className="relative">
-            <Building className="w-5 h-5" />
-          </div>
-          <span className="text-[10px] tracking-tight">Real Estate</span>
-        </NavLink>
-
-        {/* More / Profile */}
-        <NavLink 
-          to="/profile" 
-          className={({ isActive }) => `flex flex-col items-center justify-center gap-1 transition-all ${
-            isActive ? 'text-blue-600 font-extrabold scale-105' : 'text-slate-500 hover:text-slate-900 font-medium'
-          }`}
-        >
-          <div className="relative">
-            <Menu className="w-5 h-5" />
-          </div>
-          <span className="text-[10px] tracking-tight">More</span>
+          <span className="text-[10px] tracking-tight font-bold">Bookings</span>
         </NavLink>
 
       </div>

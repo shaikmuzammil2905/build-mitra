@@ -7,6 +7,7 @@ import { CoreModules } from '../components/CoreModules';
 import { EngineeringToolsGrid } from '../components/EngineeringToolsGrid';
 import { WhyChooseUs } from '../components/WhyChooseUs';
 import { LeadershipSection } from '../components/LeadershipSection';
+import { HomeLoanCalculatorCard } from '../components/HomeLoanCalculatorCard';
 import { CalculatorModal } from '../components/CalculatorModal';
 import { QuickViewModal } from '../components/QuickViewModal';
 import { EnquiryModal } from '../components/EnquiryModal';
@@ -269,7 +270,17 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
 
-        {/* 3. PRODUCT & SERVICE SHOWCASES (Exact Match to image copy 21.png) */}
+        {/* 3. HOME LOAN EMI CALCULATOR (Exact Match to image copy 26.png) */}
+        <div>
+          <HomeLoanCalculatorCard 
+            onApplyLoan={(loanDetails) => {
+              setEnquiryTopic(`Home Loan Application: ₹${(loanDetails.amount / 100000).toFixed(1)} Lakhs for ${loanDetails.tenure} Years (EMI: ₹${loanDetails.emi.toLocaleString('en-IN')})`);
+              setEnquiryModalOpen(true);
+            }}
+          />
+        </div>
+
+        {/* 4. PRODUCT & SERVICE SHOWCASES (Exact Match to image copy 21.png) */}
         <div className="space-y-8">
           {productSections.map((section) => {
             const SectionIcon = section.icon;

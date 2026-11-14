@@ -76,15 +76,15 @@ export const CustomerHeader: React.FC = () => {
         <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
           
           {/* Top App Bar - Grand & Responsive */}
-          <div className="flex items-center justify-between h-14 sm:h-16 gap-1.5 sm:gap-3">
+          <div className="flex items-center justify-between min-h-[66px] sm:h-20 py-1.5 sm:py-2 gap-1.5 sm:gap-3">
             
-            {/* Left: Brand Logo + Location Selector */}
-            <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
-              <Link to="/" className="flex items-center gap-1 group shrink-0" title="BuildMitra Home">
+            {/* Left: Big Brand Logo + Big Location Selector Below (image copy 22.png) */}
+            <div className="flex flex-col items-start gap-1 shrink-0 py-0.5">
+              <Link to="/" className="flex items-center group shrink-0" title="BuildMitra Home">
                 <img 
                   src="/assets/logo.png" 
                   alt="BuildMitra Logo" 
-                  className="h-7 sm:h-9 w-auto object-contain transition-transform group-hover:scale-105" 
+                  className="h-8 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105" 
                 />
               </Link>
 
@@ -94,16 +94,16 @@ export const CustomerHeader: React.FC = () => {
                     setCityDropdownOpen(!cityDropdownOpen);
                     setNotifDropdownOpen(false);
                   }}
-                  className="flex items-center gap-1 text-[11px] sm:text-xs font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-full border border-slate-200 transition-colors"
+                  className="flex items-center gap-1.5 text-xs sm:text-sm font-black text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1 sm:py-1.5 rounded-full border border-slate-200 shadow-2xs transition-all active:scale-95"
                   title="Change Location"
                 >
-                  <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
-                  <span className="max-w-[55px] xs:max-w-[70px] sm:max-w-none truncate">{selectedCity}</span>
-                  <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
+                  <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                  <span>{selectedCity}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                 </button>
 
                 {cityDropdownOpen && (
-                  <div className="absolute left-0 mt-2 w-44 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-fade-in">
+                  <div className="absolute left-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-fade-in">
                     <div className="text-[10px] font-bold text-slate-400 uppercase px-2.5 py-1">Select City</div>
                     {cities.map((city) => (
                       <button
