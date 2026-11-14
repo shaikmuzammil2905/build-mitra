@@ -79,14 +79,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenEnquiry }) =
               />
             </Link>
 
-            {/* Desktop Navigation - All items fit strictly on a single line */}
-            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 whitespace-nowrap">
+            {/* Desktop Navigation - All items fit strictly on a single line with sleek underline indicator */}
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 whitespace-nowrap">
               <Link 
                 to="/" 
-                className={`px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all ${
+                className={`relative px-3 py-2 text-xs xl:text-sm font-semibold transition-all duration-200 ${
                   isActive('/') 
-                    ? 'bg-blue-600 text-white shadow-xs' 
-                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-100'
+                    ? 'text-blue-600 font-bold after:content-[""] after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-blue-600 after:rounded-full' 
+                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50 rounded-lg'
                 }`}
               >
                 Home
@@ -94,10 +94,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenEnquiry }) =
 
               <Link 
                 to="/materials" 
-                className={`px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all ${
+                className={`relative px-3 py-2 text-xs xl:text-sm font-semibold transition-all duration-200 ${
                   isActive('/materials') 
-                    ? 'bg-blue-600 text-white shadow-xs' 
-                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-100'
+                    ? 'text-blue-600 font-bold after:content-[""] after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-blue-600 after:rounded-full' 
+                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50 rounded-lg'
                 }`}
               >
                 Materials
@@ -111,10 +111,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenEnquiry }) =
               >
                 <Link
                   to="/services"
-                  className={`px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all flex items-center gap-1 ${
+                  className={`relative px-3 py-2 text-xs xl:text-sm font-semibold transition-all duration-200 flex items-center gap-1 ${
                     isActive('/services') || isActive('/reverse-auction')
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'text-slate-700 hover:text-blue-600 hover:bg-slate-100'
+                      ? 'text-blue-600 font-bold after:content-[""] after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-blue-600 after:rounded-full'
+                      : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50 rounded-lg'
                   }`}
                 >
                   Services
@@ -147,10 +147,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenEnquiry }) =
 
               <Link 
                 to="/labour" 
-                className={`px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all ${
+                className={`relative px-3 py-2 text-xs xl:text-sm font-semibold transition-all duration-200 ${
                   isActive('/labour') 
-                    ? 'bg-blue-600 text-white shadow-xs' 
-                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-100'
+                    ? 'text-blue-600 font-bold after:content-[""] after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-blue-600 after:rounded-full' 
+                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50 rounded-lg'
                 }`}
               >
                 Labour Net
@@ -158,10 +158,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenEnquiry }) =
 
               <Link 
                 to="/real-estate" 
-                className={`px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all ${
+                className={`relative px-3 py-2 text-xs xl:text-sm font-semibold transition-all duration-200 ${
                   isActive('/real-estate') 
-                    ? 'bg-blue-600 text-white shadow-xs' 
-                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-100'
+                    ? 'text-blue-600 font-bold after:content-[""] after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-blue-600 after:rounded-full' 
+                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50 rounded-lg'
                 }`}
               >
                 Real Estate
@@ -175,10 +175,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenEnquiry }) =
               >
                 <Link
                   to="/calculators"
-                  className={`px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all flex items-center gap-1 ${
+                  className={`relative px-3 py-2 text-xs xl:text-sm font-semibold transition-all duration-200 flex items-center gap-1 ${
                     isActive('/calculators') || isActive('/floor-plans') || isActive('/loans')
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'text-slate-700 hover:text-blue-600 hover:bg-slate-100'
+                      ? 'text-blue-600 font-bold after:content-[""] after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-blue-600 after:rounded-full'
+                      : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50 rounded-lg'
                   }`}
                 >
                   Tools
@@ -220,10 +220,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenEnquiry }) =
 
               <Link 
                 to="/about" 
-                className={`px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all ${
+                className={`relative px-3 py-2 text-xs xl:text-sm font-semibold transition-all duration-200 ${
                   isActive('/about') 
-                    ? 'bg-blue-600 text-white shadow-xs' 
-                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-100'
+                    ? 'text-blue-600 font-bold after:content-[""] after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-blue-600 after:rounded-full' 
+                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50 rounded-lg'
                 }`}
               >
                 About Us
@@ -231,10 +231,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenEnquiry }) =
 
               <Link 
                 to="/contact" 
-                className={`px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all ${
+                className={`relative px-3 py-2 text-xs xl:text-sm font-semibold transition-all duration-200 ${
                   isActive('/contact') 
-                    ? 'bg-blue-600 text-white shadow-xs' 
-                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-100'
+                    ? 'text-blue-600 font-bold after:content-[""] after:absolute after:bottom-0 after:left-2.5 after:right-2.5 after:h-0.5 after:bg-blue-600 after:rounded-full' 
+                    : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50 rounded-lg'
                 }`}
               >
                 Contact Us
