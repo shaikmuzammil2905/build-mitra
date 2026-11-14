@@ -17,7 +17,8 @@ import {
   Building,
   Layers,
   Calculator,
-  Calendar
+  Calendar,
+  ArrowRight
 } from 'lucide-react';
 
 export const CustomerHeader: React.FC = () => {
@@ -188,21 +189,34 @@ export const CustomerHeader: React.FC = () => {
               </Link>
             </div>
 
-            {/* Notifications Bell (per image copy 14.png Screen 5) */}
+            {/* Search Trigger Icon (exact to user uploaded reference) */}
+            <button
+              onClick={() => {
+                navigate('/');
+                const inputEl = document.querySelector('input[type="text"]') as HTMLInputElement;
+                if (inputEl) inputEl.focus();
+              }}
+              className="p-1.5 sm:p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-full transition-colors"
+              title="Search Services"
+            >
+              <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+
+            {/* Notifications Bell */}
             <div className="relative">
               <button
                 onClick={() => setNotifDropdownOpen(!notifDropdownOpen)}
-                className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 transition-colors"
+                className="relative p-1.5 sm:p-2 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition-colors"
                 title="Notifications"
               >
                 <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white animate-pulse"></span>
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white animate-pulse"></span>
                 )}
               </button>
 
               {notifDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-3xl shadow-2xl border border-slate-200 p-4 z-50 animate-fade-in">
+                <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-3xl shadow-2xl border border-slate-200 p-4 z-50 animate-fade-in">
                   <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div className="font-extrabold text-sm text-slate-900">Notifications</div>
                     <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
@@ -227,26 +241,39 @@ export const CustomerHeader: React.FC = () => {
               )}
             </div>
 
-            {/* Customer Profile / Login (Screens 1, 2, 4) */}
+            {/* User Sign / Get Started Button in BOTH Mobile & Desktop (Exact to uploaded screenshot) */}
             {currentUser.isLoggedIn ? (
-              <Link
-                to="/profile"
-                className="flex items-center gap-2 pl-1 group"
-                title="Open Profile"
-              >
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-blue-500 shadow-xs group-hover:scale-105 transition-transform">
-                  <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full object-cover" />
-                </div>
-              </Link>
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-2 sm:px-2.5 py-1 rounded-full border border-slate-200 transition-colors"
+                  title="View Profile"
+                >
+                  <img src={currentUser.avatar} alt={currentUser.name} className="w-5 h-5 rounded-full object-cover border border-blue-500" />
+                  <span className="hidden md:inline max-w-[80px] truncate">{currentUser.name}</span>
+                </Link>
+
+                <button
+                  onClick={() => {
+                    setAuthStep('welcome');
+                    setAuthModalOpen(true);
+                  }}
+                  className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-xs hover:shadow-sm transition-all active:scale-95 shrink-0"
+                >
+                  <span>Get Started</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             ) : (
               <button
                 onClick={() => {
-                  setAuthStep('welcome');
+                  setAuthStep('login');
                   setAuthModalOpen(true);
                 }}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs px-3.5 py-2 rounded-full shadow-xs transition-all active:scale-95"
+                className="inline-flex items-center gap-1 sm:gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-xs sm:text-sm px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-xs hover:shadow-sm transition-all active:scale-95 shrink-0"
               >
-                Login
+                <span>Sign In</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             )}
 

@@ -152,15 +152,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     return {
       id: 'cust-1',
-      name: 'Hemanth Kumar',
+      name: 'Guest User',
       phone: '+91 98765 43210',
-      email: 'hemanth.kumar@example.com',
+      email: 'guest@buildmitra.com',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
       addresses: [
         'Flat 402, Sai Residency, Madhapur, Hyderabad - 500081',
         'Plot 18, Road No. 12, Banjara Hills, Hyderabad - 500034'
       ],
-      isLoggedIn: true,
+      isLoggedIn: false,
       role: 'customer'
     };
   });
