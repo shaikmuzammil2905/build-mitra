@@ -170,7 +170,7 @@ export const CustomerHeader: React.FC = () => {
           {/* Right: Quick Portals Switcher + Notifications + Profile */}
           <div className="flex items-center gap-2">
             
-            {/* Quick Portals Links (Desktop & Tablet) */}
+            {/* Quick Portals Links (Desktop & Tablet) - Partner only, Admin hidden from public header */}
             <div className="hidden sm:flex items-center gap-1.5 mr-1">
               <Link
                 to="/partner/dashboard"
@@ -178,14 +178,6 @@ export const CustomerHeader: React.FC = () => {
               >
                 <Briefcase className="w-3.5 h-3.5 text-amber-600" />
                 <span>Partner Portal</span>
-              </Link>
-
-              <Link
-                to="/admin"
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold bg-purple-50 text-purple-800 border border-purple-200 hover:bg-purple-100 transition-colors"
-              >
-                <ShieldAlert className="w-3.5 h-3.5 text-purple-600" />
-                <span>Admin</span>
               </Link>
             </div>
 

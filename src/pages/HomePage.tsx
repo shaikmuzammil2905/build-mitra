@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { HeroSection } from '../components/HeroSection';
 import { 
   Search, 
   ArrowRight, 
@@ -30,7 +31,7 @@ import {
 } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
-  const { categories, bookings, providers, selectedCity } = useApp();
+  const { categories, bookings, providers, selectedCity, setAuthModalOpen, setAuthStep } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilterCategory, setSelectedFilterCategory] = useState<string>('all');
   const navigate = useNavigate();
@@ -70,108 +71,50 @@ export const HomePage: React.FC = () => {
   });
 
   return (
-    <div className="pb-28 pt-2 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-6">
-      
-      {/* 1. APP SEARCH BAR (Exact to Screen 5 of image copy 14.png) */}
-      <div className="relative">
-        <div className="flex items-center bg-white rounded-2xl p-2 shadow-xs border border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
-          <Search className="w-5 h-5 text-slate-400 ml-2.5 shrink-0" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={`Search painting, electrical, plumbing in ${selectedCity}...`}
-            className="w-full px-3 py-1.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 bg-transparent focus:outline-none"
-          />
-          {searchQuery && (
-            <button 
-              onClick={() => setSearchQuery('')}
-              className="text-xs font-bold text-slate-400 hover:text-slate-600 mr-2"
-            >
-              Clear
-            </button>
-          )}
-          <Link
-            to="/nearby-providers"
-            className="hidden sm:flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shrink-0"
+    <div className="pb-28">
+      {/* 1. ARCHITECTURAL HERO SECTION AS BEFORE (with desktop animated bg and mobile bright bg) */}
+      <HeroSection 
+        onSearchSubmit={(q) => setSearchQuery(q)}
+        onOpenEnquiry={(topic) => {
+          setAuthStep('welcome');
+          setAuthModalOpen(true);
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-8 mt-6">
+
+        {/* 2. ACTIVE BOOKING STATUS STRIP (When user has an active booking) */}
+        {activeJob && (
+          <div 
+            onClick={() => navigate(`/booking/${activeJob.id}`)}
+            className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white p-4 rounded-3xl shadow-md border border-blue-800 flex items-center justify-between gap-3 cursor-pointer hover:shadow-lg transition-all group"
           >
-            <MapPin className="w-3.5 h-3.5" />
-            <span>Find Nearby</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* 2. ACTIVE BOOKING STATUS STRIP (When user has an active booking) */}
-      {activeJob && (
-        <div 
-          onClick={() => navigate(`/booking/${activeJob.id}`)}
-          className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white p-4 rounded-3xl shadow-md border border-blue-800 flex items-center justify-between gap-3 cursor-pointer hover:shadow-lg transition-all group"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
-              <Clock className="w-5 h-5 text-amber-400 animate-spin" style={{ animationDuration: '8s' }} />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono font-bold text-xs text-amber-400">#{activeJob.id}</span>
-                <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-emerald-400/30">
-                  {activeJob.status}
-                </span>
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20">
+                <Clock className="w-5 h-5 text-amber-400 animate-spin" style={{ animationDuration: '8s' }} />
               </div>
-              <div className="font-extrabold text-sm text-white mt-0.5">
-                {activeJob.serviceName}
-              </div>
-              <div className="text-[11px] text-slate-300">
-                Assigned: {activeJob.provider?.name || 'Verified Specialist'} • Tap to track live
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-xs text-amber-400">#{activeJob.id}</span>
+                  <span className="bg-emerald-500/20 text-emerald-300 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-emerald-400/30">
+                    {activeJob.status}
+                  </span>
+                </div>
+                <div className="font-extrabold text-sm text-white mt-0.5">
+                  {activeJob.serviceName}
+                </div>
+                <div className="text-[11px] text-slate-300">
+                  Assigned: {activeJob.provider?.name || 'Verified Specialist'} • Tap to track live
+                </div>
               </div>
             </div>
+
+            <div className="flex items-center gap-1 text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform shrink-0">
+              <span>Track</span>
+              <ChevronRight className="w-4 h-4" />
+            </div>
           </div>
-
-          <div className="flex items-center gap-1 text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform shrink-0">
-            <span>Track</span>
-            <ChevronRight className="w-4 h-4" />
-          </div>
-        </div>
-      )}
-
-      {/* 3. HERO PROMO BANNER (Screen 5 Reference: Professional Home Services at Your Fingertips) */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white p-6 sm:p-8 shadow-lg">
-        <div className="relative z-10 max-w-xl">
-          <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full border border-white/30 mb-3">
-            <ShieldCheck className="w-3.5 h-3.5 text-amber-300" />
-            <span>100% Verified Partners • Zero Commission MVP</span>
-          </div>
-
-          <h1 className="text-2xl sm:text-4xl font-black text-white leading-tight">
-            Professional Home Services at Your Fingertips
-          </h1>
-
-          <p className="text-xs sm:text-sm text-blue-100 mt-2 leading-relaxed">
-            Connect with top-rated painters, plumbers, electricians and construction contractors near you with GPS instant matching and transparent rates.
-          </p>
-
-          <div className="flex flex-wrap gap-2.5 mt-5">
-            <Link
-              to="/services/painting"
-              className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm px-5 py-2.5 rounded-2xl shadow-md transition-all active:scale-95 flex items-center gap-2"
-            >
-              <span>Explore Services</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-
-            <Link
-              to="/nearby-providers"
-              className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-2xl border border-white/30 transition-all flex items-center gap-1.5"
-            >
-              <MapPin className="w-4 h-4 text-amber-300" />
-              <span>GPS Nearby</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Decorative background glow */}
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-radial from-blue-400/30 to-transparent blur-2xl pointer-events-none"></div>
-      </div>
+        )}
 
       {/* 4. THE 8 SERVICE CATEGORIES (Exact match to Screen 5 of image copy 14.png) */}
       <div>
@@ -363,6 +306,8 @@ export const HomePage: React.FC = () => {
             Partner Login
           </Link>
         </div>
+      </div>
+
       </div>
 
     </div>
