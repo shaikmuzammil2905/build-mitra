@@ -148,25 +148,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [currentUser, setCurrentUser] = useState<UserProfile>(() => {
     const saved = localStorage.getItem('bm_user');
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
+      try { 
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed.isLoggedIn === 'boolean') {
+          return parsed;
+        }
+      } catch (e) {}
     }
     return {
-      id: 'cust-1',
+      id: 'cust-guest',
       name: 'Guest User',
-      phone: '+91 98765 43210',
-      email: 'guest@buildmitra.com',
+      phone: '',
+      email: '',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-      addresses: [
-        'Flat 402, Sai Residency, Madhapur, Hyderabad - 500081',
-        'Plot 18, Road No. 12, Banjara Hills, Hyderabad - 500034'
-      ],
+      addresses: [],
       isLoggedIn: false,
       role: 'customer'
     };
   });
 
   useEffect(() => {
-    localStorage.setItem('bm_user', JSON.stringify(currentUser));
+    if (currentUser.isLoggedIn) {
+      localStorage.setItem('bm_user', JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem('bm_user');
+    }
   }, [currentUser]);
 
   // Auth Modal State
@@ -175,20 +181,36 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [tempPhone, setTempPhone] = useState('+91 98765 43210');
 
   const loginUser = (phone: string, name = 'Hemanth Kumar') => {
-    setCurrentUser(prev => ({
-      ...prev,
-      phone,
-      name: prev.name || name,
-      isLoggedIn: true
-    }));
+    const newUser: UserProfile = {
+      id: `cust-${Date.now()}`,
+      name: name,
+      phone: phone,
+      email: `${name.toLowerCase().replace(/\s+/g, '.')}@example.com`,
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      addresses: [
+        'Flat 402, Sai Residency, Madhapur, Hyderabad - 500081',
+        'Plot 18, Road No. 12, Banjara Hills, Hyderabad - 500034'
+      ],
+      isLoggedIn: true,
+      role: 'customer'
+    };
+    setCurrentUser(newUser);
+    localStorage.setItem('bm_user', JSON.stringify(newUser));
     setAuthModalOpen(false);
   };
 
   const logoutUser = () => {
-    setCurrentUser(prev => ({
-      ...prev,
-      isLoggedIn: false
-    }));
+    localStorage.removeItem('bm_user');
+    setCurrentUser({
+      id: 'cust-guest',
+      name: 'Guest User',
+      phone: '',
+      email: '',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      addresses: [],
+      isLoggedIn: false,
+      role: 'customer'
+    });
   };
 
   const updateUserAddresses = (addresses: string[]) => {

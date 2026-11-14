@@ -18,7 +18,8 @@ import {
   Layers,
   Calculator,
   Calendar,
-  ArrowRight
+  ArrowRight,
+  LogOut
 } from 'lucide-react';
 
 export const CustomerHeader: React.FC = () => {
@@ -29,7 +30,8 @@ export const CustomerHeader: React.FC = () => {
     selectedCity, 
     setSelectedCity,
     notifications,
-    markNotificationRead 
+    markNotificationRead,
+    logoutUser 
   } = useApp();
 
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
@@ -170,15 +172,32 @@ export const CustomerHeader: React.FC = () => {
           {/* Right: Quick Portals Switcher + Notifications + Profile */}
           <div className="flex items-center gap-2">
             
-            {/* Quick Portals Links (Desktop & Tablet) - Partner only, Admin hidden from public header */}
-            <div className="hidden sm:flex items-center gap-1.5 mr-1">
-              <Link
-                to="/partner/dashboard"
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition-colors"
-              >
-                <Briefcase className="w-3.5 h-3.5 text-amber-600" />
-                <span>Partner Portal</span>
-              </Link>
+            {/* Sign In / Register / Sign Out Option in that section (Hiding Partner Portal per user request) */}
+            <div className="flex items-center gap-1.5 mr-1">
+              {currentUser.isLoggedIn ? (
+                <button
+                  onClick={logoutUser}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors shadow-2xs"
+                  title="Sign Out of BuildMitra"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                  <span className="sm:hidden">Logout</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setAuthStep('login');
+                    setAuthModalOpen(true);
+                  }}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors shadow-2xs"
+                  title="Sign In or Register"
+                >
+                  <User className="w-3.5 h-3.5 text-blue-600" />
+                  <span className="hidden sm:inline">Sign In / Register</span>
+                  <span className="sm:hidden">Sign In</span>
+                </button>
+              )}
             </div>
 
             {/* Search Trigger Icon (exact to user uploaded reference) */}
