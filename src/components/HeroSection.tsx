@@ -13,47 +13,47 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
   const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
 
-  // 4 Dynamic Automatic Slides (per image copy 28.png)
+  // 4 Dynamic Automatic Slides strictly focused on Building Construction 🏗️
   const slides = [
     {
       id: 0,
-      title: 'Professional Home Services at Your Fingertips',
-      subtitle: 'Verified electricians, plumbers, painters, carpenters & cleaning specialists',
-      ctaText: 'Book Now',
+      title: 'Turnkey Building Construction 🏗️',
+      subtitle: 'From foundation digging to key handover • IS 456 structural guarantee & milestone escrow safety',
+      ctaText: 'Start Construction',
       ctaPath: '/services',
-      image: '/assets/banner_painter.jpg',
-      bgGradient: 'from-blue-700 via-blue-600 to-sky-500',
-      badge: 'Certified Technicians'
+      image: '/assets/building_construction_site.jpg',
+      bgGradient: 'from-blue-900 via-blue-800 to-indigo-950',
+      badge: '🏗️ Turnkey Construction'
     },
     {
       id: 1,
-      title: 'Reverse Auction Engine: Live Material Bidding',
-      subtitle: 'Upload BOQ & verified primary suppliers bid downward in real time for lowest price',
-      ctaText: 'Start Live Bidding',
+      title: 'Primary Materials: Direct Jobsite Delivery',
+      subtitle: 'Live reverse auction bidding for TMT steel rebars, 53 grade cement & RMC concrete at mill rates',
+      ctaText: 'Start Material Bidding',
       ctaPath: '/reverse-auction',
-      image: '/assets/reverse-auction.jpg',
-      bgGradient: 'from-slate-950 via-blue-950 to-indigo-900',
-      badge: 'Lowest Landed Price'
+      image: '/assets/heavy_construction_materials.jpg',
+      bgGradient: 'from-slate-950 via-slate-900 to-blue-950',
+      badge: '🏗️ Live Material Bidding'
     },
     {
       id: 2,
-      title: 'Instant Home Loan & Construction Finance',
-      subtitle: 'Starting from 8.40% p.a. • Instant bank eligibility across SBI, HDFC & ICICI',
-      ctaText: 'Calculate Loan EMI',
-      ctaPath: '/home-loans',
-      image: '/assets/home-loans.jpg',
-      bgGradient: 'from-indigo-900 via-purple-950 to-slate-900',
-      badge: 'Top Banks (SBI, HDFC)'
+      title: 'Structural Engineering & 19 Civil Calculators',
+      subtitle: 'Instant concrete, steel, brickwork & BOQ estimation with IS 456 structural audit verification',
+      ctaText: 'Open 19 Calculators',
+      ctaPath: '/calculator',
+      image: '/assets/structural_civil_engineers.jpg',
+      bgGradient: 'from-indigo-950 via-slate-900 to-blue-900',
+      badge: '🏗️ Structural Engineering'
     },
     {
       id: 3,
-      title: 'Turnkey Construction & 3D House Designs',
-      subtitle: 'IS 456 Structural engineering guarantee with milestone escrow payment safety',
-      ctaText: 'Inspect 3D Designs',
+      title: '3D Architectural Plans & Structural Drawings',
+      subtitle: 'Vastu-compliant 3D elevations, beam-column schedules, BIM modeling & municipal approvals',
+      ctaText: 'View 3D Designs',
       ctaPath: '/3d-designs',
-      image: '/assets/floor-plans.jpg',
-      bgGradient: 'from-amber-600 via-amber-700 to-slate-900',
-      badge: '10-Year Warranty'
+      image: '/assets/turnkey_architectural_construction.jpg',
+      bgGradient: 'from-amber-950 via-slate-900 to-blue-950',
+      badge: '🏗️ 3D Architectural Plans'
     }
   ];
 
@@ -84,7 +84,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
           type="text" 
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search for services..."
+          placeholder="Search materials, construction services, civil calculators..."
           className="w-full bg-white text-slate-800 placeholder-slate-400 pl-11 pr-24 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-medium border border-slate-200/90 shadow-2xs hover:border-blue-400 focus:border-blue-600 focus:outline-none transition-all"
         />
         <Search className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
