@@ -82,7 +82,7 @@ export const CustomerHeader: React.FC = () => {
                 <img 
                   src="/assets/logo.png" 
                   alt="BuildMitra Logo" 
-                  className="h-8 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105" 
+                  className="h-10 sm:h-12 md:h-14 w-auto min-w-[130px] sm:min-w-[170px] md:min-w-[195px] max-w-[180px] sm:max-w-[220px] md:max-w-[260px] object-contain transition-transform group-hover:scale-105" 
                 />
               </Link>
 
@@ -258,19 +258,6 @@ export const CustomerHeader: React.FC = () => {
                   <span className="hidden sm:inline">Sign In / Register</span>
                 </button>
               )}
-
-              {/* Partner Portal Pill Button (Matching Image 3) */}
-              <Link
-                to="/partner/dashboard"
-                className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-[#FFFDF5] hover:bg-[#FEFCE8] border border-[#FDE047] hover:border-amber-400 text-[#78350F] shadow-2xs transition-all active:scale-95 group shrink-0"
-                title="BuildMitra Partner Portal"
-              >
-                <Briefcase className="w-3.5 h-3.5 text-[#B45309] shrink-0 transition-transform group-hover:scale-110" />
-                <div className="flex flex-col text-left leading-[1.05]">
-                  <span className="text-[10px] sm:text-[11px] font-black text-[#78350F] tracking-tight">Partner</span>
-                  <span className="text-[9px] sm:text-[10px] font-bold text-[#92400E] tracking-tight">Portal</span>
-                </div>
-              </Link>
 
               {/* Mobile View: Menu Bar Hamburger Toggle (Visible on mobile & tablets) */}
               <button
