@@ -23,7 +23,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
       ctaPath: '/services',
       image: '/assets/building_construction_site.jpg',
       bgGradient: 'from-blue-900 via-blue-800 to-indigo-950',
-      badge: '🏗️ Turnkey Construction'
+      patchGradient: 'from-blue-900',
+      badge: '🏗️ Turnkey Construction',
+      patchBadge: 'IS 456 Certified Build'
     },
     {
       id: 1,
@@ -33,7 +35,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
       ctaPath: '/reverse-auction',
       image: '/assets/heavy_construction_materials.jpg',
       bgGradient: 'from-slate-950 via-slate-900 to-blue-950',
-      badge: '🏗️ Live Material Bidding'
+      patchGradient: 'from-slate-950',
+      badge: '🏗️ Live Material Bidding',
+      patchBadge: 'Verified Primary Mills'
     },
     {
       id: 2,
@@ -43,7 +47,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
       ctaPath: '/calculator',
       image: '/assets/structural_civil_engineers.jpg',
       bgGradient: 'from-indigo-950 via-slate-900 to-blue-900',
-      badge: '🏗️ Structural Engineering'
+      patchGradient: 'from-indigo-950',
+      badge: '🏗️ Structural Engineering',
+      patchBadge: '19 Civil Calculators'
     },
     {
       id: 3,
@@ -53,7 +59,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
       ctaPath: '/3d-designs',
       image: '/assets/turnkey_architectural_construction.jpg',
       bgGradient: 'from-amber-950 via-slate-900 to-blue-950',
-      badge: '🏗️ 3D Architectural Plans'
+      patchGradient: 'from-amber-950',
+      badge: '🏗️ 3D Architectural Plans',
+      patchBadge: 'Vastu & Municipal Approved'
     }
   ];
 
@@ -72,8 +80,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
       onSearchSubmit(searchQuery.trim());
     }
   };
-
-  const active = slides[currentSlide];
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-6 space-y-4 sm:space-y-6">
@@ -96,50 +102,81 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
         </button>
       </form>
 
-      {/* 2. Automatic Dynamic Slider with 4 Banners (image copy 28.png) */}
+      {/* 2. Automatic Dynamic Slider with 4 Banners & Patchwork Transition (image copy 28.png) */}
       <div 
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
-        className="relative overflow-hidden rounded-3xl text-white shadow-md border border-slate-200/40 min-h-[175px] sm:min-h-[210px] lg:min-h-[240px]"
+        className="relative overflow-hidden rounded-3xl text-white shadow-xl border border-slate-200/50 min-h-[195px] sm:min-h-[235px] lg:min-h-[265px]"
       >
-        {/* Active Banner Slide */}
-        <div className={`w-full h-full p-5 sm:p-8 lg:p-10 flex items-center justify-between bg-gradient-to-r ${active.bgGradient} transition-all duration-700`}>
-          
-          {/* Left: Headline & CTA Button */}
-          <div className="relative z-10 max-w-[62%] sm:max-w-md lg:max-w-lg space-y-2.5 sm:space-y-3.5 animate-fade-in">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs text-[10px] sm:text-xs font-bold text-amber-300">
-              <Sparkles className="w-3 h-3" />
-              <span>{active.badge}</span>
-            </span>
-
-            <h1 className="text-lg sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-xs">
-              {active.title}
-            </h1>
-
-            <p className="text-xs sm:text-sm text-slate-200 line-clamp-2 leading-relaxed hidden sm:block">
-              {active.subtitle}
-            </p>
-            
-            <button
-              onClick={() => navigate(active.ctaPath)}
-              className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 rounded-full shadow-md active:scale-95 transition-all"
+        {/* Render all 4 slides for smooth synchronized content + image transitions */}
+        {slides.map((slide, idx) => {
+          const isCurrent = currentSlide === idx;
+          return (
+            <div 
+              key={slide.id}
+              className={`absolute inset-0 w-full h-full flex items-center justify-between bg-gradient-to-r ${slide.bgGradient} transition-all duration-700 ease-in-out ${
+                isCurrent ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-[1.02] pointer-events-none'
+              }`}
             >
-              <span>{active.ctaText}</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
-          </div>
+              {/* Left: Content Text & CTA Button */}
+              <div className="relative z-20 max-w-[58%] sm:max-w-md lg:max-w-lg p-5 sm:p-8 lg:p-10 space-y-2.5 sm:space-y-3.5">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs text-[10px] sm:text-xs font-black text-amber-300 border border-white/20 shadow-xs">
+                  <Sparkles className="w-3 h-3 text-amber-300 shrink-0" />
+                  <span>{slide.badge}</span>
+                </span>
 
-          {/* Right: Visual Image with Smooth Gradient Overlay */}
-          <div className="absolute right-0 top-0 bottom-0 w-[45%] sm:w-[42%] lg:w-[38%] flex items-center justify-end pointer-events-none">
-            <img 
-              src={active.image} 
-              alt={active.title} 
-              className="h-full w-full object-cover object-left-top mix-blend-normal opacity-95 contrast-105"
-            />
-            <div className="absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-slate-950/60 to-transparent"></div>
-          </div>
+                <h1 className="text-base sm:text-2xl lg:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-md">
+                  {slide.title}
+                </h1>
 
-        </div>
+                <p className="text-xs sm:text-sm text-slate-200 line-clamp-2 leading-relaxed hidden sm:block">
+                  {slide.subtitle}
+                </p>
+                
+                <button
+                  onClick={() => navigate(slide.ctaPath)}
+                  className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 rounded-full shadow-md active:scale-95 transition-all"
+                >
+                  <span>{slide.ctaText}</span>
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                </button>
+              </div>
+
+              {/* Right: Construction Picture with Stylized Patchwork Transition */}
+              <div className="absolute right-0 top-0 bottom-0 w-[48%] sm:w-[46%] lg:w-[42%] flex items-center justify-end overflow-hidden">
+                {/* Construction Picture synced with content */}
+                <img 
+                  src={slide.image} 
+                  alt={slide.title} 
+                  className={`h-full w-full object-cover object-center transition-transform duration-1000 ease-out ${
+                    isCurrent ? 'scale-100' : 'scale-110'
+                  }`}
+                  loading="eager"
+                />
+
+                {/* Stylized Angled Geometric Patchwork Divider between Content & Picture */}
+                <div 
+                  className={`absolute inset-0 bg-gradient-to-r ${slide.bgGradient} opacity-95 pointer-events-none`}
+                  style={{
+                    clipPath: 'polygon(0% 0%, 28% 0%, 0% 100%)'
+                  }}
+                />
+
+                {/* Feathered Soft Gradient Patchwork Blend */}
+                <div 
+                  className={`absolute inset-y-0 left-0 w-16 sm:w-28 bg-gradient-to-r ${slide.patchGradient} to-transparent pointer-events-none`}
+                />
+
+                {/* Floating Assurance Patchwork Badge */}
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 hidden xs:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-white text-[9px] sm:text-[11px] font-black shadow-lg">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>{slide.patchBadge}</span>
+                </div>
+              </div>
+
+            </div>
+          );
+        })}
 
         {/* Previous / Next Arrow Controls */}
         <button
