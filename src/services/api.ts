@@ -271,8 +271,16 @@ export const api = {
     method: 'DELETE'
   }),
 
-  // Payments, Subscriptions & Audit Logs
+  // Payments, Subscriptions, Properties & Audit Logs
   getPayments: () => apiFetch<PaymentRecord[]>('/api/admin/payments'),
+  getProperties: () => apiFetch<any[]>('/api/properties'),
+  getProducts: () => apiFetch<any[]>('/api/products'),
+  getServices: () => apiFetch<any[]>('/api/services'),
+  get3DModels: () => apiFetch<any[]>('/api/3d-models'),
+  getPdfPurchases: () => apiFetch<any[]>('/api/pdf-purchases'),
+  getNotifications: () => apiFetch<any[]>('/api/notifications'),
+  getSupportRequests: () => apiFetch<any[]>('/api/support-requests'),
+  getAdminUsers: () => apiFetch<any[]>('/api/admin-users'),
   getAuditLogs: () => apiFetch<AuditLogRecord[]>('/api/admin/audit-logs'),
   getSystemSettings: () => apiFetch<any>('/api/admin/settings')
 };

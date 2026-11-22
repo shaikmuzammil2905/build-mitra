@@ -37,19 +37,22 @@ const ScrollToTop = () => {
 export const AppContent: React.FC = () => {
   const location = useLocation();
 
+  const isAdminView = location.pathname.startsWith('/admin');
+
   // Hide large footer on pure app screens to preserve app experience
   const isAppOnlyView = [
     '/booking',
     '/nearby-providers',
     '/profile',
-    '/partner/dashboard'
+    '/partner/dashboard',
+    '/admin'
   ].some(p => location.pathname.startsWith(p));
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans antialiased selection:bg-blue-500 selection:text-white">
       
-      {/* Universal Top Customer App Header */}
-      <CustomerHeader />
+      {/* Universal Top Customer App Header (Hidden on Admin Panel for standalone dedicated command center) */}
+      {!isAdminView && <CustomerHeader />}
 
       {/* Main Routed Content - Directly Maps to image copy 14.png */}
       <main className="flex-1">
@@ -115,8 +118,8 @@ export const AppContent: React.FC = () => {
       {/* Footer on desktop & informative views */}
       {!isAppOnlyView && <Footer />}
 
-      {/* Mobile App Bottom Navigation Bar (Screens 4, 5, 10) */}
-      <BottomNav />
+      {/* Mobile App Bottom Navigation Bar (Hidden on Admin) */}
+      {!isAdminView && <BottomNav />}
 
       {/* Global Customer Auth Modal (Screens 1, 2, 3: Welcome, Mobile/Email Login, 6-digit OTP) */}
       <AuthModal />

@@ -554,7 +554,7 @@ app.delete('/api/admin/courses/:id', (req, res) => {
 });
 
 // ==========================================
-// 10. PAYMENTS, SUBSCRIPTIONS & AUDIT LOGS
+// 10. PAYMENTS, SUBSCRIPTIONS, PROPERTIES & AUDIT LOGS
 // ==========================================
 app.get('/api/admin/payments', (req, res) => {
   res.json(db.data.payments);
@@ -562,6 +562,38 @@ app.get('/api/admin/payments', (req, res) => {
 
 app.get('/api/subscriptions/plans', (req, res) => {
   res.json(db.data.subscriptionPlans);
+});
+
+app.get('/api/properties', (req, res) => {
+  res.json(db.data.properties);
+});
+
+app.get('/api/products', (req, res) => {
+  res.json(db.data.products || []);
+});
+
+app.get('/api/services', (req, res) => {
+  res.json(db.data.services || []);
+});
+
+app.get('/api/3d-models', (req, res) => {
+  res.json(db.data.ai3DModels || []);
+});
+
+app.get('/api/pdf-purchases', (req, res) => {
+  res.json(db.data.pdfPurchases || []);
+});
+
+app.get('/api/notifications', (req, res) => {
+  res.json(db.data.notifications || []);
+});
+
+app.get('/api/support-requests', (req, res) => {
+  res.json(db.data.supportRequests || []);
+});
+
+app.get('/api/admin-users', (req, res) => {
+  res.json(db.data.adminUsers || []);
 });
 
 app.get('/api/admin/audit-logs', (req, res) => {
