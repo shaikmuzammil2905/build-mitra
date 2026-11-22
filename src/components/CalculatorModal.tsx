@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { EngineeringCalculator } from '../data/calculatorsData';
-import { X, Calculator, Plus, Check, FileSpreadsheet, Info, Sparkles } from 'lucide-react';
+import { X, Calculator, Plus, Check, FileSpreadsheet, Info, Download, Loader2, Sparkles } from 'lucide-react';
+import { api } from '../services/api';
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 interface CalculatorModalProps {
   calculator: EngineeringCalculator | null;
@@ -11,6 +18,9 @@ interface CalculatorModalProps {
 export const CalculatorModal: React.FC<CalculatorModalProps> = ({ calculator, onClose, onAddToBOQ }) => {
   const [inputs, setInputs] = useState<Record<string, any>>({});
   const [added, setAdded] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
+  const [pdfSuccess, setPdfSuccess] = useState<string | null>(null);
+  const [pdfError, setPdfError] = useState<string | null>(null);
 
   useEffect(() => {
     if (calculator) {
@@ -51,6 +61,100 @@ export const CalculatorModal: React.FC<CalculatorModalProps> = ({ calculator, on
     onAddToBOQ(calcResult.boqItems);
     setAdded(true);
     setTimeout(() => setAdded(false), 3000);
+  };
+
+  const handleDownloadPaidPdf = async () => {
+    try {
+      setDownloadingPdf(true);
+      setPdfError(null);
+      setPdfSuccess(null);
+
+      // 1. Create order on backend (default ₹20)
+      const order = await api.createPdfOrder(calculator.id, calculator.title, '+91 98765 43210');
+
+      if (!window.Razorpay) {
+        throw new Error('Razorpay SDK is loading, please try again in a few seconds.');
+      }
+
+      const options = {
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'BuildMitra Engineering',
+        description: `Engineering Estimate PDF: ${calculator.title}`,
+        image: 'https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/media/logo.png',
+        order_id: order.orderId,
+        prefill: {
+          name: 'Verified Client',
+          contact: '+91 98765 43210',
+          email: 'client@buildmitra.com'
+        },
+        theme: {
+          color: '#1B365D'
+        },
+        handler: async (response: any) => {
+          try {
+            setDownloadingPdf(true);
+            // 2. Verify on backend & generate branded PDF
+            const result = await api.verifyAndGeneratePdf({
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+              calculatorName: calculator.title,
+              userPhone: '+91 98765 43210',
+              areaSqFt: inputs.area || 1200,
+              grade: inputs.grade || 'Standard',
+              ratePerSqFt: 1850,
+              totalCost: 2250000,
+              breakdown: calcResult.boqItems.map((b: any) => ({
+                name: b.name || b.item || 'Engineering Component',
+                pct: 20,
+                cost: b.rate ? Math.round((Number(b.quantity) || 1) * b.rate) : 50000
+              })),
+              notes: calcResult.notes
+            });
+
+            setPdfSuccess(`Payment Verified! Report #${result.reportNo} downloaded.`);
+
+            // Trigger browser download
+            if (result.pdfBase64) {
+              const byteCharacters = atob(result.pdfBase64);
+              const byteNumbers = new Array(byteCharacters.length);
+              for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+              }
+              const byteArray = new Uint8Array(byteNumbers);
+              const blob = new Blob([byteArray], { type: 'application/pdf' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `${result.reportNo}.pdf`;
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+            } else if (result.downloadUrl) {
+              window.open(result.downloadUrl, '_blank');
+            }
+          } catch (verErr: any) {
+            setPdfError(verErr.message || 'Payment verification failed');
+          } finally {
+            setDownloadingPdf(false);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setDownloadingPdf(false);
+          }
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err: any) {
+      console.error('PDF Purchase Error:', err);
+      setPdfError(err.message || 'Failed to initiate Razorpay checkout');
+      setDownloadingPdf(false);
+    }
   };
 
   return (
@@ -198,41 +302,72 @@ export const CalculatorModal: React.FC<CalculatorModalProps> = ({ calculator, on
 
         </div>
 
-        {/* Footer with BOQ Action */}
-        <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="text-xs text-slate-500 flex items-center gap-1.5">
-            <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
-            <span>Adds quantity lines to your project Bill of Quantities</span>
-          </div>
+        {/* Footer with BOQ Action & ₹20 Paid PDF Report */}
+        <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-200 space-y-3">
+          {pdfSuccess && (
+            <div className="p-2.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl flex items-center justify-between font-bold">
+              <span>✓ {pdfSuccess}</span>
+            </div>
+          )}
+          {pdfError && (
+            <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl font-bold">
+              ⚠ {pdfError}
+            </div>
+          )}
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-900"
-            >
-              Close
-            </button>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="text-xs text-slate-500 flex items-center gap-1.5">
+              <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+              <span>Adds quantity lines to project BOQ or export certified PDF</span>
+            </div>
 
-            <button
-              onClick={handleAddBOQ}
-              className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all ${
-                added 
-                  ? 'bg-emerald-600 text-white' 
-                  : 'bg-blue-600 hover:bg-blue-700 text-white active:scale-95'
-              }`}
-            >
-              {added ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  <span>Added to Project BOQ!</span>
-                </>
-              ) : (
-                <>
-                  <Plus className="w-4 h-4" />
-                  <span>Add to Dynamic BOQ</span>
-                </>
-              )}
-            </button>
+            <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+              <button
+                onClick={onClose}
+                className="px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-slate-900"
+              >
+                Close
+              </button>
+
+              <button
+                onClick={handleDownloadPaidPdf}
+                disabled={downloadingPdf}
+                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-md transition-all active:scale-95 disabled:opacity-50"
+              >
+                {downloadingPdf ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-slate-900" />
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4 text-slate-900" />
+                    <span>Detailed PDF (₹20)</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={handleAddBOQ}
+                className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all ${
+                  added 
+                    ? 'bg-emerald-600 text-white' 
+                    : 'bg-blue-600 hover:bg-blue-700 text-white active:scale-95'
+                }`}
+              >
+                {added ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    <span>Added to BOQ!</span>
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4" />
+                    <span>Add to BOQ</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 

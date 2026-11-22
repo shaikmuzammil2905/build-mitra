@@ -23,3 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 
+# Environment & Credentials
+.env
+.env.*
+*.pem
+*.key
+*.csv
+server/.env
+server/uploads
+server/data
+
+

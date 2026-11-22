@@ -12,6 +12,7 @@ import {
   Clock
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { api } from '../services/api';
 
 export const PartnerRegistrationPage: React.FC = () => {
   const navigate = useNavigate();
@@ -46,8 +47,22 @@ export const PartnerRegistrationPage: React.FC = () => {
     setStep(2);
   };
 
-  const handleStep2Submit = (e: React.FormEvent) => {
+  const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      // Sync with real backend API
+      await api.registerPartner({
+        name,
+        businessName: `${name} Professional Services`,
+        phone,
+        category,
+        experienceYears: experience,
+        serviceLocations: ['Hyderabad', 'Bengaluru']
+      }).catch(err => console.warn('Backend sync note:', err.message));
+    } catch (err) {
+      console.warn('Backend note:', err);
+    }
+
     registerPartner({
       name,
       phone,
