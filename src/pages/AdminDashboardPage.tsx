@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { 
   ArrowLeft, 
   ShieldCheck, 
@@ -99,13 +99,31 @@ interface SidebarItem {
 
 export const AdminDashboardPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { smtpConfig, setSmtpConfig, sendTestEmail, emailLogs } = useApp();
 
-  const [activeSection, setActiveSection] = useState<AdminSectionKey>('overview');
+  const sectionParam = searchParams.get('section') as AdminSectionKey | null;
+  const [activeSection, setActiveSection] = useState<AdminSectionKey>(() => {
+    return sectionParam || 'overview';
+  });
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState<'today' | '7d' | '30d' | '90d' | 'all'>('30d');
+
+  useEffect(() => {
+    const current = searchParams.get('section') as AdminSectionKey | null;
+    if (current && current !== activeSection) {
+      setActiveSection(current);
+    }
+  }, [searchParams]);
+
+  const navigateToSection = (key: AdminSectionKey) => {
+    setActiveSection(key);
+    setSearchParams({ section: key });
+    setMobileSidebarOpen(false);
+    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Rich initial fallback datasets so all 28 modules display comprehensive platform data immediately
   const [analytics, setAnalytics] = useState<AnalyticsData | null>({
@@ -521,38 +539,39 @@ export const AdminDashboardPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+    <div className="h-screen w-full bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white overflow-hidden">
       
       {/* Top Super Admin Exclusive Executive Header */}
-      <header className="bg-slate-950 border-b border-slate-800/80 px-4 sm:px-6 py-3.5 sticky top-0 z-40 flex items-center justify-between shadow-2xl backdrop-blur-md">
-        <div className="flex items-center gap-3">
+      <header className="h-16 shrink-0 bg-slate-950 border-b border-slate-800/80 px-4 sm:px-6 flex items-center justify-between shadow-2xl z-40">
+        <div className="flex items-center gap-3 min-w-0">
           <button 
             onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-            className="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800"
+            className="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:bg-slate-800 shrink-0"
+            title="Open 28 Modules Menu"
           >
             <Layers className="w-5 h-5 text-blue-400" />
           </button>
           
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-500 flex items-center justify-center font-black text-white shadow-lg shadow-blue-900/30 ring-1 ring-white/20">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-500 flex items-center justify-center font-black text-white shadow-lg shadow-blue-900/30 ring-1 ring-white/20 shrink-0">
               BM
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base sm:text-lg text-white tracking-tight">BUILDMITRA</span>
-                <span className="text-[10px] font-black bg-gradient-to-r from-purple-500/20 to-blue-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full tracking-wider uppercase">
+                <span className="font-extrabold text-base sm:text-lg text-white tracking-tight shrink-0">BUILDMITRA</span>
+                <span className="text-[10px] font-black bg-gradient-to-r from-purple-500/20 to-blue-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full tracking-wider uppercase shrink-0">
                   Super Admin V2.4
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden sm:flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>AWS EC2 Mumbai (ap-south-1) • Razorpay Live Gateway Active</span>
+              <p className="text-[11px] text-slate-400 hidden sm:flex items-center gap-1.5 truncate">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                <span className="truncate">AWS EC2 Mumbai (ap-south-1) • Razorpay Live Gateway Active</span>
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button 
             onClick={loadDashboardData}
             disabled={loading}
@@ -575,7 +594,7 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* Action Notification Toast Banner */}
       {actionNotice && (
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2.5 text-xs font-bold flex items-center justify-between shadow-lg sticky top-[61px] z-30">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 text-xs font-bold flex items-center justify-between shrink-0 shadow-lg z-30">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-white" />
             <span>{actionNotice}</span>
@@ -586,51 +605,16 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
       )}
 
-      {/* Mobile Sub-Header Section Switcher */}
-      <div className="md:hidden bg-slate-950/90 border-b border-slate-800/90 px-4 py-2.5 flex items-center justify-between sticky top-[61px] z-20 backdrop-blur-md">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="text-[10px] uppercase font-bold text-slate-400">Current:</span>
-          <span className="text-xs font-bold text-blue-400 truncate">
-            {SIDEBAR_ITEMS.find(i => i.key === activeSection)?.label}
-          </span>
-        </div>
-        <button
-          onClick={() => setMobileSidebarOpen(true)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600/20 text-blue-300 border border-blue-500/30 text-xs font-bold active:scale-95 transition-all"
-        >
-          <Layers className="w-3.5 h-3.5 text-blue-400" />
-          <span>28 Modules Menu</span>
-        </button>
-      </div>
-
       {/* Main Admin Workspace with Sidebar */}
       <div className="flex-1 flex overflow-hidden relative">
         
-        {/* Mobile Backdrop Overlay */}
-        {mobileSidebarOpen && (
-          <div 
-            className="fixed inset-0 bg-black/80 backdrop-blur-xs z-40 md:hidden animate-fade-in"
-            onClick={() => setMobileSidebarOpen(false)}
-          />
-        )}
-
-        {/* Left Sidebar (All 28 Navigation Sections) */}
-        <aside className={`
-          w-72 sm:w-80 bg-slate-950 border-r border-slate-800/80 flex flex-col fixed md:relative inset-y-0 left-0 z-50 transform transition-transform duration-200 ease-in-out md:translate-x-0
-          ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        `}>
-          <div className="p-3.5 border-b border-slate-800/80 text-[11px] font-black text-slate-400 flex items-center justify-between uppercase tracking-wider bg-slate-900/40">
+        {/* Desktop Docked Sidebar (Always below header, 100% visible) */}
+        <aside className="hidden md:flex w-72 shrink-0 bg-slate-950 border-r border-slate-800/80 flex-col h-full z-20">
+          <div className="p-3.5 border-b border-slate-800/80 text-[11px] font-black text-slate-400 flex items-center justify-between uppercase tracking-wider bg-slate-900/40 shrink-0">
             <div className="flex items-center gap-2">
               <span>28 Central Modules</span>
               <span className="text-[10px] bg-slate-800 text-emerald-400 px-2 py-0.5 rounded font-mono">ONLINE</span>
             </div>
-            <button
-              onClick={() => setMobileSidebarOpen(false)}
-              className="md:hidden p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
-              title="Close Menu"
-            >
-              <X className="w-4 h-4" />
-            </button>
           </div>
 
           <nav className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-thin scrollbar-thumb-slate-800">
@@ -640,11 +624,7 @@ export const AdminDashboardPage: React.FC = () => {
               return (
                 <button
                   key={item.key}
-                  onClick={() => {
-                    setActiveSection(item.key);
-                    setMobileSidebarOpen(false);
-                    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
+                  onClick={() => navigateToSection(item.key)}
                   className={`
                     w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left
                     ${isActive 
@@ -669,7 +649,7 @@ export const AdminDashboardPage: React.FC = () => {
             })}
           </nav>
 
-          <div className="p-3.5 border-t border-slate-800/80 bg-slate-950 text-[11px] text-slate-400">
+          <div className="p-3.5 border-t border-slate-800/80 bg-slate-950 text-[11px] text-slate-400 shrink-0">
             <div className="flex items-center justify-between mb-1">
               <span className="font-bold text-slate-300">AWS Mumbai S3:</span>
               <span className="text-emerald-400 font-mono font-bold">CONNECTED</span>
@@ -678,8 +658,91 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
         </aside>
 
+        {/* Mobile Slide-Out Drawer with full backdrop */}
+        {mobileSidebarOpen && (
+          <div className="fixed inset-0 z-50 md:hidden flex">
+            <div 
+              className="fixed inset-0 bg-black/80 backdrop-blur-xs animate-fade-in"
+              onClick={() => setMobileSidebarOpen(false)}
+            />
+            <aside className="relative w-72 max-w-[85vw] bg-slate-950 border-r border-slate-800/80 flex flex-col h-full shadow-2xl z-10">
+              <div className="p-3.5 border-b border-slate-800/80 text-[11px] font-black text-slate-400 flex items-center justify-between uppercase tracking-wider bg-slate-900/60 shrink-0">
+                <div className="flex items-center gap-2">
+                  <span>28 Central Modules</span>
+                  <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-mono">ONLINE</span>
+                </div>
+                <button
+                  onClick={() => setMobileSidebarOpen(false)}
+                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
+                  title="Close Menu"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <nav className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-thin scrollbar-thumb-slate-800">
+                {SIDEBAR_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeSection === item.key;
+                  return (
+                    <button
+                      key={item.key}
+                      onClick={() => navigateToSection(item.key)}
+                      className={`
+                        w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left
+                        ${isActive 
+                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-950' 
+                          : 'text-slate-400 hover:bg-slate-900 hover:text-slate-100'}
+                      `}
+                    >
+                      <div className="flex items-center gap-3 truncate">
+                        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                        <span className="truncate">{item.label}</span>
+                      </div>
+                      {item.badge !== undefined && item.badge !== 0 && (
+                        <span className={`
+                          text-[10px] font-black px-2 py-0.5 rounded-full
+                          ${isActive ? 'bg-white text-blue-700' : 'bg-slate-800 text-slate-300'}
+                        `}>
+                          {item.badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              <div className="p-3.5 border-t border-slate-800/80 bg-slate-950 text-[11px] text-slate-400 shrink-0">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-slate-300">AWS Mumbai S3:</span>
+                  <span className="text-emerald-400 font-mono font-bold">CONNECTED</span>
+                </div>
+                <p className="truncate text-slate-500 font-mono text-[10px]">buildmitra-mumbai-storage</p>
+              </div>
+            </aside>
+          </div>
+        )}
+
         {/* Right Active Content Area */}
-        <main ref={mainRef} className="flex-1 bg-slate-900/60 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+          {/* Mobile Sub-Header Section Switcher */}
+          <div className="md:hidden bg-slate-950/90 border-b border-slate-800/90 px-4 py-2 flex items-center justify-between shrink-0 backdrop-blur-md">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-[10px] uppercase font-bold text-slate-400">Current:</span>
+              <span className="text-xs font-bold text-blue-400 truncate">
+                {SIDEBAR_ITEMS.find(i => i.key === activeSection)?.label}
+              </span>
+            </div>
+            <button
+              onClick={() => setMobileSidebarOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600/20 text-blue-300 border border-blue-500/30 text-xs font-bold active:scale-95 transition-all"
+            >
+              <Layers className="w-3.5 h-3.5 text-blue-400" />
+              <span>28 Modules Menu</span>
+            </button>
+          </div>
+
+          <main ref={mainRef} className="flex-1 bg-slate-900/60 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           
           {/* ================================================================= */}
           {/* Module 1: EXECUTIVE OVERVIEW */}
@@ -707,60 +770,82 @@ export const AdminDashboardPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Grand KPI Cards Grid */}
+              {/* Grand Clickable KPI Cards Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-br from-slate-900 to-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden group">
+                <div 
+                  onClick={() => navigateToSection('users')}
+                  className="bg-gradient-to-br from-slate-900 to-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden group cursor-pointer hover:border-blue-500/60 hover:shadow-blue-950/40 hover:scale-[1.01] transition-all"
+                >
                   <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
                     <span>Registered Users</span>
-                    <div className="p-2 bg-blue-500/10 rounded-xl text-blue-400"><Users className="w-4 h-4" /></div>
+                    <div className="p-2 bg-blue-500/10 rounded-xl text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-all"><Users className="w-4 h-4" /></div>
                   </div>
                   <div className="text-3xl font-black text-white mt-3">
                     {analytics?.users.total || users.length}
                   </div>
-                  <div className="text-xs text-emerald-400 mt-2 font-bold flex items-center gap-1">
-                    <span>↑ 18.4%</span>
-                    <span className="text-slate-400 font-normal">Active Members</span>
+                  <div className="text-xs text-emerald-400 mt-2 font-bold flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <span>↑ 18.4%</span>
+                      <span className="text-slate-400 font-normal">Active Members</span>
+                    </div>
+                    <span className="text-[11px] text-blue-400 font-semibold group-hover:underline">Open →</span>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-slate-900 to-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden group">
+                <div 
+                  onClick={() => navigateToSection('partner_approvals')}
+                  className="bg-gradient-to-br from-slate-900 to-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden group cursor-pointer hover:border-amber-500/60 hover:shadow-amber-950/40 hover:scale-[1.01] transition-all"
+                >
                   <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
                     <span>Partner Applications</span>
-                    <div className="p-2 bg-amber-500/10 rounded-xl text-amber-400"><ShieldCheck className="w-4 h-4" /></div>
+                    <div className="p-2 bg-amber-500/10 rounded-xl text-amber-400 group-hover:bg-amber-600 group-hover:text-white transition-all"><ShieldCheck className="w-4 h-4" /></div>
                   </div>
                   <div className="text-3xl font-black text-white mt-3">
                     {partners.length}
                   </div>
-                  <div className="text-xs text-amber-400 mt-2 font-bold flex items-center gap-1">
-                    <span>⏳ {partners.filter(p => p.status === 'Pending Approval').length} Pending</span>
-                    <span className="text-slate-400 font-normal">KYC</span>
+                  <div className="text-xs text-amber-400 mt-2 font-bold flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <span>⏳ {partners.filter(p => p.status === 'Pending Approval').length} Pending</span>
+                      <span className="text-slate-400 font-normal">KYC</span>
+                    </div>
+                    <span className="text-[11px] text-amber-400 font-semibold group-hover:underline">Inspect →</span>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-slate-900 to-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden group">
+                <div 
+                  onClick={() => navigateToSection('auctions')}
+                  className="bg-gradient-to-br from-slate-900 to-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden group cursor-pointer hover:border-purple-500/60 hover:shadow-purple-950/40 hover:scale-[1.01] transition-all"
+                >
                   <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
                     <span>Reverse Auctions</span>
-                    <div className="p-2 bg-purple-500/10 rounded-xl text-purple-400"><Gavel className="w-4 h-4" /></div>
+                    <div className="p-2 bg-purple-500/10 rounded-xl text-purple-400 group-hover:bg-purple-600 group-hover:text-white transition-all"><Gavel className="w-4 h-4" /></div>
                   </div>
                   <div className="text-3xl font-black text-white mt-3">
                     {auctions.length} Lots
                   </div>
-                  <div className="text-xs text-purple-300 mt-2 font-bold flex items-center gap-1">
-                    <span>{auctions.reduce((sum, a) => sum + a.bidsCount, 0)} Bids</span>
-                    <span className="text-slate-400 font-normal">Placed</span>
+                  <div className="text-xs text-purple-300 mt-2 font-bold flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <span>{auctions.reduce((sum, a) => sum + a.bidsCount, 0)} Bids</span>
+                      <span className="text-slate-400 font-normal">Placed</span>
+                    </div>
+                    <span className="text-[11px] text-purple-400 font-semibold group-hover:underline">View →</span>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-slate-900 to-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden group">
+                <div 
+                  onClick={() => navigateToSection('payments')}
+                  className="bg-gradient-to-br from-slate-900 to-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden group cursor-pointer hover:border-emerald-500/60 hover:shadow-emerald-950/40 hover:scale-[1.01] transition-all"
+                >
                   <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
                     <span>Platform Volume</span>
-                    <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400"><DollarSign className="w-4 h-4" /></div>
+                    <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-all"><DollarSign className="w-4 h-4" /></div>
                   </div>
                   <div className="text-3xl font-black text-emerald-400 mt-3">
                     ₹ {(analytics?.finance.totalRevenue || payments.reduce((sum, p) => sum + p.amount, 0)).toLocaleString('en-IN')}
                   </div>
-                  <div className="text-xs text-slate-400 mt-2">
-                    Razorpay Live Verified
+                  <div className="text-xs text-slate-400 mt-2 flex items-center justify-between">
+                    <span>Razorpay Live Verified</span>
+                    <span className="text-[11px] text-emerald-400 font-semibold group-hover:underline">Ledger →</span>
                   </div>
                 </div>
               </div>
@@ -776,20 +861,24 @@ export const AdminDashboardPage: React.FC = () => {
                       <span>13 Registered Trade Categories</span>
                     </h3>
                     <button 
-                      onClick={() => setActiveSection('partner_approvals')}
+                      onClick={() => navigateToSection('partner_approvals')}
                       className="text-xs text-blue-400 hover:underline font-bold"
                     >
-                      Inspect Queue
+                      Inspect Queue →
                     </button>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     {categories.slice(0, 8).map((cat) => (
-                      <div key={cat.id} className="p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-between">
+                      <button 
+                        key={cat.id} 
+                        onClick={() => navigateToSection('contractors_helpers')}
+                        className="p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-between hover:border-blue-500/60 hover:bg-slate-900 transition-all text-left"
+                      >
                         <span className="font-semibold text-slate-300 truncate">{cat.name}</span>
                         <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-bold text-[10px]">
                           {partners.filter(p => p.category.toLowerCase().includes(cat.name.toLowerCase().split(' ')[0])).length} Pros
                         </span>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -802,32 +891,38 @@ export const AdminDashboardPage: React.FC = () => {
                       <span>Engineering Estimations & ₹20 Reports</span>
                     </h3>
                     <button 
-                      onClick={() => setActiveSection('calculators')}
+                      onClick={() => navigateToSection('calculators')}
                       className="text-xs text-emerald-400 hover:underline font-bold"
                     >
-                      Rate Settings
+                      Rate Settings →
                     </button>
                   </div>
 
-                  <div className="p-4 bg-slate-950/60 rounded-2xl border border-slate-800 flex items-center justify-between">
+                  <div 
+                    onClick={() => navigateToSection('calculators')}
+                    className="p-4 bg-slate-950/60 rounded-2xl border border-slate-800 flex items-center justify-between cursor-pointer hover:border-blue-500/60 hover:bg-slate-900 transition-all group"
+                  >
                     <div>
                       <div className="text-xs text-slate-400">Total Engineering Calculator Executions</div>
                       <div className="text-xl font-black text-white mt-1">3,120+ Calculations</div>
                     </div>
-                    <span className="text-xs font-bold text-blue-400 bg-blue-500/10 px-3 py-1 rounded-xl">
-                      19 Tools Live
+                    <span className="text-xs font-bold text-blue-400 bg-blue-500/10 px-3 py-1 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-all">
+                      19 Tools Live →
                     </span>
                   </div>
 
-                  <div className="p-4 bg-slate-950/60 rounded-2xl border border-slate-800 flex items-center justify-between">
+                  <div 
+                    onClick={() => navigateToSection('pdf_purchases')}
+                    className="p-4 bg-slate-950/60 rounded-2xl border border-slate-800 flex items-center justify-between cursor-pointer hover:border-emerald-500/60 hover:bg-slate-900 transition-all group"
+                  >
                     <div>
                       <div className="text-xs text-slate-400">Paid PDF Reports Downloaded (₹20 Fee)</div>
                       <div className="text-xl font-black text-emerald-400 mt-1">
                         {pdfPurchases.length || 3} Reports Generated
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl">
-                      AWS S3 Archived
+                    <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                      AWS S3 Archived →
                     </span>
                   </div>
                 </div>
@@ -2418,7 +2513,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         </main>
       </div>
-
     </div>
-  );
+  </div>
+);
 };
