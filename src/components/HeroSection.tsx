@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ArrowRight, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 interface HeroSectionProps {
   onSearchSubmit: (query: string) => void;
@@ -8,6 +9,7 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
+  const { cmsData } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -17,8 +19,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSearchSubmit }) => {
   const slides = [
     {
       id: 0,
-      title: 'Turnkey Building Construction 🏗️',
-      subtitle: 'From foundation digging to key handover • IS 456 structural guarantee & milestone escrow safety',
+      title: cmsData?.heroTitle || 'Turnkey Building Construction 🏗️',
+      subtitle: cmsData?.heroSubtitle || 'From foundation digging to key handover • IS 456 structural guarantee & milestone escrow safety',
       ctaText: 'Start Construction',
       ctaPath: '/services',
       image: '/assets/building_construction_site.jpg',

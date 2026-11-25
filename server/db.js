@@ -491,10 +491,14 @@ const INITIAL_DATABASE = {
     { id: 'PRD-04', name: 'First Class Red Kiln Burnt Clay Bricks', brand: 'Standard 9x4x3', unit: '1,000 Pcs', price: '₹ 8,900/Lot', stock: 'In Stock' }
   ],
   services: [
-    { id: 'SRV-01', name: 'Turnkey Civil Construction', rate: '₹ 1,850/Sq.Ft', turnaround: '6-9 Months', activeProviders: 34 },
-    { id: 'SRV-02', name: 'Premium Interior Painting & Primer', rate: '₹ 16/Sq.Ft', turnaround: '2-4 Days', activeProviders: 46 },
-    { id: 'SRV-03', name: 'Complete House Wiring & Circuit Protection', rate: '₹ 22/Sq.Ft', turnaround: '3-5 Days', activeProviders: 52 },
-    { id: 'SRV-04', name: 'Sanitary & Concealed Plumbing', rate: '₹ 18/Sq.Ft', turnaround: '2-3 Days', activeProviders: 39 }
+    { id: 'SRV-01', name: 'Turnkey Civil Construction', rate: '₹ 1,850/Sq.Ft', turnaround: '6-9 Months', activeProviders: 34, image: '/assets/building_construction_site.jpg', category: 'Civil Works' },
+    { id: 'SRV-02', name: 'Premium Interior & Exterior Painting', rate: '₹ 16/Sq.Ft', turnaround: '2-4 Days', activeProviders: 46, image: '/assets/services.jpg', category: 'Painting' },
+    { id: 'SRV-03', name: 'Certified MEP Master Electrical Works', rate: '₹ 22/Sq.Ft', turnaround: '3-5 Days', activeProviders: 52, image: '/assets/cat_electrical.jpg', category: 'Electrical' },
+    { id: 'SRV-04', name: 'Sanitary & Concealed Plumbing', rate: '₹ 18/Sq.Ft', turnaround: '2-3 Days', activeProviders: 39, image: '/assets/cat_plumbing.jpg', category: 'Plumbing' },
+    { id: 'SRV-05', name: 'Advanced Terrace & Basement Waterproofing', rate: '₹ 38/Sq.Ft', turnaround: '3-5 Days', activeProviders: 28, image: '/assets/services.jpg', category: 'Waterproofing' },
+    { id: 'SRV-06', name: 'Precision Carpentry & Modular Woodwork', rate: '₹ 499/Day', turnaround: '3-7 Days', activeProviders: 25, image: '/assets/floor-plans.jpg', category: 'Carpentry' },
+    { id: 'SRV-07', name: 'Professional Deep House Cleaning & Sanitization', rate: '₹ 1,499/Session', turnaround: 'Same Day', activeProviders: 41, image: '/assets/cleaning_staff.jpg', category: 'Deep Cleaning' },
+    { id: 'SRV-08', name: 'Housekeeping & Labour Net Workforce', rate: '₹ 650/Day', turnaround: 'Immediate', activeProviders: 65, image: '/assets/housekeeping_gloves.jpg', category: 'Labour Workforce' }
   ],
   cmsSections: {
     hero: {

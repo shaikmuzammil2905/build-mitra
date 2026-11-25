@@ -276,6 +276,10 @@ export const api = {
   getProperties: () => apiFetch<any[]>('/api/properties'),
   getProducts: () => apiFetch<any[]>('/api/products'),
   getServices: () => apiFetch<any[]>('/api/services'),
+  updateService: (id: string, data: any) => apiFetch<{ success: boolean; service: any }>(`/api/admin/services/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data)
+  }),
   get3DModels: () => apiFetch<any[]>('/api/3d-models'),
   getPdfPurchases: () => apiFetch<any[]>('/api/pdf-purchases'),
   getNotifications: () => apiFetch<any[]>('/api/notifications'),

@@ -576,6 +576,29 @@ app.get('/api/services', (req, res) => {
   res.json(db.data.services || []);
 });
 
+app.put('/api/admin/services/:id', (req, res) => {
+  const { id } = req.params;
+  const { rate, turnaround, activeProviders, priceStarting } = req.body;
+  const srv = (db.data.services || []).find(s => s.id === id);
+  if (!srv) {
+    // If not found in simple services list, add it or update
+    const newSrv = { id, name: req.body.name || id, rate, turnaround: turnaround || 'On-Demand', activeProviders: Number(activeProviders) || 20 };
+    db.data.services.push(newSrv);
+    db.logAudit('SERVICE_RATE_UPDATE', 'ADMIN', `Added/Updated service ${id} rate to ${rate}`);
+    db.save();
+    return res.json({ success: true, service: newSrv });
+  }
+
+  if (rate !== undefined) srv.rate = rate;
+  if (turnaround !== undefined) srv.turnaround = turnaround;
+  if (activeProviders !== undefined) srv.activeProviders = Number(activeProviders);
+  if (priceStarting !== undefined) srv.priceStarting = Number(priceStarting);
+
+  db.logAudit('SERVICE_RATE_UPDATE', 'ADMIN', `Updated service ${id} (${srv.name}) rate to ${rate}`);
+  db.save();
+  res.json({ success: true, service: srv });
+});
+
 app.get('/api/3d-models', (req, res) => {
   res.json(db.data.ai3DModels || []);
 });

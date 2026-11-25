@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { HOME_SERVICES_CATALOG } from '../data/servicesData';
+import { useApp } from '../context/AppContext';
 import { 
   Hammer, 
   ShieldCheck, 
@@ -26,6 +27,7 @@ interface ServicesPageProps {
 }
 
 export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking }) => {
+  const { serviceRates } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -42,7 +44,22 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking }) => 
 
   const categories = ['All', 'Waterproofing', 'Painting', 'Electrical', 'Plumbing', 'Civil Works', 'Carpentry'];
 
-  const filteredServices = HOME_SERVICES_CATALOG.filter(s => {
+  const filteredServices = HOME_SERVICES_CATALOG.map(s => {
+    // Dynamic override from Admin Panel
+    const override = serviceRates?.[s.id] 
+      || (s.category === 'Waterproofing' ? serviceRates?.['service-waterproofing'] || serviceRates?.['SRV-05'] : undefined)
+      || (s.category === 'Painting' ? serviceRates?.['service-painting'] || serviceRates?.['SRV-02'] : undefined)
+      || (s.category === 'Electrical' ? serviceRates?.['service-electrician'] || serviceRates?.['SRV-03'] : undefined)
+      || (s.category === 'Plumbing' ? serviceRates?.['service-plumber'] || serviceRates?.['SRV-04'] : undefined)
+      || (s.category === 'Civil Works' ? serviceRates?.['service-civil'] || serviceRates?.['SRV-01'] : undefined)
+      || (s.category === 'Carpentry' ? serviceRates?.['service-carpenter'] || serviceRates?.['SRV-06'] : undefined);
+
+    if (override) {
+      const parts = override.split('/');
+      return { ...s, startingPrice: parts[0]?.trim() || s.startingPrice, priceUnit: parts[1] ? `per ${parts[1].trim()}` : s.priceUnit };
+    }
+    return s;
+  }).filter(s => {
     const matchesCat = selectedCategory === 'All' || s.category === selectedCategory;
     const matchesQuery = !searchQuery || 
       s.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -52,14 +69,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking }) => 
   });
 
   const rateCard = [
-    { trade: 'Internal Emulsion Painting (2 Coats + Primer)', unitRate: '₹ 14 – 18 / Sq.Ft', timeEstimate: '3–5 Days', materials: 'Asian Paints / Berger Premium' },
-    { trade: 'External Weather-Proof Elastomeric Painting', unitRate: '₹ 22 – 28 / Sq.Ft', timeEstimate: '5–8 Days', materials: 'Apex Ultima / WeatherCoat' },
-    { trade: 'Crystalline Terrace Waterproofing + Screed', unitRate: '₹ 45 – 65 / Sq.Ft', timeEstimate: '4–6 Days', materials: 'Dr. Fixit / Fosroc Brushbond' },
-    { trade: 'Underground Sump Chemical Epoxy Grouting', unitRate: '₹ 55 – 75 / Sq.Ft', timeEstimate: '2–3 Days', materials: 'Food-Grade Epoxy Grout' },
-    { trade: 'Concealed CPVC Plumbing (Per Point)', unitRate: '₹ 650 – 850 / Point', timeEstimate: 'Per Bathroom: 2 Days', materials: 'Astral / Supreme CPVC' },
-    { trade: 'Electrical Concealed Wiring (Per Point)', unitRate: '₹ 500 – 700 / Point', timeEstimate: '1–2 Days', materials: 'Finolex FRLS / Havells Wires' },
+    { trade: 'Internal Emulsion Painting (2 Coats + Primer)', unitRate: serviceRates?.['SRV-02'] || '₹ 14 – 18 / Sq.Ft', timeEstimate: '3–5 Days', materials: 'Asian Paints / Berger Premium' },
+    { trade: 'External Weather-Proof Elastomeric Painting', unitRate: serviceRates?.['SRV-02'] ? `${serviceRates['SRV-02']} (Weather-Proof)` : '₹ 22 – 28 / Sq.Ft', timeEstimate: '5–8 Days', materials: 'Apex Ultima / WeatherCoat' },
+    { trade: 'Crystalline Terrace Waterproofing + Screed', unitRate: serviceRates?.['SRV-05'] || serviceRates?.['service-waterproofing'] || '₹ 45 – 65 / Sq.Ft', timeEstimate: '4–6 Days', materials: 'Dr. Fixit / Fosroc Brushbond' },
+    { trade: 'Underground Sump Chemical Epoxy Grouting', unitRate: serviceRates?.['SRV-05'] || '₹ 55 – 75 / Sq.Ft', timeEstimate: '2–3 Days', materials: 'Food-Grade Epoxy Grout' },
+    { trade: 'Concealed CPVC Plumbing (Per Point)', unitRate: serviceRates?.['SRV-04'] || '₹ 650 – 850 / Point', timeEstimate: 'Per Bathroom: 2 Days', materials: 'Astral / Supreme CPVC' },
+    { trade: 'Electrical Concealed Wiring (Per Point)', unitRate: serviceRates?.['SRV-03'] || '₹ 500 – 700 / Point', timeEstimate: '1–2 Days', materials: 'Finolex FRLS / Havells Wires' },
     { trade: 'Vitrified Floor Tile Laying (Laser Leveled)', unitRate: '₹ 28 – 35 / Sq.Ft', timeEstimate: '1000 Sq.Ft: 4 Days', materials: 'Laticrete Adhesive & Spacer' },
-    { trade: 'Full Turnkey Civil Structure (Labour + Material)', unitRate: '₹ 1,750 – 2,200 / Sq.Ft', timeEstimate: '6–9 Months', materials: 'A-Grade Cement & Fe 550D Rebars' }
+    { trade: 'Full Turnkey Civil Structure (Labour + Material)', unitRate: serviceRates?.['SRV-01'] || '₹ 1,750 – 2,200 / Sq.Ft', timeEstimate: '6–9 Months', materials: 'A-Grade Cement & Fe 550D Rebars' }
   ];
 
   const faqs = [

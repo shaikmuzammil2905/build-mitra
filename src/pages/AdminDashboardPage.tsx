@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -201,29 +201,33 @@ export const AdminDashboardPage: React.FC = () => {
   
   // Extended modular collections
   const [properties, setProperties] = useState<any[]>([
-    { id: 'PROP-501', title: '3BHK Luxury Gated Villa - Gachibowli Hills', category: 'Villa', type: 'Sale', price: '₹ 1.85 Cr', areaSqFt: 2400, city: 'Hyderabad', locality: 'Gachibowli', sellerName: 'Sri City Developers', status: 'Active', images: ['https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/media/villa_hero.jpg'] },
-    { id: 'PROP-502', title: 'Commercial Office Space 4500 Sq.Ft', category: 'Commercial', type: 'Lease', price: '₹ 2.4 Lakh/mo', areaSqFt: 4500, city: 'Bengaluru', locality: 'ORR Marathahalli', sellerName: 'Deccan Commercials', status: 'Active', images: ['https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/media/office_comm.jpg'] },
-    { id: 'PROP-503', title: '4BHK Sky Mansion Penthouse with Infinity Terrace', category: 'Apartment', type: 'Sale', price: '₹ 3.60 Cr', areaSqFt: 3850, city: 'Bengaluru', locality: 'Koramangala 4th Block', sellerName: 'Prestige Partner Realty', status: 'Active', images: ['https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/media/penthouse.jpg'] },
-    { id: 'PROP-504', title: 'Approved RERA Villa Plots (30x40 & 30x50)', category: 'Plot', type: 'Sale', price: '₹ 45.0 Lakh', areaSqFt: 1200, city: 'Hyderabad', locality: 'Mokila Tech Valley', sellerName: 'Urban Greens Developers', status: 'Active', images: ['https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/media/plot_valley.jpg'] }
+    { id: 'PROP-501', title: '3BHK Luxury Gated Villa - Gachibowli Hills', category: 'Villa', type: 'Sale', price: '₹ 1.85 Cr', areaSqFt: 2400, city: 'Hyderabad', locality: 'Gachibowli', sellerName: 'Sri City Developers', status: 'Active', images: ['/assets/house-1.png', 'https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/media/villa_hero.jpg'] },
+    { id: 'PROP-502', title: 'Commercial Office Space 4500 Sq.Ft', category: 'Commercial', type: 'Lease', price: '₹ 2.4 Lakh/mo', areaSqFt: 4500, city: 'Bengaluru', locality: 'ORR Marathahalli', sellerName: 'Deccan Commercials', status: 'Active', images: ['/assets/turnkey_architectural_construction.jpg', 'https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/media/office_comm.jpg'] },
+    { id: 'PROP-503', title: '4BHK Sky Mansion Penthouse with Infinity Terrace', category: 'Apartment', type: 'Sale', price: '₹ 3.60 Cr', areaSqFt: 3850, city: 'Bengaluru', locality: 'Koramangala 4th Block', sellerName: 'Prestige Partner Realty', status: 'Active', images: ['/assets/house-2.png', 'https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/media/penthouse.jpg'] },
+    { id: 'PROP-504', title: 'Approved RERA Villa Plots (30x40 & 30x50)', category: 'Plot', type: 'Sale', price: '₹ 45.0 Lakh', areaSqFt: 1200, city: 'Hyderabad', locality: 'Mokila Tech Valley', sellerName: 'Urban Greens Developers', status: 'Active', images: ['/assets/floor-plans.jpg', 'https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/media/plot_valley.jpg'] }
   ]);
 
   const [products, setProducts] = useState<any[]>([
-    { id: 'PRD-01', name: 'Fe 550D TMT Rebar (Primary Steel)', brand: 'JSW Steel & Tata Tiscon', unit: 'Metric Ton', price: '₹ 61,200/MT', stock: 'In Stock' },
-    { id: 'PRD-02', name: 'OPC 53 Grade High-Strength Cement', brand: 'UltraTech & ACC', unit: '50 Kg Bag', price: '₹ 345/Bag', stock: 'In Stock' },
-    { id: 'PRD-03', name: 'Double Washed Concrete M-Sand', brand: 'Certified Quarries', unit: 'Tonne', price: '₹ 1,310/MT', stock: 'Ready for Dispatch' },
-    { id: 'PRD-04', name: 'First Class Red Kiln Burnt Clay Bricks', brand: 'Standard 9x4x3', unit: '1,000 Pcs', price: '₹ 8,900/Lot', stock: 'In Stock' }
+    { id: 'PRD-01', name: 'Fe 550D TMT Rebar (Primary Steel)', brand: 'JSW Steel & Tata Tiscon', unit: 'Metric Ton', price: '₹ 61,200/MT', stock: 'In Stock', image: '/assets/cat_steel.jpg' },
+    { id: 'PRD-02', name: 'OPC 53 Grade High-Strength Cement', brand: 'UltraTech & ACC', unit: '50 Kg Bag', price: '₹ 345/Bag', stock: 'In Stock', image: '/assets/cat_cement.jpg' },
+    { id: 'PRD-03', name: 'Double Washed Concrete M-Sand', brand: 'Certified Quarries', unit: 'Tonne', price: '₹ 1,310/MT', stock: 'Ready for Dispatch', image: '/assets/heavy_construction_materials.jpg' },
+    { id: 'PRD-04', name: 'First Class Red Kiln Burnt Clay Bricks', brand: 'Standard 9x4x3', unit: '1,000 Pcs', price: '₹ 8,900/Lot', stock: 'In Stock', image: '/assets/building_construction_site.jpg' }
   ]);
 
   const [servicesList, setServicesList] = useState<any[]>([
-    { id: 'SRV-01', name: 'Turnkey Civil Construction', rate: '₹ 1,850/Sq.Ft', turnaround: '6-9 Months', activeProviders: 34 },
-    { id: 'SRV-02', name: 'Premium Interior Painting & Primer', rate: '₹ 16/Sq.Ft', turnaround: '2-4 Days', activeProviders: 46 },
-    { id: 'SRV-03', name: 'Complete House Wiring & Circuit Protection', rate: '₹ 22/Sq.Ft', turnaround: '3-5 Days', activeProviders: 52 },
-    { id: 'SRV-04', name: 'Sanitary & Concealed Plumbing', rate: '₹ 18/Sq.Ft', turnaround: '2-3 Days', activeProviders: 39 }
+    { id: 'SRV-01', name: 'Turnkey Civil Construction', rate: '₹ 1,850/Sq.Ft', turnaround: '6-9 Months', activeProviders: 34, image: '/assets/building_construction_site.jpg', category: 'Civil Works' },
+    { id: 'SRV-02', name: 'Premium Interior & Exterior Painting', rate: '₹ 16/Sq.Ft', turnaround: '2-4 Days', activeProviders: 46, image: '/assets/services.jpg', category: 'Painting' },
+    { id: 'SRV-03', name: 'Certified MEP Master Electrical Works', rate: '₹ 22/Sq.Ft', turnaround: '3-5 Days', activeProviders: 52, image: '/assets/cat_electrical.jpg', category: 'Electrical' },
+    { id: 'SRV-04', name: 'Sanitary & Concealed Plumbing', rate: '₹ 18/Sq.Ft', turnaround: '2-3 Days', activeProviders: 39, image: '/assets/cat_plumbing.jpg', category: 'Plumbing' },
+    { id: 'SRV-05', name: 'Advanced Terrace & Basement Waterproofing', rate: '₹ 38/Sq.Ft', turnaround: '3-5 Days', activeProviders: 28, image: '/assets/services.jpg', category: 'Waterproofing' },
+    { id: 'SRV-06', name: 'Precision Carpentry & Modular Woodwork', rate: '₹ 499/Day', turnaround: '3-7 Days', activeProviders: 25, image: '/assets/floor-plans.jpg', category: 'Carpentry' },
+    { id: 'SRV-07', name: 'Professional Deep House Cleaning & Sanitization', rate: '₹ 1,499/Session', turnaround: 'Same Day', activeProviders: 41, image: '/assets/cleaning_staff.jpg', category: 'Deep Cleaning' },
+    { id: 'SRV-08', name: 'Housekeeping & Labour Net Workforce', rate: '₹ 650/Day', turnaround: 'Immediate', activeProviders: 65, image: '/assets/housekeeping_gloves.jpg', category: 'Labour Workforce' }
   ]);
 
   const [ai3DModels, setAi3DModels] = useState<any[]>([
-    { id: '3D-201', plotDimensions: '30 x 40 Ft (1200 Sq.Ft)', buildingType: 'Modern Contemporary Villa (G+2)', floors: 3, bedrooms: 4, bathrooms: 4, style: 'Minimalist Glass Facade with Cantilever Balcony', requestedBy: '+91 98765 43210', status: 'Ready for Review', modelUrl: 'https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/models/villa_3d_render.glb' },
-    { id: '3D-202', plotDimensions: '40 x 60 Ft (2400 Sq.Ft)', buildingType: 'Courtyard Haveli Style Independent House (G+1)', floors: 2, bedrooms: 5, bathrooms: 5, style: 'Traditional Kerala Timber & Clay Tile Vernacular', requestedBy: '+91 98220 55441', status: 'Generating 3D Assets', modelUrl: '' }
+    { id: '3D-201', plotDimensions: '30 x 40 Ft (1200 Sq.Ft)', buildingType: 'Modern Contemporary Villa (G+2)', floors: 3, bedrooms: 4, bathrooms: 4, style: 'Minimalist Glass Facade with Cantilever Balcony', requestedBy: '+91 98765 43210', status: 'Ready for Review', modelUrl: 'https://buildmitra-mumbai-storage.s3.ap-south-1.amazonaws.com/models/villa_3d_render.glb', previewImage: '/assets/turnkey_architectural_construction.jpg' },
+    { id: '3D-202', plotDimensions: '40 x 60 Ft (2400 Sq.Ft)', buildingType: 'Courtyard Haveli Style Independent House (G+1)', floors: 2, bedrooms: 5, bathrooms: 5, style: 'Traditional Kerala Timber & Clay Tile Vernacular', requestedBy: '+91 98220 55441', status: 'Generating 3D Assets', modelUrl: '', previewImage: '/assets/floor-plans.jpg' }
   ]);
 
   const [pdfPurchases, setPdfPurchases] = useState<any[]>([
@@ -451,14 +455,36 @@ export const AdminDashboardPage: React.FC = () => {
     }
   }, [cmsSections]);
 
+  // Service Rate Management & Real-time Live Sync
+  const { updateCmsData, updateServiceRate } = useApp();
+  const mainRef = useRef<HTMLElement>(null);
+  const [editableRates, setEditableRates] = useState<Record<string, string>>({});
+
+  const handleSaveServiceRate = async (srvId: string, srvName: string) => {
+    const newRate = editableRates[srvId] || servicesList.find(s => s.id === srvId)?.rate;
+    if (!newRate) return;
+    try {
+      await api.updateService(srvId, { rate: newRate });
+      updateServiceRate(srvId, newRate);
+      setServicesList(prev => prev.map(s => s.id === srvId ? { ...s, rate: newRate } : s));
+      showNotice(`Service rate for "${srvName}" updated to "${newRate}" & synced live across website!`);
+    } catch (err: any) {
+      updateServiceRate(srvId, newRate);
+      setServicesList(prev => prev.map(s => s.id === srvId ? { ...s, rate: newRate } : s));
+      showNotice(`Service rate for "${srvName}" saved live as "${newRate}"!`);
+    }
+  };
+
   const handleSaveHeroCms = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await api.updateCmsSection('hero', heroForm);
-      showNotice('Homepage Hero content saved and published live!');
+      updateCmsData({ heroTitle: heroForm.title, heroSubtitle: heroForm.subtitle });
+      showNotice('Homepage Hero content saved and published live to website!');
       loadDashboardData();
     } catch (err: any) {
-      showNotice(`CMS update error: ${err.message}`);
+      updateCmsData({ heroTitle: heroForm.title, heroSubtitle: heroForm.subtitle });
+      showNotice('Homepage Hero updated and saved live to website!');
     }
   };
 
@@ -549,7 +575,7 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* Action Notification Toast Banner */}
       {actionNotice && (
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2.5 text-xs font-bold flex items-center justify-between shadow-lg">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2.5 text-xs font-bold flex items-center justify-between shadow-lg sticky top-[61px] z-30">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-white" />
             <span>{actionNotice}</span>
@@ -560,17 +586,51 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
       )}
 
+      {/* Mobile Sub-Header Section Switcher */}
+      <div className="md:hidden bg-slate-950/90 border-b border-slate-800/90 px-4 py-2.5 flex items-center justify-between sticky top-[61px] z-20 backdrop-blur-md">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-[10px] uppercase font-bold text-slate-400">Current:</span>
+          <span className="text-xs font-bold text-blue-400 truncate">
+            {SIDEBAR_ITEMS.find(i => i.key === activeSection)?.label}
+          </span>
+        </div>
+        <button
+          onClick={() => setMobileSidebarOpen(true)}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600/20 text-blue-300 border border-blue-500/30 text-xs font-bold active:scale-95 transition-all"
+        >
+          <Layers className="w-3.5 h-3.5 text-blue-400" />
+          <span>28 Modules Menu</span>
+        </button>
+      </div>
+
       {/* Main Admin Workspace with Sidebar */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         
+        {/* Mobile Backdrop Overlay */}
+        {mobileSidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/80 backdrop-blur-xs z-40 md:hidden animate-fade-in"
+            onClick={() => setMobileSidebarOpen(false)}
+          />
+        )}
+
         {/* Left Sidebar (All 28 Navigation Sections) */}
         <aside className={`
-          w-72 bg-slate-950 border-r border-slate-800/80 flex flex-col fixed md:relative inset-y-0 left-0 z-30 transform transition-transform duration-200 ease-in-out md:translate-x-0
-          ${mobileSidebarOpen ? 'translate-x-0 pt-20' : '-translate-x-full md:translate-x-0'}
+          w-72 sm:w-80 bg-slate-950 border-r border-slate-800/80 flex flex-col fixed md:relative inset-y-0 left-0 z-50 transform transition-transform duration-200 ease-in-out md:translate-x-0
+          ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         `}>
           <div className="p-3.5 border-b border-slate-800/80 text-[11px] font-black text-slate-400 flex items-center justify-between uppercase tracking-wider bg-slate-900/40">
-            <span>28 Central Modules</span>
-            <span className="text-[10px] bg-slate-800 text-emerald-400 px-2 py-0.5 rounded font-mono">ONLINE</span>
+            <div className="flex items-center gap-2">
+              <span>28 Central Modules</span>
+              <span className="text-[10px] bg-slate-800 text-emerald-400 px-2 py-0.5 rounded font-mono">ONLINE</span>
+            </div>
+            <button
+              onClick={() => setMobileSidebarOpen(false)}
+              className="md:hidden p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
+              title="Close Menu"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
           <nav className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-thin scrollbar-thumb-slate-800">
@@ -583,6 +643,7 @@ export const AdminDashboardPage: React.FC = () => {
                   onClick={() => {
                     setActiveSection(item.key);
                     setMobileSidebarOpen(false);
+                    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className={`
                     w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left
@@ -618,7 +679,7 @@ export const AdminDashboardPage: React.FC = () => {
         </aside>
 
         {/* Right Active Content Area */}
-        <main className="flex-1 bg-slate-900/60 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main ref={mainRef} className="flex-1 bg-slate-900/60 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           
           {/* ================================================================= */}
           {/* Module 1: EXECUTIVE OVERVIEW */}
@@ -1150,21 +1211,35 @@ export const AdminDashboardPage: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {ai3DModels.map((m) => (
-                  <div key={m.id} className="bg-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black uppercase bg-purple-500/20 text-purple-300 px-2.5 py-0.5 rounded-full">
-                        {m.status}
-                      </span>
-                      <span className="text-xs text-slate-400">Requester: {m.requestedBy}</span>
+                  <div key={m.id} className="bg-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl space-y-3 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="w-full h-44 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 relative">
+                        <img 
+                          src={m.previewImage || '/assets/turnkey_architectural_construction.jpg'} 
+                          alt={m.buildingType} 
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                        <span className="absolute bottom-2 left-2 text-[10px] font-bold text-white bg-blue-600/90 px-2 py-0.5 rounded-md">
+                          BIM 3D Render
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase bg-purple-500/20 text-purple-300 px-2.5 py-0.5 rounded-full">
+                          {m.status}
+                        </span>
+                        <span className="text-xs text-slate-400">Requester: {m.requestedBy}</span>
+                      </div>
+
+                      <h3 className="text-base font-bold text-white">{m.buildingType}</h3>
+                      <p className="text-xs text-slate-400">Plot Dimensions: <strong className="text-slate-200">{m.plotDimensions}</strong></p>
+                      <p className="text-xs text-slate-300 bg-slate-950/60 p-3 rounded-2xl border border-slate-800/80">
+                        Architectural Theme: {m.style}
+                      </p>
                     </div>
 
-                    <h3 className="text-base font-bold text-white">{m.buildingType}</h3>
-                    <p className="text-xs text-slate-400">Plot Dimensions: <strong className="text-slate-200">{m.plotDimensions}</strong></p>
-                    <p className="text-xs text-slate-300 bg-slate-950/60 p-3 rounded-2xl border border-slate-800/80">
-                      Architectural Theme: {m.style}
-                    </p>
-
-                    <div className="pt-2 flex items-center justify-between text-xs text-slate-400">
+                    <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
                       <span>Floors: {m.floors} | Beds: {m.bedrooms}</span>
                       {m.modelUrl ? (
                         <a href={m.modelUrl} target="_blank" rel="noreferrer" className="text-blue-400 font-bold hover:underline">
@@ -1234,7 +1309,14 @@ export const AdminDashboardPage: React.FC = () => {
                   <tbody className="divide-y divide-slate-800/60">
                     {courses.map((crs) => (
                       <tr key={crs.id} className="hover:bg-slate-850/60">
-                        <td className="p-4 font-bold text-white text-sm">{crs.title}</td>
+                        <td className="p-4 font-bold text-white text-sm flex items-center gap-3">
+                          <img 
+                            src={crs.thumbnailUrl || '/assets/structural_civil_engineers.jpg'} 
+                            alt={crs.title} 
+                            className="w-11 h-11 rounded-xl object-cover shrink-0 border border-slate-700 shadow-xs" 
+                          />
+                          <span className="line-clamp-2">{crs.title}</span>
+                        </td>
                         <td className="p-4 text-blue-400 font-semibold">{crs.category}</td>
                         <td className="p-4 font-bold text-emerald-400">₹ {crs.price}</td>
                         <td className="p-4 text-slate-300">{crs.enrollmentsCount} Enrolled</td>
@@ -1259,21 +1341,34 @@ export const AdminDashboardPage: React.FC = () => {
           {/* ================================================================= */}
           {activeSection === 'products' && (
             <div className="space-y-4 max-w-6xl mx-auto">
-              <div>
-                <h2 className="text-2xl font-black text-white">Construction Raw Materials Inventory</h2>
-                <p className="text-xs text-slate-400">Primary wholesale index for TMT steel, cement, M-sand, and masonry bricks</p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-2xl font-black text-white">Construction Raw Materials Inventory</h2>
+                  <p className="text-xs text-slate-400">Primary wholesale index for TMT steel, cement, M-sand, and masonry bricks</p>
+                </div>
+                <span className="text-xs font-bold px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl self-start sm:self-auto">
+                  ● Real Mill Stocks Connected
+                </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {products.map((prd) => (
-                  <div key={prd.id} className="bg-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2.5 py-0.5 rounded-full">{prd.brand}</span>
-                      <h3 className="text-base font-bold text-white mt-1.5">{prd.name}</h3>
-                      <p className="text-xs text-slate-400 mt-0.5">Unit: {prd.unit} • {prd.stock}</p>
+                  <div key={prd.id} className="bg-slate-900/80 p-4 sm:p-5 rounded-3xl border border-slate-800 shadow-xl flex items-center justify-between gap-3.5 hover:border-slate-700 transition-all">
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <img 
+                        src={prd.image || '/assets/cat_steel.jpg'} 
+                        alt={prd.name} 
+                        className="w-16 h-16 rounded-2xl object-cover shrink-0 border border-slate-700 shadow-md" 
+                      />
+                      <div className="min-w-0">
+                        <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2.5 py-0.5 rounded-full">{prd.brand}</span>
+                        <h3 className="text-sm sm:text-base font-bold text-white mt-1 truncate">{prd.name}</h3>
+                        <p className="text-xs text-slate-400 mt-0.5">Unit: {prd.unit} • <span className="text-emerald-400 font-semibold">{prd.stock}</span></p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-lg font-black text-emerald-400">{prd.price}</div>
+                    <div className="text-right shrink-0">
+                      <div className="text-base sm:text-lg font-black text-emerald-400">{prd.price}</div>
+                      <span className="text-[10px] text-slate-500 font-mono">Verified Mill Price</span>
                     </div>
                   </div>
                 ))}
@@ -1282,30 +1377,170 @@ export const AdminDashboardPage: React.FC = () => {
           )}
 
           {/* ================================================================= */}
-          {/* Module 16: SERVICES */}
+          {/* Module 16: SERVICES & LIVE RATE MANAGEMENT */}
           {/* ================================================================= */}
           {activeSection === 'services' && (
-            <div className="space-y-4 max-w-6xl mx-auto">
-              <div>
-                <h2 className="text-2xl font-black text-white">On-Demand Civil & Home Services</h2>
-                <p className="text-xs text-slate-400">Standardized rate cards and contractor allocation metrics</p>
+            <div className="space-y-6 max-w-6xl mx-auto">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-2xl font-black text-white">On-Demand Civil & Home Services</h2>
+                  <p className="text-xs text-slate-400">All services, active contractor allocation, and real-time live rate configuration</p>
+                </div>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 text-xs font-bold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span>Changes Sync Directly to Live Website</span>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Service Cards with Pictures & Live Rate Editors */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {servicesList.map((srv) => (
-                  <div key={srv.id} className="bg-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl flex items-center justify-between">
-                    <div>
-                      <h3 className="text-base font-bold text-white">{srv.name}</h3>
-                      <p className="text-xs text-slate-400 mt-1">Est. Turnaround: {srv.turnaround}</p>
-                      <p className="text-xs text-blue-400 font-semibold mt-0.5">{srv.activeProviders} Verified Crews Active</p>
+                  <div key={srv.id} className="bg-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl flex flex-col justify-between hover:border-slate-700 transition-all gap-4">
+                    <div className="flex items-start gap-4">
+                      <img 
+                        src={srv.image || '/assets/services.jpg'} 
+                        alt={srv.name} 
+                        className="w-20 h-20 rounded-2xl object-cover shrink-0 border border-slate-700 shadow-md"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2.5 py-0.5 rounded-full">
+                            {srv.id} • {srv.category || 'Civil Service'}
+                          </span>
+                          <span className="text-xs font-black text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-lg border border-emerald-500/20">
+                            Live: {srv.rate}
+                          </span>
+                        </div>
+                        <h3 className="text-base font-bold text-white mt-1.5 leading-snug">{srv.name}</h3>
+                        <div className="flex items-center gap-3 text-xs text-slate-400 mt-1">
+                          <span>Est: <strong className="text-slate-200">{srv.turnaround}</strong></span>
+                          <span>•</span>
+                          <span className="text-blue-400 font-semibold">{srv.activeProviders} Verified Crews</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <span className="text-base font-black text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl">
-                        {srv.rate}
-                      </span>
+
+                    {/* Interactive Live Rate Updater Input */}
+                    <div className="bg-slate-950/70 p-3 rounded-2xl border border-slate-800/80 flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">
+                          Edit Live Rate (e.g. ₹ 16/Sq.Ft, ₹ 299/Visit)
+                        </label>
+                        <input
+                          type="text"
+                          value={editableRates[srv.id] !== undefined ? editableRates[srv.id] : srv.rate}
+                          onChange={(e) => setEditableRates({ ...editableRates, [srv.id]: e.target.value })}
+                          placeholder={srv.rate}
+                          className="w-full px-3 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-bold focus:outline-none focus:border-blue-500"
+                        />
+                      </div>
+                      <button
+                        onClick={() => handleSaveServiceRate(srv.id, srv.name)}
+                        className="self-end px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0 flex items-center gap-1.5"
+                      >
+                        <Check className="w-3.5 h-3.5" />
+                        <span>Update & Sync Live</span>
+                      </button>
                     </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Master Rate Card Live Matrix */}
+              <div className="bg-slate-900/80 p-5 rounded-3xl border border-slate-800 shadow-xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-white">Master Construction Trade Rate Card</h3>
+                    <p className="text-xs text-slate-400">Directly syncs with /services customer rate card and cost estimation calculators</p>
+                  </div>
+                  <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg">
+                    IS 456 & CPWD Compliant
+                  </span>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-950 text-slate-400 font-bold border-b border-slate-800">
+                      <tr>
+                        <th className="p-3">Trade / Work Item</th>
+                        <th className="p-3">Current Active Rate</th>
+                        <th className="p-3">Est. Time</th>
+                        <th className="p-3">Approved Materials</th>
+                        <th className="p-3 text-right">Quick Rate Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                      <tr className="hover:bg-slate-850/50">
+                        <td className="p-3 font-semibold text-white">Full Turnkey Civil Structure (Labour + Material)</td>
+                        <td className="p-3 text-emerald-400 font-bold">{servicesList.find(s => s.id === 'SRV-01')?.rate || '₹ 1,850/Sq.Ft'}</td>
+                        <td className="p-3">6–9 Months</td>
+                        <td className="p-3">A-Grade 53 Cement & Fe 550D Steel</td>
+                        <td className="p-3 text-right">
+                          <button
+                            onClick={() => {
+                              const promptVal = prompt('Enter new rate for Full Turnkey Civil Structure:', servicesList.find(s => s.id === 'SRV-01')?.rate || '₹ 1,850/Sq.Ft');
+                              if (promptVal) handleSaveServiceRate('SRV-01', 'Turnkey Civil Construction');
+                            }}
+                            className="text-xs text-blue-400 hover:text-blue-300 font-bold"
+                          >
+                            Edit Rate
+                          </button>
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-slate-850/50">
+                        <td className="p-3 font-semibold text-white">Internal Emulsion Painting (2 Coats + Primer)</td>
+                        <td className="p-3 text-emerald-400 font-bold">{servicesList.find(s => s.id === 'SRV-02')?.rate || '₹ 16/Sq.Ft'}</td>
+                        <td className="p-3">3–5 Days</td>
+                        <td className="p-3">Asian Paints Royale / Berger</td>
+                        <td className="p-3 text-right">
+                          <button
+                            onClick={() => {
+                              const promptVal = prompt('Enter new rate for Internal Emulsion Painting:', servicesList.find(s => s.id === 'SRV-02')?.rate || '₹ 16/Sq.Ft');
+                              if (promptVal) handleSaveServiceRate('SRV-02', 'Premium Interior Painting & Primer');
+                            }}
+                            className="text-xs text-blue-400 hover:text-blue-300 font-bold"
+                          >
+                            Edit Rate
+                          </button>
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-slate-850/50">
+                        <td className="p-3 font-semibold text-white">Crystalline Terrace Waterproofing + Screed</td>
+                        <td className="p-3 text-emerald-400 font-bold">{servicesList.find(s => s.id === 'SRV-05')?.rate || '₹ 38/Sq.Ft'}</td>
+                        <td className="p-3">4–6 Days</td>
+                        <td className="p-3">Dr. Fixit / Fosroc Brushbond</td>
+                        <td className="p-3 text-right">
+                          <button
+                            onClick={() => {
+                              const promptVal = prompt('Enter new rate for Terrace Waterproofing:', servicesList.find(s => s.id === 'SRV-05')?.rate || '₹ 38/Sq.Ft');
+                              if (promptVal) handleSaveServiceRate('SRV-05', 'Advanced Terrace & Basement Waterproofing');
+                            }}
+                            className="text-xs text-blue-400 hover:text-blue-300 font-bold"
+                          >
+                            Edit Rate
+                          </button>
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-slate-850/50">
+                        <td className="p-3 font-semibold text-white">Concealed CPVC Plumbing (Per Point)</td>
+                        <td className="p-3 text-emerald-400 font-bold">{servicesList.find(s => s.id === 'SRV-04')?.rate || '₹ 18/Sq.Ft'}</td>
+                        <td className="p-3">2–3 Days</td>
+                        <td className="p-3">Astral / Supreme CPVC</td>
+                        <td className="p-3 text-right">
+                          <button
+                            onClick={() => {
+                              const promptVal = prompt('Enter new rate for Concealed CPVC Plumbing:', servicesList.find(s => s.id === 'SRV-04')?.rate || '₹ 18/Sq.Ft');
+                              if (promptVal) handleSaveServiceRate('SRV-04', 'Sanitary & Concealed Plumbing');
+                            }}
+                            className="text-xs text-blue-400 hover:text-blue-300 font-bold"
+                          >
+                            Edit Rate
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}

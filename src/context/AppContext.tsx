@@ -139,6 +139,19 @@ interface AppContextType {
   // Notifications
   notifications: { id: string; title: string; message: string; timestamp: string; read: boolean }[];
   markNotificationRead: (id: string) => void;
+
+  // CMS Dynamic Controls
+  cmsData: {
+    heroTitle: string;
+    heroSubtitle: string;
+    announcement: string;
+    emergencyPhone: string;
+  };
+  updateCmsData: (patch: Partial<{ heroTitle: string; heroSubtitle: string; announcement: string; emergencyPhone: string }>) => void;
+
+  // Dynamic Service Rates & Real-time Sync
+  serviceRates: Record<string, string>;
+  updateServiceRate: (serviceKeyOrId: string, newRate: string, priceStarting?: number) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -221,7 +234,92 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [selectedCity, setSelectedCity] = useState<string>('Hyderabad');
 
   // 3. Categories & Sub-Services
-  const [categories] = useState<ServiceCategory[]>(SERVICE_CATEGORIES);
+  const [categories, setCategories] = useState<ServiceCategory[]>(() => {
+    const saved = localStorage.getItem('bm_categories');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return SERVICE_CATEGORIES;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('bm_categories', JSON.stringify(categories));
+  }, [categories]);
+
+  // 3b. Dynamic CMS State (Persisted in localStorage)
+  const [cmsData, setCmsData] = useState<{
+    heroTitle: string;
+    heroSubtitle: string;
+    announcement: string;
+    emergencyPhone: string;
+  }>(() => {
+    const saved = localStorage.getItem('bm_cms');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return {
+      heroTitle: 'Turnkey Building Construction 🏗️',
+      heroSubtitle: 'From foundation digging to key handover • IS 456 structural guarantee & milestone escrow safety',
+      announcement: '🚀 AWS S3 Storage & Razorpay Live Gateway Activated across Mumbai (ap-south-1)',
+      emergencyPhone: '+91 98765 43210'
+    };
+  });
+
+  const updateCmsData = (patch: Partial<typeof cmsData>) => {
+    setCmsData(prev => {
+      const next = { ...prev, ...patch };
+      localStorage.setItem('bm_cms', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  // 3c. Dynamic Service Rates State (Persisted in localStorage)
+  const [serviceRates, setServiceRates] = useState<Record<string, string>>(() => {
+    const saved = localStorage.getItem('bm_service_rates');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return {
+      'SRV-01': '₹ 1,850/Sq.Ft',
+      'SRV-02': '₹ 16/Sq.Ft',
+      'SRV-03': '₹ 22/Sq.Ft',
+      'SRV-04': '₹ 18/Sq.Ft',
+      'SRV-05': '₹ 38/Sq.Ft',
+      'SRV-06': '₹ 499/Day',
+      'SRV-07': '₹ 1,499/Session',
+      'SRV-08': '₹ 650/Day',
+      'service-waterproofing': '₹ 38 / Sq.Ft',
+      'service-painting': '₹ 14 / Sq.Ft',
+      'service-electrician': '₹ 299 / Visit',
+      'service-plumber': '₹ 349 / Visit',
+      'service-carpenter': '₹ 499 / Visit',
+      'service-civil': '₹ 1,750 / Sq.Ft'
+    };
+  });
+
+  const updateServiceRate = (serviceKeyOrId: string, newRate: string, priceStarting?: number) => {
+    setServiceRates(prev => {
+      const next = { ...prev, [serviceKeyOrId]: newRate };
+      localStorage.setItem('bm_service_rates', JSON.stringify(next));
+      return next;
+    });
+
+    if (priceStarting !== undefined) {
+      setCategories(prev => prev.map(cat => ({
+        ...cat,
+        subServices: cat.subServices.map(sub => {
+          if (sub.id === serviceKeyOrId || cat.id === serviceKeyOrId) {
+            return {
+              ...sub,
+              priceStarting: priceStarting,
+              priceDisplay: `₹${priceStarting.toLocaleString('en-IN')} onwards`
+            };
+          }
+          return sub;
+        })
+      })));
+    }
+  };
 
   const getCategory = (id: string) => categories.find(c => c.id === id);
   const getSubService = (id: string) => {
@@ -533,7 +631,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       submitSupportTicket,
       replySupportTicket,
       notifications,
-      markNotificationRead
+      markNotificationRead,
+      cmsData,
+      updateCmsData,
+      serviceRates,
+      updateServiceRate
     }}>
       {children}
     </AppContext.Provider>
